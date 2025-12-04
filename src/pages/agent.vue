@@ -24,18 +24,18 @@
   </section>
 
   <section id="point">
-    <div class="section-wrap" style="background-image: url(/images/img-point_1.jpg);">
+    <div class="section-wrap" style="background-image: url(/outofthebox/images/img-point_1.jpg);">
       <div class="text-wrap">
         <h5>本気度の高い求職者へ最短でリーチできる。</h5>
         <p>イチヅケには、自分の市場価値を正しく知りたい意欲の高い求職者が集まります。プロフィールを公開した段階で、転職意向が強い、熱量の高い求職者が多数存在します。従来のスカウト型よりレスポンス率が高く、アプローチの効率が大幅に改善できます。</p>
       </div>
     </div>
-    <div class="section-wrap second" style="background-image: url(/images/img-point_2.jpg);">
+    <div class="section-wrap second" style="background-image: url(/outofthebox/images/img-point_2.jpg);">
       <div class="text-wrap">
         <h5>競合エージェントとの差別化が図れる。</h5>
         <p>求職者側は “提示額(年収)＋熱量” を基準に比較します。高評価を提示できるほど求職者との接点を確保しやすく、良い提案をできる転職エージェント様が、正当に選ばれる環境が整っています。</p>
       </div>
-    </div><div class="section-wrap" style="background-image: url(/images/img-point_3.jpg);">
+    </div><div class="section-wrap" style="background-image: url(/outofthebox/images/img-point_3.jpg);">
       <div class="text-wrap">
         <h5>データに基づいた採用活動ができる。</h5>
         <p>様々な職種・スキル・経験値の人材が、どのような反応を得ているのか。市場価値のトレンドを知るヒントになります。求人戦略・求職者への提案精度・顧客へのレポートに活用でき、データドリブンな転職支援が可能になります。</p>
@@ -118,17 +118,17 @@
 <script setup lang="ts">
 const appealItems = [
   {
-    img: "/images/img-appeal_1.jpg",
+    img: "/outofthebox/images/img-appeal_1.jpg",
     title: "求職者へのアプローチ無制限",
     text: "求職者へは、回数・上限なく提案が可能。オファー枠やメッセージ上限に縛られず、候補者への接触スピードと量の両面を高め、機会損失を防ぎながらアクティブな獲得が行えます。"
   },
   {
-    img: "/images/img-appeal_2.jpg",
+    img: "/outofthebox/images/img-appeal_2.jpg",
     title: "採用コストの効率化",
     text: "求職者のスキル・経験・実績などの情報を確認したうえで、提示したい年収を示すことで、求職者の最終的に大きな判断材料の「年収」から判断しやすくなり、ミスマッチを最小化します。"
   },
   {
-    img: "/images/img-appeal_3.jpg",
+    img: "/outofthebox/images/img-appeal_3.jpg",
     title: "求職者と直接コンタクト",
     text: "条件を満たすと求職者とダイレクトにやり取りが可能になります。仲介を挟まないためレスポンスが早く、提案の温度感がそのまま届き、意思決定の速度と成約率が向上します。"
   }
@@ -136,25 +136,25 @@ const appealItems = [
 
 const blogList = [
   {
-    img: "/images/img-blog_1.png",
+    img: "/outofthebox/images/img-blog_1.png",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ",
   },
   {
-    img: "/images/img-blog_2.png",
+    img: "/outofthebox/images/img-blog_2.png",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ",
   },
   {
-    img: "/images/img-blog_3.png",
+    img: "/outofthebox/images/img-blog_3.png",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ",
   },
   {
-    img: "/images/img-blog_4.png",
+    img: "/outofthebox/images/img-blog_4.png",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ",
