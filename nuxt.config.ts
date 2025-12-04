@@ -16,8 +16,15 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    public: {
-    }
+    public: {}
+  },
+
+  nitro: {
+    publicAssets: [
+      {
+        dir: 'public'
+      }
+    ]
   },
   
   compatibilityDate: '2025-11-11',

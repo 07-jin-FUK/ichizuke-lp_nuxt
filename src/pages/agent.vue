@@ -492,13 +492,16 @@ const toggle = (index: number) => {
     }
 
     .btn {
+      width: fit-content;
       font-size: 14px;
       color: white;
       letter-spacing: 0.42px;
       background-color: #313131;
+      border-radius: 20px;
       padding: 10px 25px;
       margin-top: 50px;
       margin-left: auto;
+      display: block;
     }
   }
 }
