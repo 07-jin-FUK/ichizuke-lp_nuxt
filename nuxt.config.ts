@@ -26,6 +26,10 @@ export default defineNuxtConfig({
       }
     ]
   },
+
+  plugins: [
+    '~/plugins/typekit.client'
+  ],
   
   compatibilityDate: '2025-11-11',
 });

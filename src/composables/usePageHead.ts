@@ -51,17 +51,5 @@ export const usePageHead = async (head: Head) => {
       { hid: 'twitter:description', name: 'twitter:description', content: head.desc || siteDesc },
       { hid: 'twitter:image', name: 'twitter:image', content: head.image || `${ogpImages}ogp.jpg` },
     ],
-    script: [
-      {
-        src: 'https://use.typekit.net/xxv3ubw.js',
-        async: true,
-        tagPriority: 'high',
-        crossorigin: 'anonymous',
-        defer: true,
-        onload: `
-          try { Typekit.load(); } catch (e) {}
-        `,
-      },
-    ],
   });
 };
