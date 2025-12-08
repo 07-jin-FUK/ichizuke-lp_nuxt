@@ -16,42 +16,69 @@
     <div class="section-wrap">
       <div class="text-wrap">
         <h5><span class="logo-type">イチヅケ</span>は、</h5>
-        <h5>求職者の“市場価値”を可視化し、新たなアプローチで求職者とのマッチングを実現するキャリアプラットフォームです。</h5>
+        <h5>求職者の"市場価値"を可視化し、新たなアプローチで求職者とのマッチングを実現するキャリアプラットフォームです。</h5>
         <p>求職者がプロフィールを登録すると、企業・エージェントは年収提示ベースのオファーを提示でき、求職者はその提示額と熱意をもとに、最も関心の高いエージェントとのみコンタクトを開始します。</p>
       </div>
       <img src="/images/mock.svg" alt="モック">
     </div>
   </section>
 
-  <section id="point">
-    <div class="section-wrap" style="background-image: url(/outofthebox/images/img-point_1.jpg);">
-      <div class="text-wrap">
-        <h5>本気度の高い求職者へ最短でリーチできる。</h5>
-        <p>イチヅケには、自分の市場価値を正しく知りたい意欲の高い求職者が集まります。プロフィールを公開した段階で、転職意向が強い、熱量の高い求職者が多数存在します。従来のスカウト型よりレスポンス率が高く、アプローチの効率が大幅に改善できます。</p>
+  <section id="point" ref="pointSection">
+    <div class="slides" ref="slides">
+      <div 
+        class="section-wrap slide slide1"
+        :class="{ active: currentSlide >= 0 }"
+        data-index="0"
+        style="background-image: url(/outofthebox/images/img-point_1.jpg);"
+      >
+        <div class="text-wrap">
+          <h5>本気度の高い求職者へ最短でリーチできる。</h5>
+          <p>
+            イチヅケには、自分の市場価値を正しく知りたい意欲の高い求職者が集まります。プロフィールを公開した段階で、転職意向が強い、熱量の高い求職者が多数存在します。従来のスカウト型よりレスポンス率が高く、アプローチの効率が大幅に改善できます。
+          </p>
+        </div>
       </div>
-    </div>
-    <div class="section-wrap second" style="background-image: url(/outofthebox/images/img-point_2.jpg);">
-      <div class="text-wrap">
-        <h5>競合エージェントとの差別化が図れる。</h5>
-        <p>求職者側は “提示額(年収)＋熱量” を基準に比較します。高評価を提示できるほど求職者との接点を確保しやすく、良い提案をできる転職エージェント様が、正当に選ばれる環境が整っています。</p>
+
+      <div 
+        class="section-wrap slide slide2"
+        :class="{ active: currentSlide >= 1 }"
+        data-index="1"
+        style="background-image: url(/outofthebox/images/img-point_2.jpg);"
+      >
+        <div class="text-wrap">
+          <h5>競合エージェントとの差別化が図れる。</h5>
+          <p>求職者側は “提示額(年収)＋熱量” を基準に比較します。高評価を提示できるほど求職者との接点を確保しやすく、良い提案をできる転職エージェント様が、正当に選ばれる環境が整っています。</p>
+        </div>
       </div>
-    </div><div class="section-wrap" style="background-image: url(/outofthebox/images/img-point_3.jpg);">
-      <div class="text-wrap">
-        <h5>データに基づいた採用活動ができる。</h5>
-        <p>様々な職種・スキル・経験値の人材が、どのような反応を得ているのか。市場価値のトレンドを知るヒントになります。求人戦略・求職者への提案精度・顧客へのレポートに活用でき、データドリブンな転職支援が可能になります。</p>
+
+      <div 
+        class="section-wrap slide slide3"
+        :class="{ active: currentSlide >= 2 }"
+        data-index="2"
+        style="background-image: url(/outofthebox/images/img-point_3.jpg);"
+      >
+        <div class="text-wrap">
+          <h5>データに基づいた採用活動ができる。</h5>
+          <p>様々な職種・スキル・経験値の人材が、どのような反応を得ているのか。市場価値のトレンドを知るヒントになります。求人戦略・求職者への提案精度・顧客へのレポートに活用でき、データドリブンな転職支援が可能になります。</p>
+        </div>
       </div>
     </div>
   </section>
 
   <section id="appeal">
     <div class="section-wrap">
-      <h5>年収提示型求職マッチングプラットフォーム<span>「イチヅケ」の魅力</span></h5>
+      <h5>
+        年収提示型求職マッチングプラットフォーム
+        <span>「イチヅケ」の魅力</span>
+        <span class="mask"></span>
+      </h5>
       <div class="appeal-wrap">
         <div 
           class="appeal-item" 
           v-for="(item, index) in appealItems" 
           :key="index"
         >
+          <span class="mask"></span>
           <img :src="item.img" :alt="item.title" />
           <h5>{{ item.title }}</h5>
           <p>{{ item.text }}</p>
@@ -91,15 +118,14 @@
           v-for="(item, index) in faqList"
           :key="index"
         >
-          <div class="question">
+          <div class="question" @click="toggle(index)">
             <p 
               class="faq-question js-toggle"
               :class="{ active: openIndex === index }"
-              @click="toggle(index)"
             >
               <span>Q</span>{{ item.question }}
             </p>
-            <span class="faq-toggle-icon"></span>
+            <span class="faq-toggle-icon" :class="{ active: openIndex === index }"></span>
           </div>
           <p 
             class="faq-answer"
@@ -111,68 +137,125 @@
       </div>
     </div>
   </section>
-
-
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+const openIndex = ref<number | null>(null);
+const pointSection = ref<HTMLElement | null>(null);
+const slides = ref<HTMLElement | null>(null);
+const currentSlide = ref(0);
+const bottomHeaderHeight = ref(0);
 
-onMounted(() => {
-  gsap.registerPlugin(ScrollTrigger);
+const toggle = (index: number) => {
+  openIndex.value = openIndex.value === index ? null : index;
+};
 
-  const panels = gsap.utils.toArray<HTMLElement>('#point .section-wrap');
-  const total = panels.length || 1;
+const updateBottomHeaderHeight = () => {
+  const bottomHeader = document.querySelector('.bottom-header') as HTMLElement;
+  if (bottomHeader) {
+    bottomHeaderHeight.value = bottomHeader.offsetHeight;
 
-  // pin の長さは画面高さ * パネル数（1画面 = 1パネル）
-  ScrollTrigger.create({
-    trigger: '#point',
-    start: 'top top',
-    end: () => `+=${window.innerHeight * total}`,
-    pin: true,
-    pinSpacing: true,
-    scrub: true,
-    // markers: true, // デバッグ用（必要なら有効化）
-  });
+    // body全体に padding-bottom を適用
+    document.body.style.paddingBottom = `${bottomHeaderHeight.value}px`;
 
-  // 各パネルのアニメーション（パネルを等分して扱う）
-  panels.forEach((panel, i) => {
-    const startPercent = (i / total) * 100;
-    const endPercent = ((i + 1) / total) * 100;
+    // CSS変数として #point に設定
+    const point = document.getElementById('point');
+    if (point) {
+      point.style.setProperty('--bottom-header-height', `${bottomHeaderHeight.value}px`);
+    }
+  }
+};
 
-    // 1つ目はズーム、それ以外は下から上へスライド（めくり）
-    if (i === 0) {
-      gsap.fromTo(panel, { scale: 1 }, {
-        scale: 1.15,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#point',
-          start: `${startPercent}% top`,
-          end: `${endPercent}% top`,
-          scrub: true,
-        },
-      });
+const handleScroll = () => {
+  if (!pointSection.value || !slides.value) return;
+
+  const pointRect = pointSection.value.getBoundingClientRect();
+  const windowHeight = window.innerHeight;
+
+  // slidesの上端が画面上端に到達するまで（1枚目のスケールアニメーション）
+  if (pointRect.top > 0) {
+    const progress = Math.max(0, 1 - (pointRect.top / windowHeight));
+    const scale = 0.5 + (progress * 0.5);
+    const opacity = progress;
+    
+    const slide1 = slides.value.querySelector('.slide1') as HTMLElement;
+    if (slide1) {
+      slide1.style.setProperty('--scale', scale.toString());
+      slide1.style.setProperty('--opacity', opacity.toString());
+    }
+    currentSlide.value = 0;
+  } 
+  else if (pointRect.top <= 0 && pointRect.bottom > windowHeight) {
+    const slide1 = slides.value.querySelector('.slide1') as HTMLElement;
+    if (slide1) {
+      slide1.style.setProperty('--scale', '1');
+      slide1.style.setProperty('--opacity', '1');
+    }
+    
+    const rawProgress = Math.abs(pointRect.top) / (pointRect.height - windowHeight);
+    const fixedProgress = Math.min(rawProgress * 0.2, 1);
+    
+    if (fixedProgress < 0.07) { 
+      currentSlide.value = 0;
+    } else if (fixedProgress < 0.13) {
+      currentSlide.value = 1;
     } else {
-      // 初期は下に隠しておく（CSSでも設定しておく）
-      gsap.fromTo(panel, { yPercent: 100 }, {
-        yPercent: 0,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#point',
-          start: `${startPercent}% top`,
-          end: `${endPercent}% top`,
-          scrub: true,
-        },
-      });
+      currentSlide.value = 2;
+    }
+  } else {
+    const slide1 = slides.value.querySelector('.slide1') as HTMLElement;
+    if (slide1) {
+      slide1.style.setProperty('--scale', '1');
+      slide1.style.setProperty('--opacity', '1');
+    }
+    currentSlide.value = 2;
+  }
+  
+  checkAppealVisibility();
+};
+
+const checkAppealVisibility = () => {
+  const h5 = document.querySelector('#appeal h5') as HTMLElement;
+  if (h5) {
+    const rect = h5.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    if (rect.bottom > 0 && rect.top < windowHeight) {
+      h5.classList.add('is-visible');
+    } else {
+      h5.classList.remove('is-visible');
+    }
+  }
+
+  const items = document.querySelectorAll('#appeal .appeal-item');
+  const windowHeight = window.innerHeight;
+
+  items.forEach((item) => {
+    const rect = item.getBoundingClientRect();
+
+    if (rect.bottom > 0 && rect.top < windowHeight) {
+      item.classList.add('is-visible');
+    } else {
+      item.classList.remove('is-visible');
     }
   });
+};
 
-  // リサイズ対応（end を再計算）
-  window.addEventListener('resize', () => {
-    ScrollTrigger.refresh();
-  });
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  handleScroll();
+  
+  // bottom-headerの高さを取得してbodyに適用
+  updateBottomHeaderHeight();
+  
+  // ウィンドウリサイズ時も更新
+  window.addEventListener('resize', updateBottomHeaderHeight);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('resize', updateBottomHeaderHeight);
+  // クリーンアップ
+  document.body.style.paddingBottom = '';
 });
 
 const appealItems = [
@@ -222,31 +305,24 @@ const blogList = [
 
 const faqList = [
   {
-    question: "サービスの利用に料金はかかりますか？",
+    question: "サービスの利用に料金はかかりますか?",
     answer: "基本プランは無料でご利用いただけます。有料オプションをご希望の場合のみ追加費用が発生します。",
   },
   {
-    question: "パスワードを忘れた場合はどうすればいいですか？",
+    question: "パスワードを忘れた場合はどうすればいいですか?",
     answer: "ログイン画面の「パスワードをお忘れの方」より再設定手続きを行ってください。",
   },
   {
-    question: "登録後にメールアドレスの変更は可能ですか？",
+    question: "登録後にメールアドレスの変更は可能ですか?",
     answer: "マイページ内のアカウント設定からメールアドレスの変更が可能です。",
   },
   {
-    question: "問い合わせの返信にはどれくらい時間がかかりますか？",
+    question: "問い合わせの返信にはどれくらい時間がかかりますか?",
     answer: "通常1〜2営業日以内にご返信しております。混雑時はお時間をいただく場合があります。",
   },
 ];
 
-const openIndex = ref<number | null>(null);
-
-const toggle = (index: number) => {
-  openIndex.value = openIndex.value === index ? null : index;
-};
-
 </script>
-
 
 <style lang="scss" scoped>
 @use '~/assets/css/mixin.scss';
@@ -290,9 +366,10 @@ const toggle = (index: number) => {
       letter-spacing: 0.54px;
       background-color: mixin.$main;
       border-radius: 30px;
-
       padding: 10px 40px 13px;
       margin-top: 20px;
+      display: inline-block;
+      text-decoration: none;
     }
 
     h2 {
@@ -302,7 +379,6 @@ const toggle = (index: number) => {
       letter-spacing: 0.9px;
       line-height: 1;
       text-shadow: 0px 3px 6px #0000005C;
-
       margin-top: 30px;
 
       span {
@@ -310,7 +386,6 @@ const toggle = (index: number) => {
         color: mixin.$main;
         letter-spacing: 2.4px;
         text-shadow: none;
-
         min-width: 60px;
         display: inline-block;
         text-align: end;
@@ -321,11 +396,10 @@ const toggle = (index: number) => {
 
   .wave {
     width: 100vw;
-    height: 53px;
+    height: 55px;
     background-image: url(/images/wave.svg);
     background-position: center;
     background-size: cover;
-
     position: absolute;
     bottom: -1px;
   }
@@ -339,7 +413,6 @@ const toggle = (index: number) => {
     gap: 0 110px;
     padding: 80px 0 100px;
     margin: auto;
-
     align-items: center;
 
     .text-wrap {
@@ -376,44 +449,42 @@ const toggle = (index: number) => {
 }
 
 #point {
-  .section-wrap {
-    position: relative;
-    
+  position: relative;
+  height: 500vh; // 400vh → 500vh に増加（3枚目の表示時間をさらに長く）
+  
+  .slides {
+    position: sticky;
+    top: 0;
     width: 100vw;
-    max-height: 602px;
-    height: 100%;
+    height: calc(100vh - var(--bottom-header-height));
+    overflow: hidden;
+  }
+
+  .section-wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: calc(100vh - var(--bottom-header-height));
     background-position: center;
     background-size: cover;
-    background-repeat: no-repeat;
-
-    padding: 214px 150px 214px 0;
-
+    
     &::before {
       content: '';
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      inset: 0;
       background-color: rgba(0, 0, 0, 0.15);
     }
 
-    &.second {
-      padding: 214px 0 214px 150px;
-
-      .text-wrap {
-        margin-right: auto;
-        margin-left: unset;
-      }
-    }
-
     .text-wrap {
-      max-width: 391px;
+      max-width: 390px;
       width: 100%;
       color: white;
-      position: relative;
+      position: absolute;
       z-index: 1;
-      margin-left: auto;
+      top: 50%;
+      right: 150px;
+      transform: translateY(-50%);
 
       h5 {
         font-size: 18px;
@@ -425,42 +496,46 @@ const toggle = (index: number) => {
         margin-top: 25px;
       }
     }
+
+    &.slide1 {
+      z-index: 1;
+      transform: translate(-50%, -50%) scale(var(--scale, 0.5));
+      transition: transform 0.1s linear;
+    }
+
+    &.slide2 {
+      z-index: 2;
+      transform: translate(-50%, calc(50% + 100vh));
+      opacity: 1;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); // 0.6s → 0.8s
+      
+      &.active {
+        transform: translate(-50%, -50%);
+      }
+      
+      .text-wrap {
+        right: unset;
+        left: 150px;
+      }
+    }
+
+    &.slide3 {
+      z-index: 3;
+      transform: translate(-50%, calc(50% + 100vh));
+      opacity: 1;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); // 0.6s → 0.8s
+      
+      &.active {
+        transform: translate(-50%, -50%);
+      }
+    }
   }
-}
-
-#point {
-  position: relative;
-  /* pin 時に高さが必要なので最小で全パネル分を確保しておくと安全（ScrollTrigger側で end を制御しているので必須ではない）*/
-  min-height: 100vh;
-
-  .section-wrap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;          /* 各パネルはビューポート全体 */
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end; /* 元の配置に合わせて */
-    padding: 60px;
-    z-index: 1;
-  }
-
-  /* 2,3 は初期で下に隠す（JS と両方でも OK） */
-  .section-wrap:nth-child(2),
-  .section-wrap:nth-child(3) {
-    transform: translateY(100%);
-  }
-
-  .section-wrap:nth-child(1) { z-index: 3; }
-  .section-wrap:nth-child(2) { z-index: 2; }
-  .section-wrap:nth-child(3) { z-index: 1; }
 }
 
 #appeal {
+  width: 100vw;
+  overflow: hidden;
+
   .section-wrap {
     padding: 100px 0;
 
@@ -470,9 +545,26 @@ const toggle = (index: number) => {
       line-height: 1.5;
       text-align: center;
       margin-bottom: 60px;
+      position: relative;
 
       span {
         display: block;
+      }
+
+      .mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        transform: translateX(0); /* 初期状態は隠す */
+        transition: transform 1.8s ease-out;
+        pointer-events: none;
+      }
+
+      &.is-visible .mask {
+        transform: translateX(100%); /* is-visible が付いたら mask が右にスライド */
       }
     }
 
@@ -491,6 +583,9 @@ const toggle = (index: number) => {
         box-shadow: 0px 3px 6px #00000029;
         padding: 30px 20px;
 
+        position: relative;
+        overflow: hidden;
+
         img {
           width: 200px;
           height: auto;
@@ -507,6 +602,23 @@ const toggle = (index: number) => {
           line-height: 1.5;
           text-align: center;
           margin-bottom: 20px;
+        }
+
+        .mask {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: #fff;
+          transform: translateX(0);
+          transition: transform 1s ease-out;
+          pointer-events: none;
+          z-index: 10;
+        }
+
+        &.is-visible .mask {
+          transform: translateX(100%); /* 画面内に入ったらスライドして表示 */
         }
       }
     }
@@ -570,7 +682,6 @@ const toggle = (index: number) => {
           font-size: 12px;
           letter-spacing: 0.36px;
           line-height: 1.6;
-
           min-height: 62px;
         }
 
@@ -593,6 +704,7 @@ const toggle = (index: number) => {
       margin-top: 50px;
       margin-left: auto;
       display: block;
+      text-decoration: none;
     }
   }
 }
@@ -619,7 +731,7 @@ const toggle = (index: number) => {
           margin-bottom: 0;
         }
 
-        .question{
+        .question {
           cursor: pointer;
           box-shadow: 0px 3px 6px #00000029;
           display: flex;
@@ -643,11 +755,6 @@ const toggle = (index: number) => {
             align-items: center;
             margin-left: auto;
 
-            @include mixin.max-screen(mixin.$large) {
-                width: 0.875em;
-                height: 0.875em;
-            }
-        
             &::before,
             &::after {
               content: '';
@@ -655,7 +762,7 @@ const toggle = (index: number) => {
               background: black;
               transition: transform 0.3s ease;
             }
-        
+
             &::before {
               top: 50%;
               left: 0;
@@ -663,7 +770,7 @@ const toggle = (index: number) => {
               height: 1px;
               transform: translateY(-50%);
             }
-        
+
             &::after {
               left: 50%;
               top: 0;
@@ -671,17 +778,11 @@ const toggle = (index: number) => {
               width: 1px;
               transform: translateX(-50%);
             }
-          }
-      
-          &.active {
-            border-bottom: none;
 
-            .faq-toggle-icon {
-              &::before {
-                margin: auto;
-              }
+            &.active {
               &::after {
-                background-color: unset;
+                transform: translateX(-50%) rotate(90deg);
+                opacity: 0;
               }
             }
           }
@@ -693,31 +794,33 @@ const toggle = (index: number) => {
 
           &.open {
             display: flex;
-            background-color: #F8F8F8;
-            padding: 30px 10px;
-
-            border-bottom: 1px solid #DEDEDE;
-
             animation: fadeIn 0.5s ease;
-            @keyframes fadeIn {
-                0% {
-                    opacity: 0;
-                    transform: translateY(-10px); 
-                }
-                100% {
-                    opacity: 1;
-                    transform: none;
-                }
-            }
-
             color: white;
             background-color: #1D1D1D;
             padding: 15px 20px;
+
+            span {
+              font-size: 20px;
+              font-weight: bold;
+              line-height: 1;
+              margin-top: 0.1em;
+              margin-right: 15px;
+            }
+
+            @keyframes fadeIn {
+              0% {
+                opacity: 0;
+                transform: translateY(0px);
+              }
+              100% {
+                opacity: 1;
+                transform: none;
+              }
+            }
           }
         }
       }
     }
   }
 }
-
 </style>
