@@ -148,7 +148,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 
 const openIndex = ref<number | null>(null);
 const pointSection = ref<HTMLElement | null>(null);
@@ -378,11 +378,14 @@ const createObservers = () => {
 // ==========================================
 // onMounted / onUnmounted
 // ==========================================
-onMounted(() => {
+onMounted(async () => {
+  await nextTick(); // DOMがレンダリングされるのを待つ
   updateBottomHeaderHeight();
   createObservers();
-  window.addEventListener('resize', () => {
+
+  window.addEventListener('resize', async () => {
     windowWidth.value = window.innerWidth;
+    await nextTick();
     updateBottomHeaderHeight();
     createObservers();
   });
@@ -487,7 +490,7 @@ const faqList = [
 
     @include mixin.max-screen(mixin.$small) {
       padding-left: 8%;
-      bottom: 15%;
+      bottom: 13%;
     }
 
     h1 {
@@ -579,8 +582,8 @@ const faqList = [
     bottom: -1px;
 
     @include mixin.max-screen(mixin.$small) {
-      height: 60px;
-      background-position: 27% 0;
+      height: 65px;
+      background-image: url(/images/wave_sp.svg);
     }
   }
 }
@@ -624,6 +627,7 @@ const faqList = [
 
         @include mixin.max-screen(mixin.$small) {
           font-size: 16px;
+          margin-bottom: -5px;
         }
       }
 
@@ -677,7 +681,7 @@ const faqList = [
 
   .slides {
     position: sticky;
-    top: var(--bottom-header-height, 0px);
+    top: 0;
     width: 100vw;
     height: calc(100vh - var(--bottom-header-height, 0px));
     overflow: hidden;
@@ -1205,6 +1209,7 @@ const faqList = [
             line-height: 1;
             margin-top: 0.1em;
             flex-shrink: 0;
+            margin-right: 15px;
 
             @include mixin.max-screen(mixin.$small) {
               font-size: 18px;
