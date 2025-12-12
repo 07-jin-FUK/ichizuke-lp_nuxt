@@ -114,6 +114,7 @@
           <p>{{ item.title }}</p>
         </div>
       </div>
+      <div class="blog-dots"></div>
       <NuxtLink to="/blog" class="btn">ブログ一覧へ</NuxtLink>
     </div>
   </section>
@@ -208,31 +209,13 @@ const handleDetailClick = (event: MouseEvent) => {
 };
 
 // ==========================================
-// bottom-header 高さ & #point offset
-// ==========================================
-const updateBottomHeaderHeight = () => {
-  const bottomHeader = document.querySelector('.bottom-header') as HTMLElement;
-  const point = document.getElementById('point');
-  if (!point || !bottomHeader) return;
-
-  bottomHeaderHeight.value = bottomHeader.offsetHeight;
-  document.body.style.paddingBottom = `${bottomHeaderHeight.value}px`;
-  point.style.setProperty('--bottom-header-height', `${bottomHeaderHeight.value}px`);
-  point.style.setProperty('--point-offset', `-${bottomHeaderHeight.value}px`);
-};
-
-// ==========================================
 // point scroll animation
 // ==========================================
-let lastScrollY = 0;
 const handleScroll = () => {
   if (!pointSection.value || !slides.value) return;
 
   const pointRect = pointSection.value.getBoundingClientRect();
   const windowHeight = window.innerHeight;
-  const currentY = window.scrollY;
-  const isForward = currentY > lastScrollY;
-  lastScrollY = currentY;
 
   const slide1 = slides.value.querySelector('.slide1') as HTMLElement;
   const slide2 = slides.value.querySelector('.slide2') as HTMLElement;
@@ -243,97 +226,83 @@ const handleScroll = () => {
   const mask3 = slide3.querySelector('.mask') as HTMLElement;
   const inner1 = slide1.querySelector('.inner') as HTMLElement;
 
-  const bh = bottomHeaderHeight.value || 0;
+  // すべてのスライドを常に表示
+  slide1.style.display = "block";
+  slide2.style.display = "block";
+  slide3.style.display = "block";
 
-  // 上端より上にある場合
   if (pointRect.top > 0) {
-    inner1.style.transform = `translate(-50%, calc(-50% + ${bh}px)) scale(0.5)`;
+    inner1.style.transform = `translate(-50%, -50%) scale(0.5)`;
     mask1.style.clipPath = 'inset(0 0 0 0)';
     mask2.style.clipPath = 'inset(100% 0 0 0)';
     mask3.style.clipPath = 'inset(100% 0 0 0)';
-    slide1.style.display = "block";
-    slide2.style.display = "none";
-    slide3.style.display = "none";
-    slide1.style.zIndex = "10";
+    slide1.style.zIndex = "1";
     slide2.style.zIndex = "2";
-    slide3.style.zIndex = "1";
-    slide1.classList.add("is-front");
-    slide2.classList.remove("is-front");
-    slide3.classList.remove("is-front");
+    slide3.style.zIndex = "3";
     return;
   }
 
   const scrolled = Math.abs(pointRect.top);
   const totalHeight = pointRect.height - windowHeight;
-  const progress = Math.min(scrolled / totalHeight, 1);
+  const progress = Math.min(Math.max(scrolled / totalHeight, 0), 1);
 
-  // スライド1（拡大）
+  const PHASE2_DELAY = 0.3;
+
   if (progress < 0.25) {
     const t = progress / 0.25;
-    inner1.style.transform = `translate(-50%, calc(-50% + ${bh}px)) scale(${0.5 + t * 0.5})`;
+    inner1.style.transform = `translate(-50%, -50%) scale(${0.5 + t * 0.5})`;
     mask1.style.clipPath = 'inset(0 0 0 0)';
     mask2.style.clipPath = 'inset(100% 0 0 0)';
     mask3.style.clipPath = 'inset(100% 0 0 0)';
-    slide1.style.display = "block";
-    slide2.style.display = "none";
-    slide3.style.display = "none";
-    slide1.style.zIndex = "10";
+    slide1.style.zIndex = "1";
     slide2.style.zIndex = "2";
-    slide3.style.zIndex = "1";
-    slide1.classList.add("is-front");
-    slide2.classList.remove("is-front");
-    slide3.classList.remove("is-front");
+    slide3.style.zIndex = "3";
     return;
   }
 
-  // スライド1→2
-  if (progress < 0.55) {
-    const t = (progress - 0.25) / 0.3;
-    slide1.style.display = "block";
-    slide2.style.display = "block";
-    slide3.style.display = "none";
-    inner1.style.transform = `translate(-50%, calc(-50% + ${bh}px)) scale(1)`;
+  if (progress < 0.55 + PHASE2_DELAY) {
+    const t = (progress - (0.25 + PHASE2_DELAY)) / 0.3;
+    inner1.style.transform = `translate(-50%, -50%) scale(1)`;
 
-    if (isForward) {
-      mask1.style.clipPath = `inset(0 0 ${t * 100}% 0)`;
-      mask2.style.clipPath = `inset(${(1 - t) * 100}% 0 0 0)`;
-      slide1.style.zIndex = "2";
-      slide2.style.zIndex = "10";
-      slide1.classList.remove("is-front");
-      slide2.classList.add("is-front");
-    } else {
-      mask1.style.clipPath = `inset(${(1 - t) * 100}% 0 0 0)`;
-      mask2.style.clipPath = `inset(0 0 ${t * 100}% 0)`;
-      slide1.style.zIndex = "2";
-      slide2.style.zIndex = "10";
-      slide1.classList.remove("is-front");
-      slide2.classList.add("is-front");
-    }
-    slide3.classList.remove("is-front");
-    return;
-  }
-
-  // スライド2→3
-  const t = (progress - 0.55) / 0.45;
-  slide1.style.display = "none";
-  slide2.style.display = "block";
-  slide3.style.display = "block";
-
-  if (isForward) {
-    mask2.style.clipPath = `inset(0 0 ${t * 100}% 0)`;
-    mask3.style.clipPath = `inset(${(1 - t) * 100}% 0 0 0)`;
-    slide2.style.zIndex = "2";
-    slide3.style.zIndex = "10";
-    slide2.classList.remove("is-front");
-    slide3.classList.add("is-front");
-  } else {
+    mask1.style.clipPath = 'inset(0 0 0 0)';
     mask2.style.clipPath = `inset(${(1 - t) * 100}% 0 0 0)`;
-    mask3.style.clipPath = `inset(0 0 ${t * 100}% 0)`;
-    slide2.style.zIndex = "10";
-    slide3.style.zIndex = "2";
-    slide3.classList.add("is-front");
-    slide2.classList.remove("is-front");
+    mask3.style.clipPath = 'inset(100% 0 0 0)';
+
+    slide1.style.zIndex = "1";
+    slide2.style.zIndex = "2";
+    slide3.style.zIndex = "3";
+    return;
   }
+
+  if (progress >= 0.55 + PHASE2_DELAY) {
+    const t = (progress - (0.55 + PHASE2_DELAY)) / (0.45 - PHASE2_DELAY);
+    const clampedT = Math.min(Math.max(t, 0), 1);
+
+    inner1.style.transform = `translate(-50%, -50%) scale(1)`;
+
+    mask1.style.clipPath = 'inset(0 0 0 0)';
+    mask2.style.clipPath = 'inset(0 0 0 0)';
+    mask3.style.clipPath = `inset(${(1 - clampedT) * 100}% 0 0 0)`;
+
+    slide1.style.zIndex = "1";
+    slide2.style.zIndex = "2";
+    slide3.style.zIndex = "3";
+    return;
+  }
+};
+
+// ==========================================
+// bottom-header 高さ & #point offset
+// ==========================================
+const updateBottomHeaderHeight = () => {
+  const bottomHeader = document.querySelector('.bottom-header') as HTMLElement;
+  const slidesEl = slides.value;
+  if (!slidesEl || !bottomHeader) return;
+
+  bottomHeaderHeight.value = bottomHeader.offsetHeight;
+  document.body.style.paddingBottom = `${bottomHeaderHeight.value}px`;
+
+  slidesEl.style.setProperty('--bottom-header-height', `${bottomHeaderHeight.value}px`);
 };
 
 // ==========================================
@@ -364,7 +333,7 @@ const createObservers = () => {
     #faq .faq-wrap
   `;
   const targets = document.querySelectorAll<HTMLElement>(selector);
-  const otherMargin = windowWidth.value <= 480 ? "0px 0px -20% 0px" : "0px 0px -35% 0px";
+  const otherMargin = windowWidth.value <= 480 ? "0px 0px -20% 0px" : "0px 0px -30% 0px";
 
   io = new IntersectionObserver(
     (entries) => {
@@ -376,19 +345,98 @@ const createObservers = () => {
 };
 
 // ==========================================
+// blog 自動横スクロール
+// ==========================================
+let blogScrollTimer: number | undefined;
+
+const initAutoBlogScroll = () => {
+  const wrap = document.querySelector('#blog .blog-wrap') as HTMLElement | null;
+  if (!wrap) return;
+
+  const items = wrap.querySelectorAll('.blog-item') as NodeListOf<HTMLElement>;
+  if (items.length === 0) return;
+
+  // ===== ドット生成 =====
+  const dotWrap = document.querySelector('#blog .blog-dots') as HTMLElement | null;
+  if (!dotWrap) return; // ← ここ必須！
+
+  dotWrap.innerHTML = '';
+  const dots: HTMLElement[] = [];
+
+  let index = 0;
+
+  const updateActiveDot = () => {
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === index);
+    });
+  };
+
+  items.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.classList.add('blog-dot');
+    if (i === 0) d.classList.add('active');
+    dotWrap.appendChild(d);
+    dots.push(d);
+
+    d.addEventListener('click', () => {
+      index = i;
+      updateActiveDot();
+
+      const left = items[i].offsetLeft - wrap.offsetLeft;
+      wrap.scrollTo({ left, behavior: 'smooth' });
+    });
+  });
+
+  // PC は自動スクロール停止
+  if (window.innerWidth > 480) {
+    if (blogScrollTimer) window.clearInterval(blogScrollTimer);
+    return;
+  }
+
+  const slide = () => {
+    index++;
+    if (index >= items.length) index = 0;
+
+    const target = items[index];
+    const left = target.offsetLeft - wrap.offsetLeft;
+
+    wrap.scrollTo({
+      left,
+      behavior: 'smooth'
+    });
+
+    updateActiveDot();
+  };
+
+  if (blogScrollTimer) window.clearInterval(blogScrollTimer);
+
+  wrap.scrollTo({ left: 0, behavior: 'auto' });
+  blogScrollTimer = window.setInterval(slide, 4000);
+};
+
+// ==========================================
 // onMounted / onUnmounted
 // ==========================================
 onMounted(async () => {
-  await nextTick(); // DOMがレンダリングされるのを待つ
+  await nextTick();        // ここでまだ blog-list 全部描画されてないことがある
+  await nextTick();        // ★ 1回追加すると Vue3 は安定する
+
+  initAutoBlogScroll();    // ← ブログ描画完了後に必ず実行
+
   updateBottomHeaderHeight();
   createObservers();
 
   window.addEventListener('resize', async () => {
     windowWidth.value = window.innerWidth;
+
     await nextTick();
+    await nextTick();      // ← ここも追加
+    initAutoBlogScroll();
+
     updateBottomHeaderHeight();
     createObservers();
   });
+
   window.addEventListener('scroll', handleScroll, { passive: true });
 });
 
@@ -396,6 +444,9 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
   if (io) { io.disconnect(); io = null; }
   if (ioAbout) { ioAbout.disconnect(); ioAbout = null; }
+
+  if (blogScrollTimer) clearInterval(blogScrollTimer);
+
   document.body.style.paddingBottom = '';
 });
 
@@ -480,7 +531,8 @@ const faqList = [
   position: relative;
 
   @include mixin.max-screen(mixin.$small) {
-    background-position: 65% 0;
+    background-position: 65% 70%;
+    background-size: 320%;
   }
 
   .copy-wrap {
@@ -490,7 +542,7 @@ const faqList = [
 
     @include mixin.max-screen(mixin.$small) {
       padding-left: 8%;
-      bottom: 13%;
+      bottom: 20%;
     }
 
     h1 {
@@ -683,7 +735,7 @@ const faqList = [
     position: sticky;
     top: 0;
     width: 100vw;
-    height: calc(100vh - var(--bottom-header-height, 0px));
+    height: calc(100vh - var(--bottom-header-height));
     overflow: hidden;
   }
 
@@ -715,6 +767,15 @@ const faqList = [
         background-position: center center;
         background-size: cover;
         z-index: 1;
+
+        &::before {
+          content: "";
+          display: block;
+          width: 100%;
+          height: 100%;
+          background-color: black;
+          opacity: 0.15;
+        }
       }
     }
 
@@ -936,8 +997,18 @@ const faqList = [
       gap: 0 20px;
 
       @include mixin.max-screen(mixin.$small) {
-        grid-template-columns: repeat(1, 1fr);
-        gap: 20px 0;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 20px;
+        margin: auto;
+        -webkit-overflow-scrolling: touch;
+
+        scrollbar-width: none;           // Firefox
+        -ms-overflow-style: none;        // IE, Edge
+        &::-webkit-scrollbar {
+          display: none;                 // Chrome, Safari
+        }
       }
 
       .blog-item {
@@ -958,8 +1029,16 @@ const faqList = [
           transform: scale(1);
         }
 
+        @include mixin.max-screen(mixin.$small) {
+          flex: 0 0 90vw; // ←1カードの幅。調整してOK
+          max-width: none;
+        }
+
         img {
           width: 100%;
+          height: 165px;
+          object-fit: cover;
+          background: #000;
           border-radius: 15px 15px 0 0;
         }
 
@@ -989,10 +1068,11 @@ const faqList = [
           letter-spacing: 0.36px;
           line-height: 1.6;
           min-height: 62px;
-          display: -webkit-box;
-          -webkit-line-clamp: 3; /* ← 最大行数 */
-          -webkit-box-orient: vertical;
           overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 3; // 行数調整
+          -webkit-box-orient: vertical;
         }
 
         .info-wrap, p {
@@ -1003,6 +1083,27 @@ const faqList = [
           @include mixin.max-screen(mixin.$small) {
             max-width: 90%;
           }
+        }
+      }
+    }
+
+    .blog-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+
+      .blog-dot {
+        display: block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: black;
+        transition: background 0.3s;
+        cursor: pointer;
+
+        &.active {
+          background: #313131;
         }
       }
     }

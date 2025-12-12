@@ -70,8 +70,6 @@ onUnmounted(() => {
 @use '~/assets/css/mixin.scss';
 
 .header {
-  position: relative;
-
   .btn {
     height: 45px;
     font-size: 16px;
@@ -91,8 +89,9 @@ onUnmounted(() => {
     @include mixin.max-screen(mixin.$small) {
       font-size: 14px;
       padding: 10px 25px 13px;
-      top: 15px;
+      top: unset;
       right: 5%;
+      bottom: 8%;
     }
   }
 
