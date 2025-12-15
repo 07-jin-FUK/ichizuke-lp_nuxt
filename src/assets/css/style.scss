@@ -88,3 +88,26 @@ a {
   background-color: white;
   padding: 100px 70px 80px;
 }
+
+.blog-dots {
+  display: none;
+
+  @include mixin.max-screen(mixin.$small) {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .blog-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #a2a2a2;
+    cursor: pointer;
+
+    &.active {
+      background: black;
+    }
+  }
+}

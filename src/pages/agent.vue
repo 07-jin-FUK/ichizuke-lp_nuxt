@@ -100,20 +100,24 @@
   <section id="blog">
     <div class="section-wrap">
       <h5>イチヅケブログ</h5>
+
       <div class="blog-wrap">
-        <div 
-          class="blog-item" 
-          v-for="(item, index) in blogList" 
+        <div
+          class="blog-item-wrap"
+          v-for="(item, index) in blogList"
           :key="index"
         >
-          <img :src="item.img" :alt="item.title" />
-          <div class="info-wrap">
-            <span class="date">{{ item.date }}</span>
-            <span class="category">{{ item.category }}</span>
+          <div class="blog-item">
+            <img :src="item.img" :alt="item.title" />
+            <div class="info-wrap">
+              <span class="date">{{ item.date }}</span>
+              <span class="category">{{ item.category }}</span>
+            </div>
+            <p>{{ item.title }}</p>
           </div>
-          <p>{{ item.title }}</p>
         </div>
       </div>
+
       <div class="blog-dots"></div>
       <NuxtLink to="/blog" class="btn">ブログ一覧へ</NuxtLink>
     </div>
@@ -414,30 +418,62 @@ const initAutoBlogScroll = () => {
   blogScrollTimer = window.setInterval(slide, 4000);
 };
 
+const applyEllipsis = () => {
+  const texts = document.querySelectorAll<HTMLParagraphElement>(
+    '#blog .blog-item p'
+  );
+
+  texts.forEach(p => {
+    p.classList.remove('is-clamped');
+
+    const style = window.getComputedStyle(p);
+    const lineHeight = parseFloat(style.lineHeight);
+    const lines = Math.round(p.scrollHeight / lineHeight);
+
+    if (lines > 3) {
+      p.classList.add('is-clamped');
+    }
+  });
+};
+
 // ==========================================
 // onMounted / onUnmounted
 // ==========================================
 onMounted(async () => {
-  await nextTick();        // ここでまだ blog-list 全部描画されてないことがある
-  await nextTick();        // ★ 1回追加すると Vue3 は安定する
+  await nextTick();
+  await nextTick();
+  await new Promise(r => setTimeout(r, 100));
 
-  initAutoBlogScroll();    // ← ブログ描画完了後に必ず実行
+  initAutoBlogScroll();
+
+  await nextTick();
+  applyEllipsis(); 
 
   updateBottomHeaderHeight();
   createObservers();
 
-  window.addEventListener('resize', async () => {
+  const handleResize = async () => {
     windowWidth.value = window.innerWidth;
 
     await nextTick();
-    await nextTick();      // ← ここも追加
+    await nextTick();
+
     initAutoBlogScroll();
+
+    await nextTick();
+    applyEllipsis();
 
     updateBottomHeaderHeight();
     createObservers();
-  });
+  };
 
+  window.addEventListener('resize', handleResize);
   window.addEventListener('scroll', handleScroll, { passive: true });
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('resize', applyEllipsis);
 });
 
 onUnmounted(() => {
@@ -488,7 +524,7 @@ const blogList = [
     img: "/outofthebox/images/img-blog_3.png",
     date: "2025.11.11",
     category: "お知らせ",
-    title: "提供サービス変更及び利用規約改定のお知らせ",
+    title: "提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ",
   },
   {
     img: "/outofthebox/images/img-blog_4.png",
@@ -909,6 +945,7 @@ const faqList = [
       margin: auto;
 
       @include mixin.max-screen(mixin.$small) {
+        width: 100%;
         grid-template-columns: repeat(1, 1fr);
         gap: 20px 0;
       }
@@ -930,6 +967,10 @@ const faqList = [
         &.show {
           opacity: 1;
           transform: scale(1);
+        }
+
+        @include mixin.max-screen(mixin.$small) {
+          max-width: unset;
         }
 
         img {
@@ -1000,110 +1041,112 @@ const faqList = [
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
-        gap: 20px;
-        margin: auto;
+        gap: 0;                
+        padding: 0;       
         -webkit-overflow-scrolling: touch;
 
-        scrollbar-width: none;           // Firefox
-        -ms-overflow-style: none;        // IE, Edge
+        scrollbar-width: none;
+        -ms-overflow-style: none;
         &::-webkit-scrollbar {
-          display: none;                 // Chrome, Safari
+          display: none;
         }
       }
 
-      .blog-item {
-        background-color: white;
-        border-radius: 15px;
-        box-shadow: 0px 3px 6px #00000029;
-        padding-bottom: 10px;
-        
-        opacity: 0;
-        transform: scale(0.95);
-        transition: 
-          opacity 0.6s ease,
-          transform 0.6s ease;
-        will-change: opacity, transform;
-
-        &.show {
-          opacity: 1;
-          transform: scale(1);
-        }
-
+      .blog-item-wrap { 
         @include mixin.max-screen(mixin.$small) {
-          flex: 0 0 90vw; // ←1カードの幅。調整してOK
-          max-width: none;
+          padding: 10px; 
+          flex: 0 0 95vw;   
         }
 
-        img {
-          width: 100%;
-          height: 165px;
-          object-fit: cover;
-          background: #000;
-          border-radius: 15px 15px 0 0;
-        }
+        .blog-item {
+          height: 100%;
+          background-color: white;
+          border-radius: 15px;
+          box-shadow: 0px 3px 6px #00000029;
+          padding-bottom: 15px;
+          
+          opacity: 0;
+          transform: scale(0.95);
+          transition: 
+            opacity 0.6s ease,
+            transform 0.6s ease;
+          will-change: opacity, transform;
 
-        .info-wrap {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-top: 15px;
-          padding-bottom: 10px;
-
-          .date {
-            font-size: 13px;
+          &.show {
+            opacity: 1;
+            transform: scale(1);
           }
-
-          .category {
-            font-size: 9px;
-            letter-spacing: 0.27px;
-            color: white;
-            background-color: #707070;
-            border-radius: 12px;
-            padding: 5px 10px;
-          }
-        }
-
-        p {
-          font-size: 12px;
-          letter-spacing: 0.36px;
-          line-height: 1.6;
-          min-height: 62px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 3; // 行数調整
-          -webkit-box-orient: vertical;
-        }
-
-        .info-wrap, p {
-          max-width: 200px;
-          width: 100%;
-          margin: auto;
 
           @include mixin.max-screen(mixin.$small) {
-            max-width: 90%;
+            max-width: none;
           }
-        }
-      }
-    }
 
-    .blog-dots {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 20px;
+          img {
+            width: 100%;
+            height: 165px;
+            object-fit: cover;
+            background: #000;
+            border-radius: 15px 15px 0 0;
+          }
 
-      .blog-dot {
-        display: block;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: black;
-        transition: background 0.3s;
-        cursor: pointer;
+          .info-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            padding-bottom: 10px;
 
-        &.active {
-          background: #313131;
+            .date {
+              font-size: 13px;
+            }
+
+            .category {
+              font-size: 9px;
+              letter-spacing: 0.27px;
+              color: white;
+              background-color: #707070;
+              border-radius: 12px;
+              padding: 5px 10px;
+            }
+          }
+
+          p {
+            font-size: 12px;
+            letter-spacing: 0.36px;
+            line-height: 1.6;
+            max-height: calc(1.6em * 3);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+          
+            &::after {
+              content: '';
+            }
+
+            &.is-clamped::after {
+              content: '…';
+              position: absolute;
+              right: 17px;
+              bottom: 11px;
+              background: #fff;
+
+              @include mixin.max-screen(mixin.$small) {
+                right: 22px;
+                bottom: 10px;
+              }
+            }
+          } 
+
+          .info-wrap, p {
+            max-width: 200px;
+            width: 100%;
+            margin: auto;
+
+            @include mixin.max-screen(mixin.$small) {
+              max-width: 90%;
+            }
+          }
         }
       }
     }
@@ -1131,6 +1174,10 @@ const faqList = [
       &.show {
         opacity: 1;
         transform: scale(1);
+      }
+
+      @include mixin.max-screen(mixin.$small) {
+        margin-top: 30px;
       }
     }
   }
