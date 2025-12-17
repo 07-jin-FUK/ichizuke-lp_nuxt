@@ -145,6 +145,7 @@ onUnmounted(() => {
     }
 
     .btn {
+      display: block;
       width: 160px;
       height: fit-content;
       text-align: center;
