@@ -6,7 +6,7 @@
         <span>新たなアプローチ</span>
         <span class="logo-type">「イチヅケ」</span>
       </h1>
-      <NuxtLink to="/agent/entry" class="btn">転職エージェント無料登録</NuxtLink>
+      <div class="btn"><p>転職エージェント無料登録</p></div>
       <h2>掲載料金・初期費用<span>0</span>円</h2>
     </div>
     <div class="wave"></div>
@@ -119,7 +119,7 @@
       </div>
 
       <div class="blog-dots"></div>
-      <NuxtLink to="/blog" class="btn">ブログ一覧へ</NuxtLink>
+      <div class="btn"><p>ブログ一覧へ</p></div>
     </div>
   </section>
 
@@ -160,7 +160,7 @@ const pointSection = ref<HTMLElement | null>(null);
 const slides = ref<HTMLElement | null>(null);
 const currentSlide = ref(0);
 const bottomHeaderHeight = ref(0);
-const windowWidth = ref(window.innerWidth);
+const windowWidth = ref(0); // ← ここを修正！window.innerWidth を 0 に変更
 let io: IntersectionObserver | null = null;
 let ioAbout: IntersectionObserver | null = null;
 
@@ -491,7 +491,7 @@ const applyEllipsis = () => {
 // onMounted / onUnmounted
 // ==========================================
 const handleResize = async () => {
-  windowWidth.value = window.innerWidth;
+  windowWidth.value = window.innerWidth; // ← onMounted内で設定されるので問題なし
 
   await nextTick();
   await nextTick();
@@ -506,6 +506,9 @@ const handleResize = async () => {
 };
 
 onMounted(async () => {
+  // ← ここで windowWidth を設定
+  windowWidth.value = window.innerWidth;
+  
   await nextTick();
   await nextTick();
   await new Promise(r => setTimeout(r, 100));
@@ -666,20 +669,26 @@ const faqList = [
     }
 
     .btn {
-      font-size: 18px;
-      font-weight: 500;
-      letter-spacing: 0.54px;
       background-color: mixin.$main;
       border-radius: 30px;
       padding: 10px 40px 13px;
       margin-top: 20px;
       display: inline-block;
-      text-decoration: none;
 
       @include mixin.max-screen(mixin.$small) {
-        font-size: 14px;
         padding: 12px 30px 15px;
         margin-top: 10px;
+      }
+
+      p {
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0.54px;
+
+        @include mixin.max-screen(mixin.$small) {
+          font-size: 14px;
+        }
       }
     }
 
@@ -1219,16 +1228,12 @@ const faqList = [
 
     .btn {
       width: fit-content;
-      font-size: 14px;
-      color: white;
-      letter-spacing: 0.42px;
       background-color: #313131;
       border-radius: 20px;
       padding: 10px 25px;
       margin-top: 50px;
       margin-left: auto;
       display: block;
-      text-decoration: none;
 
       opacity: 0;
       transform: scale(0.95);
@@ -1244,6 +1249,17 @@ const faqList = [
 
       @include mixin.max-screen(mixin.$small) {
         margin-top: 30px;
+      }
+
+      p {
+        font-size: 14px;
+        color: white;
+        letter-spacing: 0.42px;
+        text-decoration: none;
+
+        @include mixin.max-screen(mixin.$small) {
+          font-size: 12px;
+        }
       }
     }
   }

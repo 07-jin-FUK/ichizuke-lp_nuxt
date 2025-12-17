@@ -1,13 +1,14 @@
 <template>
   <header class="header" :class="{ 'is-open': isActive, 'is-sticky': overHeroContent }">
-    <a href="/login" target="_blank" class="btn" v-if="route.path !== '/job-seeker'">企業ログイン</a>
+    <!-- <a href="/login" target="_blank" class="btn" v-if="route.path !== '/job-seeker'">企業ログイン</a> -->
+    <div class="btn" v-if="route.path !== '/job-seeker'"><p>企業ログイン</p></div>
     <div 
       v-if="route.path === '/agent'" 
       class="bottom-header" 
       :class="{ 'is-sticky': overHeroContent }"
     >
-      <a href="/login" target="_blank" class="btn">企業ログイン</a>
-      <a href="/entry" target="_blank" class="btn">無料登録</a>
+      <div class="btn">企業ログイン</div>
+      <div class="btn">無料登録</div>
     </div>
   </header>
 </template>
@@ -15,10 +16,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 
-const route = ref(useRoute());
+const route = useRoute(); // ref() で囲む必要なし
 const isActive = ref(false);
 const overHeroContent = ref(false);
-const windowWidth = ref(window.innerWidth); // 画面幅を常に保持
+const windowWidth = ref(0); // 初期値を0に変更（SSR対応）
 
 const isClicked = (): boolean => {
   isActive.value = !isActive.value;
@@ -33,11 +34,13 @@ const removeBodyClass = (refName: string): void => {
 
 // 画面幅更新
 const updateWindowWidth = () => {
-  windowWidth.value = window.innerWidth;
+  if (import.meta.client) { // クライアントサイドのみ実行
+    windowWidth.value = window.innerWidth;
+  }
 };
 
 const handleScroll = () => {
-  if (route.value.path !== '/agent') {
+  if (route.path !== '/agent') {
     overHeroContent.value = false;
     return;
   }
@@ -55,7 +58,10 @@ const handleScroll = () => {
 };
 
 onMounted(() => {
-  window.addEventListener('resize', updateWindowWidth); // 画面幅監視
+  // クライアントサイドで初期値を設定
+  windowWidth.value = window.innerWidth;
+  
+  window.addEventListener('resize', updateWindowWidth);
   window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll(); // 初期状態をチェック
 });
@@ -72,8 +78,6 @@ onUnmounted(() => {
 .header {
   .btn {
     height: 45px;
-    font-size: 16px;
-    letter-spacing: 0.48px;
     background-color: white;
     border-radius: 25px;
     box-shadow: 0px 3px 6px #00000029;
@@ -92,6 +96,15 @@ onUnmounted(() => {
       top: unset;
       right: 5%;
       bottom: 8%;
+    }
+
+    p {
+      font-size: 16px;
+      letter-spacing: 0.48px;
+
+      @include mixin.max-screen(mixin.$small) {
+        font-size: 14px;
+      }
     }
   }
 
@@ -139,6 +152,15 @@ onUnmounted(() => {
         width: 140px;
         font-size: 14px;
         padding: 10px 25px;
+      }
+
+      p {
+        font-size: 16px;
+        letter-spacing: 0.48px;
+
+        @include mixin.max-screen(mixin.$small) {
+          font-size: 14px;
+        }
       }
     }
   }
