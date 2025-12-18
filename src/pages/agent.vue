@@ -125,7 +125,7 @@
 
   <section id="faq">
     <div class="section-wrap">
-      <h5>FAQ</h5>
+      <h5>よくある質問</h5>
 
       <div class="faq-wrap">
         <details 
@@ -160,7 +160,7 @@ const pointSection = ref<HTMLElement | null>(null);
 const slides = ref<HTMLElement | null>(null);
 const currentSlide = ref(0);
 const bottomHeaderHeight = ref(0);
-const windowWidth = ref(0); // ← ここを修正！window.innerWidth を 0 に変更
+const windowWidth = ref(0)
 let io: IntersectionObserver | null = null;
 let ioAbout: IntersectionObserver | null = null;
 
@@ -202,6 +202,27 @@ const handleDetailClick = (event: MouseEvent) => {
     });
 
     details.setAttribute('open', 'true');
+
+    nextTick(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const rect = details.getBoundingClientRect();
+          const currentY = window.pageYOffset;
+
+          const targetY =
+            rect.top +
+            currentY -
+            bottomHeaderHeight.value -
+            10;
+
+          window.scrollTo({
+            top: targetY,
+            behavior: 'smooth'
+          });
+        });
+      });
+    });
+
     content.animate(
       [
         { height: '0px', opacity: '0' },
@@ -300,13 +321,15 @@ const handleScroll = () => {
 // ==========================================
 const updateBottomHeaderHeight = () => {
   const bottomHeader = document.querySelector('.bottom-header') as HTMLElement;
-  const slidesEl = slides.value;
-  if (!slidesEl || !bottomHeader) return;
+  if (!bottomHeader) return;
 
   bottomHeaderHeight.value = bottomHeader.offsetHeight;
-  document.body.style.paddingBottom = `${bottomHeaderHeight.value}px`;
 
-  slidesEl.style.setProperty('--bottom-header-height', `${bottomHeaderHeight.value}px`);
+  document.body.style.paddingBottom = `${bottomHeaderHeight.value}px`;
+  document.documentElement.style.setProperty(
+    '--bottom-header-height',
+    `${bottomHeaderHeight.value}px`
+  );
 };
 
 // ==========================================
@@ -339,21 +362,22 @@ const createObservers = () => {
   const targets = document.querySelectorAll<HTMLElement>(selector);
   const otherMargin = windowWidth.value <= 480 ? "0px 0px -20% 0px" : "0px 0px -30% 0px";
 
-  io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => entry.target.classList.toggle("show", entry.isIntersecting));
-    },
-    { threshold: 0.15, rootMargin: otherMargin }
-  );
+  io = new IntersectionObserver(  (entries) => { entries.forEach(entry => { 
+    if (entry.isIntersecting) { 
+      entry.target.classList.add("show"); 
+    }});  
+  },
+  { 
+    threshold: 0.15, rootMargin: otherMargin 
+  });
   targets.forEach(el => io!.observe(el));
 };
 
 // ==========================================
-// blog scroll + dot control（no clone）
+// blog scroll + dot control（clone infinite）
 // ==========================================
 let blogScrollTimer: number | undefined;
-let isProgrammaticScroll = false;
-let scrollEndTimer: number | null = null;
+let isTransitioning = false;
 
 const initAutoBlogScroll = () => {
   const wrap = document.querySelector(
@@ -361,109 +385,142 @@ const initAutoBlogScroll = () => {
   ) as HTMLElement | null;
   if (!wrap) return;
 
-  const itemWraps = Array.from(
-    wrap.querySelectorAll('.blog-item-wrap')
-  ) as HTMLElement[];
-  if (itemWraps.length === 0) return;
-
   const dotWrap = document.querySelector(
     '#blog .blog-dots'
   ) as HTMLElement | null;
   if (!dotWrap) return;
 
+  // 元スライド
+  const originals = Array.from(
+    wrap.querySelectorAll('.blog-item-wrap')
+  ) as HTMLElement[];
+  const realLength = originals.length;
+  if (realLength === 0) return;
+
   // ===== reset =====
-  wrap.scrollLeft = 0;
+  if (blogScrollTimer) {
+    clearInterval(blogScrollTimer);
+    blogScrollTimer = undefined;
+  }
   dotWrap.innerHTML = '';
-  if (blogScrollTimer) clearInterval(blogScrollTimer);
+  isTransitioning = false;
 
   // ===== dots =====
-  const dots: HTMLElement[] = [];
-  let index = 0;
-  const itemWidth = itemWraps[0].offsetWidth;
+  let current = 0;
 
-  const updateActiveDot = (i: number) => {
-    dots.forEach((d, idx) =>
-      d.classList.toggle('active', idx === i)
-    );
+  const updateDots = () => {
+    dotWrap.querySelectorAll('.blog-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
   };
 
-  itemWraps.forEach((_, i) => {
+  originals.forEach((_, i) => {
     const d = document.createElement('div');
     d.className = 'blog-dot';
     if (i === 0) d.classList.add('active');
-    dotWrap.appendChild(d);
-    dots.push(d);
 
-    // ===== dot click =====
     d.addEventListener('click', () => {
-      index = i;
-      isProgrammaticScroll = true;
-
-      wrap.scrollTo({
-        left: itemWidth * i,
-        behavior: 'smooth'
-      });
-
-      updateActiveDot(index);
-
-      if (scrollEndTimer) clearTimeout(scrollEndTimer);
-      scrollEndTimer = window.setTimeout(() => {
-        isProgrammaticScroll = false;
-      }, 400);
+      stopAuto();
+      goToSlide(i, true);
+      startAuto();
     });
+
+    dotWrap.appendChild(d);
   });
 
-  // ===== scroll sync（指操作のみ）=====
-  const syncByScroll = () => {
-    if (isProgrammaticScroll) return;
+  // ===== clone setup =====
+  const setupInfinite = () => {
+    wrap.querySelectorAll('.is-clone').forEach(el => el.remove());
 
-    const i = Math.round(wrap.scrollLeft / itemWidth);
-    index = Math.min(Math.max(i, 0), itemWraps.length - 1);
-    updateActiveDot(index);
+    // 後ろに clone
+    originals.forEach(el => {
+      const clone = el.cloneNode(true) as HTMLElement;
+      clone.classList.add('is-clone');
+      wrap.appendChild(clone);
+    });
+
+    // 前に clone
+    [...originals].reverse().forEach(el => {
+      const clone = el.cloneNode(true) as HTMLElement;
+      clone.classList.add('is-clone');
+      wrap.insertBefore(clone, wrap.firstChild);
+    });
+
+    // 本物の1枚目へ
+    wrap.scrollTo({
+      left: getSlidePosition(0),
+      behavior: 'auto'
+    });
   };
 
-  wrap.addEventListener('scroll', syncByScroll, { passive: true });
+  const getSlidePosition = (index: number) => {
+    const allSlides = wrap.querySelectorAll<HTMLElement>('.blog-item-wrap');
+    return allSlides[realLength + index].offsetLeft;
+  };
 
-  // ===== PC：auto slide 無効 =====
-  if (window.innerWidth > 480) return;
+  const goToSlide = (index: number, smooth = true) => {
+    if (isTransitioning) return;
+
+    current = index;
+    updateDots();
+
+    wrap.scrollTo({
+      left: getSlidePosition(index),
+      behavior: smooth ? 'smooth' : 'auto'
+    });
+  };
 
   // ===== auto slide =====
-  const slide = () => {
-    isProgrammaticScroll = true;
+  const nextSlide = () => {
+    if (isTransitioning) return;
+    isTransitioning = true;
 
-    // ---- last → first ----
-    if (index === itemWraps.length - 1) {
-      wrap.classList.add('is-fade');
+    const allSlides = wrap.querySelectorAll<HTMLElement>('.blog-item-wrap');
+    const nextIndex = realLength + current + 1;
 
-      setTimeout(() => {
-        index = 0;
-        wrap.scrollLeft = 0;
-
-        requestAnimationFrame(() => {
-          wrap.classList.remove('is-fade');
-          updateActiveDot(index);
-          isProgrammaticScroll = false;
-        });
-      }, 200);
-
-      return;
-    }
-
-    // ---- normal ----
-    index++;
     wrap.scrollTo({
-      left: itemWidth * index,
+      left: allSlides[nextIndex].offsetLeft,
       behavior: 'smooth'
     });
-    updateActiveDot(index);
 
-    if (scrollEndTimer) clearTimeout(scrollEndTimer);
-    scrollEndTimer = window.setTimeout(() => {
-      isProgrammaticScroll = false;
-    }, 400);
+    current = (current + 1) % realLength;
+    updateDots();
+
+    setTimeout(() => {
+      // 末尾 clone を超えたら瞬時補正
+      if (current === 0) {
+        wrap.scrollTo({
+          left: getSlidePosition(0),
+          behavior: 'auto'
+        });
+      }
+      isTransitioning = false;
+    }, 450);
   };
 
-  blogScrollTimer = window.setInterval(slide, 4000);
+  const startAuto = () => {
+    stopAuto();
+    blogScrollTimer = window.setInterval(nextSlide, 4000);
+  };
+
+  const stopAuto = () => {
+    if (blogScrollTimer) {
+      clearInterval(blogScrollTimer);
+      blogScrollTimer = undefined;
+    }
+  };
+
+  // ===== PC：auto slide 無効 =====
+  if (window.innerWidth > 480) {
+    wrap.querySelectorAll('.is-clone').forEach(el => el.remove());
+    wrap.scrollTo({ left: 0, behavior: 'auto' });
+    updateDots();
+    return;
+  }
+
+  setupInfinite();
+  updateDots();
+  startAuto();
 };
 
 // ==========================================
@@ -568,25 +625,25 @@ const appealItems = [
 
 const blogList = [
   {
-    img: "/outofthebox/images/img-blog_1.png",
+    img: "/outofthebox/images/img-blog_1.jpg",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ",
   },
   {
-    img: "/outofthebox/images/img-blog_2.png",
+    img: "/outofthebox/images/img-blog_2.jpg",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ",
   },
   {
-    img: "/outofthebox/images/img-blog_3.png",
+    img: "/outofthebox/images/img-blog_3.jpg",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ",
   },
   {
-    img: "/outofthebox/images/img-blog_4.png",
+    img: "/outofthebox/images/img-blog_4.jpg",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ",
@@ -1179,6 +1236,7 @@ const faqList = [
 
           @include mixin.max-screen(mixin.$small) {
             max-width: none;
+            padding-bottom: 25px;
           }
 
           img {
@@ -1186,7 +1244,7 @@ const faqList = [
             height: auto;
             aspect-ratio: 230 / 165;
             object-fit: cover;
-            background: #000;
+            object-position: center;
             border-radius: 15px 15px 0 0;
           }
 
@@ -1196,6 +1254,10 @@ const faqList = [
             align-items: center;
             padding-top: 15px;
             padding-bottom: 10px;
+
+            @include mixin.max-screen(mixin.$small) {
+              padding-top: 25px;
+            }
 
             .date {
               font-size: 13px;
@@ -1208,18 +1270,26 @@ const faqList = [
               background-color: #707070;
               border-radius: 12px;
               padding: 5px 10px;
+
+              @include mixin.max-screen(mixin.$small) {
+                font-size: 10px;
+              }
             }
           }
 
           p {
             font-size: 12px;
-            letter-spacing: 0.36px;
+            letter-spacing: 0.39px;
             line-height: 1.6;
             max-height: calc(1.6em * 3);
             overflow: hidden;
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 3;
+
+            @include mixin.max-screen(mixin.$small) {
+              letter-spacing: 0.5px;
+            }
           
             &::after {
               content: '';
@@ -1233,7 +1303,8 @@ const faqList = [
               background: #fff;
 
               @include mixin.max-screen(mixin.$small) {
-                bottom: 10px;
+                right: 35px;
+                bottom: 21px;
               }
             }
           } 
@@ -1244,7 +1315,7 @@ const faqList = [
             margin: auto;
 
             @include mixin.max-screen(mixin.$small) {
-              max-width: 90%;
+              max-width: 80%;
             }
           }
         }
@@ -1273,7 +1344,7 @@ const faqList = [
       }
 
       @include mixin.max-screen(mixin.$small) {
-        margin-top: 30px;
+        margin-top: 20px;
       }
 
       p {
@@ -1281,9 +1352,11 @@ const faqList = [
         color: white;
         letter-spacing: 0.42px;
         text-decoration: none;
+        line-height: 1.05;
 
         @include mixin.max-screen(mixin.$small) {
           font-size: 12px;
+          line-height: 1.25;
         }
       }
     }
@@ -1434,6 +1507,10 @@ const faqList = [
           .faq-toggle-icon::after {
             transform: translateX(-50%) rotate(90deg);
             opacity: 0;
+          }
+
+          .faq-item .faq-answer {
+            padding-bottom: var(--bottom-header-height);
           }
         }
 

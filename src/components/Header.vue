@@ -17,29 +17,36 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 
-const route = useRoute(); // ref() で囲む必要なし
+const route = useRoute();
 const isActive = ref(false);
 const overHeroContent = ref(false);
-const windowWidth = ref(0); // 初期値を0に変更（SSR対応）
+const windowWidth = ref(0);
 
+// ================================
+// menu
+// ================================
 const isClicked = (): boolean => {
   isActive.value = !isActive.value;
   document.body.classList.toggle('pined');
   return isActive.value;
 };
 
-const removeBodyClass = (refName: string): void => {
+const removeBodyClass = (): void => {
   isActive.value = false;
   document.body.classList.remove('pined');
 };
 
-// 画面幅更新
+// ================================
+// window width
+// ================================
 const updateWindowWidth = () => {
-  if (import.meta.client) { // クライアントサイドのみ実行
-    windowWidth.value = window.innerWidth;
-  }
+  if (!import.meta.client) return;
+  windowWidth.value = window.innerWidth;
 };
 
+// ================================
+// hero scroll判定
+// ================================
 const handleScroll = () => {
   if (route.path !== '/agent') {
     overHeroContent.value = false;
@@ -53,23 +60,67 @@ const handleScroll = () => {
   }
 
   const heroRect = heroSection.getBoundingClientRect();
-
-  // PCと同じ判定: heroが完全に画面外に出たら表示
   overHeroContent.value = heroRect.bottom <= 0;
 };
 
+// ================================
+// iOS Safari SP 判定
+// ================================
+const applyIOSSafariClass = () => {
+  const ua = window.navigator.userAgent;
+  const isIOS = /iP(hone|od|ad)/.test(ua);
+  const isSafari = /Safari/.test(ua) && !/Chrome|CriOS|FxiOS/.test(ua);
+  const isSP = window.innerWidth <= 480;
+
+  if (isIOS && isSafari && isSP) {
+    document.documentElement.classList.add('ios-safari-sp');
+  }
+};
+
+// ================================
+// Android Chrome / Google 対策
+// visualViewportでbottom補正
+// ================================
+const updateBottomHeaderPosition = () => {
+  const bottomHeader = document.querySelector('.bottom-header') as HTMLElement;
+  if (!bottomHeader || !window.visualViewport) return;
+
+  const vv = window.visualViewport;
+
+  // 表示領域の下端との差分
+  const offset =
+    window.innerHeight - (vv.height + vv.offsetTop);
+
+  bottomHeader.style.bottom = `${Math.max(offset, 0)}px`;
+};
+
+// ================================
+// lifecycle
+// ================================
 onMounted(() => {
-  // クライアントサイドで初期値を設定
   windowWidth.value = window.innerWidth;
-  
+
+  applyIOSSafariClass();
+  handleScroll();
+  updateBottomHeaderPosition();
+
   window.addEventListener('resize', updateWindowWidth);
   window.addEventListener('scroll', handleScroll, { passive: true });
-  handleScroll(); // 初期状態をチェック
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateBottomHeaderPosition);
+    window.visualViewport.addEventListener('scroll', updateBottomHeaderPosition);
+  }
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateWindowWidth);
   window.removeEventListener('scroll', handleScroll);
+
+  if (window.visualViewport) {
+    window.visualViewport.removeEventListener('resize', updateBottomHeaderPosition);
+    window.visualViewport.removeEventListener('scroll', updateBottomHeaderPosition);
+  }
 });
 </script>
 
@@ -130,6 +181,12 @@ onUnmounted(() => {
     top: unset;
     bottom: 0px;
     z-index: 1000;
+
+    :global(.ios-safari-sp) {
+      .bottom-header {
+        padding-top: 15px;
+      }
+    }
 
     // 初期状態は非表示
     opacity: 0;
