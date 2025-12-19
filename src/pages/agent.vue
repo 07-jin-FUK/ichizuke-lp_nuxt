@@ -9,7 +9,7 @@
       <div class="btn"><p>転職エージェント無料登録</p></div>
       <h2>掲載料金・初期費用<span>0</span>円</h2>
     </div>
-    <div class="wave"></div>
+    <div class="wave" fetchpriority=high></div>
   </div>
 
   <section id="about">
@@ -349,12 +349,13 @@ const createObservers = () => {
   aboutTargets.forEach(el => ioAbout!.observe(el));
 
   if (io) io.disconnect();
+
+  // ブログアイテム以外のセレクター
   const selector = `
     #about .mock,
     #appeal .appeal-wrap .appeal-item,
     #appeal .section-wrap > h5,
     #blog .section-wrap > h5,
-    #blog .blog-wrap .blog-item,
     #blog .btn,
     #faq .section-wrap > h5,
     #faq .faq-wrap
@@ -362,15 +363,28 @@ const createObservers = () => {
   const targets = document.querySelectorAll<HTMLElement>(selector);
   const otherMargin = windowWidth.value <= 480 ? "0px 0px -20% 0px" : "0px 0px -30% 0px";
 
-  io = new IntersectionObserver(  (entries) => { entries.forEach(entry => { 
-    if (entry.isIntersecting) { 
-      entry.target.classList.add("show"); 
-    }});  
-  },
-  { 
-    threshold: 0.15, rootMargin: otherMargin 
-  });
+  // ブログアイテム以外：通常のトグル動作
+  io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => entry.target.classList.toggle("show", entry.isIntersecting));
+    },
+    { threshold: 0.15, rootMargin: otherMargin }
+  );
   targets.forEach(el => io!.observe(el));
+
+  // ブログアイテム：通常のトグル動作（クローン含む）
+  const blogItems = document.querySelectorAll<HTMLElement>(
+    '#blog .blog-wrap .blog-item-wrap .blog-item'
+  );
+  const ioBlog = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        entry.target.classList.toggle("show", entry.isIntersecting);
+      });
+    },
+    { threshold: 0.15, rootMargin: otherMargin }
+  );
+  blogItems.forEach(el => ioBlog.observe(el));
 };
 
 // ==========================================
@@ -378,6 +392,7 @@ const createObservers = () => {
 // ==========================================
 let blogScrollTimer: number | undefined;
 let isTransitioning = false;
+let isResetting = false; 
 
 const initAutoBlogScroll = () => {
   const wrap = document.querySelector(
@@ -404,6 +419,9 @@ const initAutoBlogScroll = () => {
   }
   dotWrap.innerHTML = '';
   isTransitioning = false;
+  isResetting = false;  // ← 初期化のみ
+
+  
 
   // ===== dots =====
   let current = 0;
@@ -428,7 +446,7 @@ const initAutoBlogScroll = () => {
     dotWrap.appendChild(d);
   });
 
-  // ===== clone setup =====
+
   const setupInfinite = () => {
     wrap.querySelectorAll('.is-clone').forEach(el => el.remove());
 
@@ -436,6 +454,8 @@ const initAutoBlogScroll = () => {
     originals.forEach(el => {
       const clone = el.cloneNode(true) as HTMLElement;
       clone.classList.add('is-clone');
+      const blogItem = clone.querySelector('.blog-item');
+      if (blogItem) blogItem.classList.remove('show');
       wrap.appendChild(clone);
     });
 
@@ -443,6 +463,8 @@ const initAutoBlogScroll = () => {
     [...originals].reverse().forEach(el => {
       const clone = el.cloneNode(true) as HTMLElement;
       clone.classList.add('is-clone');
+      const blogItem = clone.querySelector('.blog-item');
+      if (blogItem) blogItem.classList.remove('show');
       wrap.insertBefore(clone, wrap.firstChild);
     });
 
@@ -470,7 +492,6 @@ const initAutoBlogScroll = () => {
     });
   };
 
-  // ===== auto slide =====
   const nextSlide = () => {
     if (isTransitioning) return;
     isTransitioning = true;
@@ -487,12 +508,30 @@ const initAutoBlogScroll = () => {
     updateDots();
 
     setTimeout(() => {
-      // 末尾 clone を超えたら瞬時補正
       if (current === 0) {
+        isResetting = true;
+        
+        // 本物の1枚目の.blog-itemを取得
+        const realFirstItem = originals[0].querySelector('.blog-item') as HTMLElement;
+        
+        // トランジションを一時的に無効化し、showを付与
+        if (realFirstItem) {
+          realFirstItem.style.transition = 'none';
+          realFirstItem.classList.add('show');
+        }
+        
         wrap.scrollTo({
           left: getSlidePosition(0),
           behavior: 'auto'
         });
+        
+        // 少し待ってからトランジションを戻す
+        setTimeout(() => {
+          if (realFirstItem) {
+            realFirstItem.style.transition = '';
+          }
+          isResetting = false;
+        }, 100);
       }
       isTransitioning = false;
     }, 450);
@@ -521,6 +560,38 @@ const initAutoBlogScroll = () => {
   setupInfinite();
   updateDots();
   startAuto();
+  
+  // クローン作成後、全クローンの.showを確実に削除
+  wrap.querySelectorAll('.is-clone .blog-item').forEach(el => {
+    el.classList.remove('show');
+  });
+  
+  // クローン作成後にブログアイテムのObserverを再設定（トグル動作）
+  const otherMargin = window.innerWidth <= 480 ? "0px 0px -20% 0px" : "0px 0px -30% 0px";
+  const allBlogItems = wrap.querySelectorAll<HTMLElement>('.blog-item');
+  
+  const ioBlogRefresh = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        const isClone = entry.target.closest('.is-clone');
+        
+        // リセット中のクローン要素は.showを外さない
+        if (isResetting && isClone && !entry.isIntersecting) {
+          return;
+        }
+        
+        entry.target.classList.toggle("show", entry.isIntersecting);
+      });
+    },
+    { threshold: 0.15, rootMargin: otherMargin }
+  );
+  
+  allBlogItems.forEach(el => {
+    ioBlogRefresh.observe(el);
+  });
+  
+  // デバッグ: 監視対象の数を確認
+  console.log('Blog items observed:', allBlogItems.length);
 };
 
 // ==========================================

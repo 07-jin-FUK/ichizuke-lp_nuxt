@@ -184,7 +184,7 @@ onUnmounted(() => {
 
     :global(.ios-safari-sp) {
       .bottom-header {
-        padding-top: 15px;
+        padding-top: 30px;
       }
     }
 
