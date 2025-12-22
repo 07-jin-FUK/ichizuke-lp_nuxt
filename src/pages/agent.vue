@@ -357,7 +357,7 @@ const createObservers = () => {
   if (io) io.disconnect();
   
   const isMobile = windowWidth.value <= 480;
-  const rootMargin = isMobile ? "0px 0px -15% 0px" : "0px 0px -20% 0px";
+  const rootMargin = isMobile ? "0px 0px 50% 0px" : "0px 0px -20% 0px";
 
   // すべての監視対象を一つのObserverで管理
   const allTargets = document.querySelectorAll<HTMLElement>(`
