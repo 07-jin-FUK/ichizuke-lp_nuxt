@@ -432,7 +432,6 @@ usePageHead(head);
     position: fixed;
     top: 0;
     left: 0;
-    background-image: url(/images/img-background.jpg);
     background-position: center;
     background-size: cover;
 
