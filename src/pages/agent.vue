@@ -884,7 +884,7 @@ const faqList = [
       &.show {
         opacity: 1;
         transform: scale(1);
-        will-change: opacity, transform;
+        // will-change: opacity, transform;
       }
 
       h5 {
@@ -949,7 +949,7 @@ const faqList = [
       &.show {
         opacity: 1;
         transform: scale(1);
-        will-change: opacity, transform;
+        // will-change: opacity, transform;
       }
     }
   }
@@ -1125,7 +1125,7 @@ const faqList = [
       &.show {
         opacity: 1;
         transform: scale(1);
-        will-change: opacity, transform;
+        // will-change: opacity, transform;
       }
 
       span {
@@ -1168,7 +1168,7 @@ const faqList = [
         &.show {
           opacity: 1;
           transform: scale(1);
-          will-change: opacity, transform;
+        //   will-change: opacity, transform;
         }
 
         @include mixin.max-screen(mixin.$small) {
@@ -1232,7 +1232,7 @@ const faqList = [
     &.show {
       opacity: 1;
       transform: scale(1);
-      will-change: opacity, transform;
+    //   will-change: opacity, transform;
     }
   }
 
@@ -1298,7 +1298,7 @@ const faqList = [
           &.show {
             opacity: 1;
             transform: scale(1);
-            will-change: opacity, transform;
+            // will-change: opacity, transform;
           }
 
           @include mixin.max-screen(mixin.$small) {
@@ -1467,7 +1467,7 @@ const faqList = [
       &.show {
         opacity: 1;
         transform: scale(1);
-        will-change: opacity, transform;
+        // will-change: opacity, transform;
       }
     }
 
@@ -1493,7 +1493,7 @@ const faqList = [
       &.show {
         opacity: 1;
         transform: scale(1);
-        will-change: opacity, transform;
+        // will-change: opacity, transform;
       }
 
       .faq-item {
