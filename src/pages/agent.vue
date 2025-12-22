@@ -26,9 +26,9 @@
   <section id="point" ref="pointSection">
     <div class="slides" ref="slides">
 
-      <div class="section-wrap slide slide1" data-index="0">
-        <div class="mask">
-          <div class="inner" style="background-image: url(/outofthebox/images/img-point_1.jpg);">
+      <div class="section-wrap slide slide1" data-index="0" ref="slide1">
+        <div class="mask" ref="mask1">
+          <div class="inner" ref="inner1" style="background-image: url(/images/img-point_1.jpg);">
             <div class="text-wrap">
               <h5>本気度の高い求職者へ最短でリーチ<span>できる。</span></h5>
               <p>
@@ -41,9 +41,9 @@
         </div>
       </div>
 
-      <div class="section-wrap slide slide2" data-index="1">
-        <div class="mask">
-          <div class="inner" style="background-image: url(/outofthebox/images/img-point_2.jpg);">
+      <div class="section-wrap slide slide2" data-index="1" ref="slide2">
+        <div class="mask" ref="mask2">
+          <div class="inner" style="background-image: url(/images/img-point_2.jpg);">
             <div class="text-wrap">
               <h5>競合エージェントとの差別化が図れる。</h5>
               <p>
@@ -56,9 +56,9 @@
         </div>
       </div>
 
-      <div class="section-wrap slide slide3" data-index="2">
-        <div class="mask">
-          <div class="inner" style="background-image: url(/outofthebox/images/img-point_3.jpg);">
+      <div class="section-wrap slide slide3" data-index="2" ref="slide3">
+        <div class="mask" ref="mask3">
+          <div class="inner" style="background-image: url(/images/img-point_3.jpg);">
             <div class="text-wrap">
               <h5>データに基づいた採用活動ができる。</h5>
               <p>
@@ -161,8 +161,19 @@ const slides = ref<HTMLElement | null>(null);
 const currentSlide = ref(0);
 const bottomHeaderHeight = ref(0);
 const windowWidth = ref(0)
+
+// ==========================================
+// 🚀 最適化: DOM参照をrefで保持
+// ==========================================
+const slide1 = ref<HTMLElement | null>(null);
+const slide2 = ref<HTMLElement | null>(null);
+const slide3 = ref<HTMLElement | null>(null);
+const mask1 = ref<HTMLElement | null>(null);
+const mask2 = ref<HTMLElement | null>(null);
+const mask3 = ref<HTMLElement | null>(null);
+const inner1 = ref<HTMLElement | null>(null);
+
 let io: IntersectionObserver | null = null;
-let ioAbout: IntersectionObserver | null = null;
 
 // ==========================================
 // アコーディオン
@@ -234,36 +245,31 @@ const handleDetailClick = (event: MouseEvent) => {
 };
 
 // ==========================================
-// point scroll animation
+// 🚀 最適化: point scroll animation
 // ==========================================
-const handleScroll = () => {
-  if (!pointSection.value || !slides.value) return;
+let rafId: number | null = null;
+let isScrolling = false;
+
+const doScroll = () => {
+  if (!pointSection.value || !slide1.value || !mask1.value || !inner1.value) return;
+  if (!slide2.value || !mask2.value || !slide3.value || !mask3.value) return;
 
   const pointRect = pointSection.value.getBoundingClientRect();
   const windowHeight = window.innerHeight;
 
-  const slide1 = slides.value.querySelector('.slide1') as HTMLElement;
-  const slide2 = slides.value.querySelector('.slide2') as HTMLElement;
-  const slide3 = slides.value.querySelector('.slide3') as HTMLElement;
-
-  const mask1 = slide1.querySelector('.mask') as HTMLElement;
-  const mask2 = slide2.querySelector('.mask') as HTMLElement;
-  const mask3 = slide3.querySelector('.mask') as HTMLElement;
-  const inner1 = slide1.querySelector('.inner') as HTMLElement;
-
   // すべてのスライドを常に表示
-  slide1.style.display = "block";
-  slide2.style.display = "block";
-  slide3.style.display = "block";
+  slide1.value.style.display = "block";
+  slide2.value.style.display = "block";
+  slide3.value.style.display = "block";
 
   if (pointRect.top > 0) {
-    inner1.style.transform = `translate(-50%, -50%) scale(0.5)`;
-    mask1.style.clipPath = 'inset(0 0 0 0)';
-    mask2.style.clipPath = 'inset(100% 0 0 0)';
-    mask3.style.clipPath = 'inset(100% 0 0 0)';
-    slide1.style.zIndex = "1";
-    slide2.style.zIndex = "2";
-    slide3.style.zIndex = "3";
+    inner1.value.style.transform = `translate(-50%, -50%) scale(0.5)`;
+    mask1.value.style.clipPath = 'inset(0 0 0 0)';
+    mask2.value.style.clipPath = 'inset(100% 0 0 0)';
+    mask3.value.style.clipPath = 'inset(100% 0 0 0)';
+    slide1.value.style.zIndex = "1";
+    slide2.value.style.zIndex = "2";
+    slide3.value.style.zIndex = "3";
     return;
   }
 
@@ -275,27 +281,27 @@ const handleScroll = () => {
 
   if (progress < 0.25) {
     const t = progress / 0.25;
-    inner1.style.transform = `translate(-50%, -50%) scale(${0.5 + t * 0.5})`;
-    mask1.style.clipPath = 'inset(0 0 0 0)';
-    mask2.style.clipPath = 'inset(100% 0 0 0)';
-    mask3.style.clipPath = 'inset(100% 0 0 0)';
-    slide1.style.zIndex = "1";
-    slide2.style.zIndex = "2";
-    slide3.style.zIndex = "3";
+    inner1.value.style.transform = `translate(-50%, -50%) scale(${0.5 + t * 0.5})`;
+    mask1.value.style.clipPath = 'inset(0 0 0 0)';
+    mask2.value.style.clipPath = 'inset(100% 0 0 0)';
+    mask3.value.style.clipPath = 'inset(100% 0 0 0)';
+    slide1.value.style.zIndex = "1";
+    slide2.value.style.zIndex = "2";
+    slide3.value.style.zIndex = "3";
     return;
   }
 
   if (progress < 0.55 + PHASE2_DELAY) {
     const t = (progress - (0.25 + PHASE2_DELAY)) / 0.3;
-    inner1.style.transform = `translate(-50%, -50%) scale(1)`;
+    inner1.value.style.transform = `translate(-50%, -50%) scale(1)`;
 
-    mask1.style.clipPath = 'inset(0 0 0 0)';
-    mask2.style.clipPath = `inset(${(1 - t) * 100}% 0 0 0)`;
-    mask3.style.clipPath = 'inset(100% 0 0 0)';
+    mask1.value.style.clipPath = 'inset(0 0 0 0)';
+    mask2.value.style.clipPath = `inset(${(1 - t) * 100}% 0 0 0)`;
+    mask3.value.style.clipPath = 'inset(100% 0 0 0)';
 
-    slide1.style.zIndex = "1";
-    slide2.style.zIndex = "2";
-    slide3.style.zIndex = "3";
+    slide1.value.style.zIndex = "1";
+    slide2.value.style.zIndex = "2";
+    slide3.value.style.zIndex = "3";
     return;
   }
 
@@ -303,17 +309,29 @@ const handleScroll = () => {
     const t = (progress - (0.55 + PHASE2_DELAY)) / (0.45 - PHASE2_DELAY);
     const clampedT = Math.min(Math.max(t, 0), 1);
 
-    inner1.style.transform = `translate(-50%, -50%) scale(1)`;
+    inner1.value.style.transform = `translate(-50%, -50%) scale(1)`;
 
-    mask1.style.clipPath = 'inset(0 0 0 0)';
-    mask2.style.clipPath = 'inset(0 0 0 0)';
-    mask3.style.clipPath = `inset(${(1 - clampedT) * 100}% 0 0 0)`;
+    mask1.value.style.clipPath = 'inset(0 0 0 0)';
+    mask2.value.style.clipPath = 'inset(0 0 0 0)';
+    mask3.value.style.clipPath = `inset(${(1 - clampedT) * 100}% 0 0 0)`;
 
-    slide1.style.zIndex = "1";
-    slide2.style.zIndex = "2";
-    slide3.style.zIndex = "3";
+    slide1.value.style.zIndex = "1";
+    slide2.value.style.zIndex = "2";
+    slide3.value.style.zIndex = "3";
     return;
   }
+};
+
+const handleScroll = () => {
+  if (isScrolling) return;
+  isScrolling = true;
+  
+  if (rafId) cancelAnimationFrame(rafId);
+  
+  rafId = requestAnimationFrame(() => {
+    doScroll();
+    isScrolling = false;
+  });
 };
 
 // ==========================================
@@ -333,58 +351,37 @@ const updateBottomHeaderHeight = () => {
 };
 
 // ==========================================
-// IntersectionObserver
+// 🚀 最適化: IntersectionObserverを統合
 // ==========================================
 const createObservers = () => {
-  if (ioAbout) ioAbout.disconnect();
-  const aboutTargets = document.querySelectorAll<HTMLElement>('#about .text-wrap, img');
-  const aboutMargin = windowWidth.value <= 480 ? "0px 0px -15% 0px" : "0px 0px -10% 0px";
-
-  ioAbout = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => entry.target.classList.toggle("show", entry.isIntersecting));
-    },
-    { threshold: 0.1, rootMargin: aboutMargin }
-  );
-  aboutTargets.forEach(el => ioAbout!.observe(el));
-
   if (io) io.disconnect();
+  
+  const isMobile = windowWidth.value <= 480;
+  const rootMargin = isMobile ? "0px 0px -15% 0px" : "0px 0px -20% 0px";
 
-  // ブログアイテム以外のセレクター
-  const selector = `
-    #about .mock,
+  // すべての監視対象を一つのObserverで管理
+  const allTargets = document.querySelectorAll<HTMLElement>(`
+    #about .text-wrap,
+    #about img,
     #appeal .appeal-wrap .appeal-item,
     #appeal .section-wrap > h5,
     #blog .section-wrap > h5,
     #blog .btn,
+    #blog .blog-wrap .blog-item-wrap:not(.is-clone) .blog-item,
     #faq .section-wrap > h5,
     #faq .faq-wrap
-  `;
-  const targets = document.querySelectorAll<HTMLElement>(selector);
-  const otherMargin = windowWidth.value <= 480 ? "0px 0px -20% 0px" : "0px 0px -30% 0px";
+  `);
 
-  // ブログアイテム以外：通常のトグル動作
   io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => entry.target.classList.toggle("show", entry.isIntersecting));
-    },
-    { threshold: 0.15, rootMargin: otherMargin }
-  );
-  targets.forEach(el => io!.observe(el));
-
-  // ブログアイテム：通常のトグル動作（クローン含む）
-  const blogItems = document.querySelectorAll<HTMLElement>(
-    '#blog .blog-wrap .blog-item-wrap .blog-item'
-  );
-  const ioBlog = new IntersectionObserver(
     (entries) => {
       entries.forEach(entry => {
         entry.target.classList.toggle("show", entry.isIntersecting);
       });
     },
-    { threshold: 0.15, rootMargin: otherMargin }
+    { threshold: 0.1, rootMargin }
   );
-  blogItems.forEach(el => ioBlog.observe(el));
+  
+  allTargets.forEach(el => io!.observe(el));
 };
 
 // ==========================================
@@ -419,9 +416,7 @@ const initAutoBlogScroll = () => {
   }
   dotWrap.innerHTML = '';
   isTransitioning = false;
-  isResetting = false;  // ← 初期化のみ
-
-  
+  isResetting = false;
 
   // ===== dots =====
   let current = 0;
@@ -445,7 +440,6 @@ const initAutoBlogScroll = () => {
 
     dotWrap.appendChild(d);
   });
-
 
   const setupInfinite = () => {
     wrap.querySelectorAll('.is-clone').forEach(el => el.remove());
@@ -511,10 +505,8 @@ const initAutoBlogScroll = () => {
       if (current === 0) {
         isResetting = true;
         
-        // 本物の1枚目の.blog-itemを取得
         const realFirstItem = originals[0].querySelector('.blog-item') as HTMLElement;
         
-        // トランジションを一時的に無効化し、showを付与
         if (realFirstItem) {
           realFirstItem.style.transition = 'none';
           realFirstItem.classList.add('show');
@@ -525,7 +517,6 @@ const initAutoBlogScroll = () => {
           behavior: 'auto'
         });
         
-        // 少し待ってからトランジションを戻す
         setTimeout(() => {
           if (realFirstItem) {
             realFirstItem.style.transition = '';
@@ -561,37 +552,9 @@ const initAutoBlogScroll = () => {
   updateDots();
   startAuto();
   
-  // クローン作成後、全クローンの.showを確実に削除
   wrap.querySelectorAll('.is-clone .blog-item').forEach(el => {
     el.classList.remove('show');
   });
-  
-  // クローン作成後にブログアイテムのObserverを再設定（トグル動作）
-  const otherMargin = window.innerWidth <= 480 ? "0px 0px -20% 0px" : "0px 0px -30% 0px";
-  const allBlogItems = wrap.querySelectorAll<HTMLElement>('.blog-item');
-  
-  const ioBlogRefresh = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => {
-        const isClone = entry.target.closest('.is-clone');
-        
-        // リセット中のクローン要素は.showを外さない
-        if (isResetting && isClone && !entry.isIntersecting) {
-          return;
-        }
-        
-        entry.target.classList.toggle("show", entry.isIntersecting);
-      });
-    },
-    { threshold: 0.15, rootMargin: otherMargin }
-  );
-  
-  allBlogItems.forEach(el => {
-    ioBlogRefresh.observe(el);
-  });
-  
-  // デバッグ: 監視対象の数を確認
-  console.log('Blog items observed:', allBlogItems.length);
 };
 
 // ==========================================
@@ -619,7 +582,7 @@ const applyEllipsis = () => {
 // onMounted / onUnmounted
 // ==========================================
 const handleResize = async () => {
-  windowWidth.value = window.innerWidth; // ← onMounted内で設定されるので問題なし
+  windowWidth.value = window.innerWidth;
 
   await nextTick();
   await nextTick();
@@ -634,7 +597,6 @@ const handleResize = async () => {
 };
 
 onMounted(async () => {
-  // ← ここで windowWidth を設定
   windowWidth.value = window.innerWidth;
   
   await nextTick();
@@ -655,14 +617,14 @@ onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
   window.removeEventListener('scroll', handleScroll);
 
+  if (rafId) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
   if (io) {
     io.disconnect();
     io = null;
-  }
-
-  if (ioAbout) {
-    ioAbout.disconnect();
-    ioAbout = null;
   }
 
   if (blogScrollTimer) {
@@ -678,17 +640,17 @@ onUnmounted(() => {
 // ==========================================
 const appealItems = [
   {
-    img: "/outofthebox/images/img-appeal_1.jpg",
+    img: "/images/img-appeal_1.jpg",
     title: "求職者へのアプローチ無制限",
     text: "求職者へは、回数・上限なく提案が可能。オファー枠やメッセージ上限に縛られず、候補者への接触スピードと量の両面を高め、機会損失を防ぎながらアクティブな獲得が行えます。"
   },
   {
-    img: "/outofthebox/images/img-appeal_2.jpg",
+    img: "/images/img-appeal_2.jpg",
     title: "採用コストの効率化",
     text: "求職者のスキル・経験・実績などの情報を確認したうえで、提示したい年収を示すことで、求職者の最終的に大きな判断材料の「年収」から判断しやすくなり、ミスマッチを最小化します。"
   },
   {
-    img: "/outofthebox/images/img-appeal_3.jpg",
+    img: "/images/img-appeal_3.jpg",
     title: "求職者と直接コンタクト",
     text: "条件を満たすと求職者とダイレクトにやり取りが可能になります。仲介を挟まないためレスポンスが早く、提案の温度感がそのまま届き、意思決定の速度と成約率が向上します。"
   }
@@ -696,25 +658,25 @@ const appealItems = [
 
 const blogList = [
   {
-    img: "/outofthebox/images/img-blog_1.jpg",
+    img: "/images/img-blog_1.jpg",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ",
   },
   {
-    img: "/outofthebox/images/img-blog_2.jpg",
+    img: "/images/img-blog_2.jpg",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ",
   },
   {
-    img: "/outofthebox/images/img-blog_3.jpg",
+    img: "/images/img-blog_3.jpg",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ提供サービス変更及び利用規約改定のお知らせ",
   },
   {
-    img: "/outofthebox/images/img-blog_4.jpg",
+    img: "/images/img-blog_4.jpg",
     date: "2025.11.11",
     category: "お知らせ",
     title: "提供サービス変更及び利用規約改定のお知らせ",
@@ -912,11 +874,11 @@ const faqList = [
       transition: 
         opacity 0.6s ease,
         transform 0.6s ease;
-      will-change: opacity, transform;
 
       &.show {
         opacity: 1;
         transform: scale(1);
+        will-change: opacity, transform;
       }
 
       h5 {
@@ -971,11 +933,11 @@ const faqList = [
       transition: 
         opacity 0.6s ease,
         transform 0.6s ease;
-      will-change: opacity, transform;
 
       &.show {
         opacity: 1;
         transform: scale(1);
+        will-change: opacity, transform;
       }
     }
   }
@@ -1132,12 +1094,11 @@ const faqList = [
       margin-bottom: 60px;
 
       position: relative;
-        opacity: 0;
-        transform: scale(0.95);
-        transition: 
-          opacity 0.6s ease,
-          transform 0.6s ease;
-      will-change: opacity, transform;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: 
+        opacity 0.6s ease,
+        transform 0.6s ease;
 
       @include mixin.max-screen(mixin.$small) {
         font-size: 16px;
@@ -1147,6 +1108,7 @@ const faqList = [
       &.show {
         opacity: 1;
         transform: scale(1);
+        will-change: opacity, transform;
       }
 
       span {
@@ -1180,11 +1142,11 @@ const faqList = [
         transition: 
           opacity 0.6s ease,
           transform 0.6s ease;
-        will-change: opacity, transform;
 
         &.show {
           opacity: 1;
           transform: scale(1);
+          will-change: opacity, transform;
         }
 
         @include mixin.max-screen(mixin.$small) {
@@ -1230,10 +1192,9 @@ const faqList = [
 
     opacity: 0;
     transform: scale(0.95);
-      transition: 
-        opacity 0.6s ease,
-        transform 0.6s ease;
-    will-change: opacity, transform;
+    transition: 
+      opacity 0.6s ease,
+      transform 0.6s ease;
 
     @include mixin.max-screen(mixin.$small) {
       font-size: 16px;
@@ -1243,6 +1204,7 @@ const faqList = [
     &.show {
       opacity: 1;
       transform: scale(1);
+      will-change: opacity, transform;
     }
   }
 
@@ -1298,11 +1260,11 @@ const faqList = [
           transition: 
             opacity 0.6s ease,
             transform 0.6s ease;
-          will-change: opacity, transform;
 
           &.show {
             opacity: 1;
             transform: scale(1);
+            will-change: opacity, transform;
           }
 
           @include mixin.max-screen(mixin.$small) {
@@ -1407,11 +1369,11 @@ const faqList = [
       transition: 
         opacity 0.6s ease,
         transform 0.6s ease;
-      will-change: opacity, transform;
 
       &.show {
         opacity: 1;
         transform: scale(1);
+        will-change: opacity, transform;
       }
 
       @include mixin.max-screen(mixin.$small) {
@@ -1455,11 +1417,11 @@ const faqList = [
       transition: 
         opacity 0.6s ease,
         transform 0.6s ease;
-      will-change: opacity, transform;
 
       &.show {
         opacity: 1;
         transform: scale(1);
+        will-change: opacity, transform;
       }
     }
 
@@ -1475,11 +1437,11 @@ const faqList = [
       transition: 
         opacity 0.6s ease,
         transform 0.6s ease;
-      will-change: opacity, transform;
 
       &.show {
         opacity: 1;
         transform: scale(1);
+        will-change: opacity, transform;
       }
 
       .faq-item {
