@@ -865,15 +865,21 @@ const faqList = [
       gap: 55px 0;
     }
 
-    .text-wrap {
-      max-width: 440px;
-      width: 100%;
+.text-wrap {
+  max-width: 440px;
+  width: 100%;
 
-      opacity: 0;
-      transform: scale(0.95);
-      transition: 
-        opacity 0.6s ease,
-        transform 0.6s ease;
+  opacity: 0;
+  transform: scale(0.95) translateZ(0);
+  transition: 
+    opacity 0.6s ease,
+    transform 0.6s ease;
+    
+      @include mixin.max-screen(mixin.$small) {
+    transition: 
+      opacity 0.4s ease,
+      transform 0.4s ease;
+  }
 
       &.show {
         opacity: 1;
@@ -929,10 +935,16 @@ const faqList = [
       flex-shrink: 0;
 
       opacity: 0;
-      transform: scale(0.95);
+  transform: scale(0.95) translateZ(0);
       transition: 
         opacity 0.6s ease,
         transform 0.6s ease;
+        
+          @include mixin.max-screen(mixin.$small) {
+    transition: 
+      opacity 0.4s ease,
+      transform 0.4s ease;
+  }
 
       &.show {
         opacity: 1;
@@ -945,7 +957,7 @@ const faqList = [
 
 #point {
   position: relative;
-  height: 500vh;
+  height: 300vh;
 
   .slides {
     position: sticky;
@@ -1095,10 +1107,15 @@ const faqList = [
 
       position: relative;
       opacity: 0;
-      transform: scale(0.95);
+  transform: scale(0.95) translateZ(0);
       transition: 
         opacity 0.6s ease,
         transform 0.6s ease;
+        @include mixin.max-screen(mixin.$small) {
+  transition: 
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
 
       @include mixin.max-screen(mixin.$small) {
         font-size: 16px;
@@ -1138,10 +1155,15 @@ const faqList = [
         padding: 30px 20px;
 
         opacity: 0;
-        transform: scale(0.95);
+  transform: scale(0.95) translateZ(0);
         transition: 
           opacity 0.6s ease,
           transform 0.6s ease;
+          @include mixin.max-screen(mixin.$small) {
+  transition: 
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
 
         &.show {
           opacity: 1;
@@ -1191,10 +1213,16 @@ const faqList = [
     margin-bottom: 60px;
 
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.95) translateZ(0);
     transition: 
       opacity 0.6s ease,
       transform 0.6s ease;
+      
+      @include mixin.max-screen(mixin.$small) {
+  transition: 
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
 
     @include mixin.max-screen(mixin.$small) {
       font-size: 16px;
@@ -1256,10 +1284,16 @@ const faqList = [
           padding-bottom: 15px;
           
           opacity: 0;
-          transform: scale(0.95);
+  transform: scale(0.95) translateZ(0);
           transition: 
             opacity 0.6s ease,
             transform 0.6s ease;
+            
+            @include mixin.max-screen(mixin.$small) {
+  transition: 
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
 
           &.show {
             opacity: 1;
@@ -1365,10 +1399,16 @@ const faqList = [
       display: block;
 
       opacity: 0;
-      transform: scale(0.95);
+  transform: scale(0.95) translateZ(0);
       transition: 
         opacity 0.6s ease,
         transform 0.6s ease;
+        
+        @include mixin.max-screen(mixin.$small) {
+  transition: 
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
 
       &.show {
         opacity: 1;
@@ -1413,10 +1453,16 @@ const faqList = [
       text-align: center;
 
       opacity: 0;
-      transform: scale(0.95);
+  transform: scale(0.95) translateZ(0);
       transition: 
         opacity 0.6s ease,
         transform 0.6s ease;
+        
+        @include mixin.max-screen(mixin.$small) {
+  transition: 
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
 
       &.show {
         opacity: 1;
@@ -1433,10 +1479,16 @@ const faqList = [
       }
 
       opacity: 0;
-      transform: scale(0.95);
+  transform: scale(0.95) translateZ(0);
       transition: 
         opacity 0.6s ease,
         transform 0.6s ease;
+        
+        @include mixin.max-screen(mixin.$small) {
+  transition: 
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
 
       &.show {
         opacity: 1;
