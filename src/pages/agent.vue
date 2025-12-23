@@ -155,10 +155,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 
-const openIndex = ref<number | null>(null);
+// const openIndex = ref<number | null>(null);
 const pointSection = ref<HTMLElement | null>(null);
-const slides = ref<HTMLElement | null>(null);
-const currentSlide = ref(0);
+
 const bottomHeaderHeight = ref(0);
 const windowWidth = ref(0)
 
@@ -178,9 +177,7 @@ let io: IntersectionObserver | null = null;
 // ==========================================
 // アコーディオン
 // ==========================================
-const toggle = (index: number) => {
-  openIndex.value = openIndex.value === index ? null : index;
-};
+
 
 const handleDetailClick = (event: MouseEvent) => {
   event.preventDefault();
@@ -357,9 +354,8 @@ const createObservers = () => {
   if (io) io.disconnect();
   
   const isMobile = windowWidth.value <= 480;
-  const rootMargin = isMobile ? "0px 0px 50% 0px" : "0px 0px -20% 0px";
+  const rootMargin = isMobile ? "0px 0px -10% 0px" : "0px 0px -20% 0px";
 
-  // すべての監視対象を一つのObserverで管理
   const allTargets = document.querySelectorAll<HTMLElement>(`
     #about .text-wrap,
     #about img,
@@ -389,7 +385,7 @@ const createObservers = () => {
 // ==========================================
 let blogScrollTimer: number | undefined;
 let isTransitioning = false;
-let isResetting = false; 
+
 
 const initAutoBlogScroll = () => {
   const wrap = document.querySelector(
@@ -416,7 +412,6 @@ const initAutoBlogScroll = () => {
   }
   dotWrap.innerHTML = '';
   isTransitioning = false;
-  isResetting = false;
 
   // ===== dots =====
   let current = 0;
@@ -441,37 +436,26 @@ const initAutoBlogScroll = () => {
     dotWrap.appendChild(d);
   });
 
-  const setupInfinite = () => {
-    wrap.querySelectorAll('.is-clone').forEach(el => el.remove());
+const setupInfinite = () => {
+  wrap.querySelectorAll('.is-clone').forEach(el => el.remove());
+  wrap.querySelectorAll('.spacer').forEach(el => el.remove());
 
-    // 後ろに clone
-    originals.forEach(el => {
-      const clone = el.cloneNode(true) as HTMLElement;
-      clone.classList.add('is-clone');
-      const blogItem = clone.querySelector('.blog-item');
-      if (blogItem) blogItem.classList.remove('show');
-      wrap.appendChild(clone);
-    });
+// 1枚目のクローンだけ追加（showなしで作成）
+  const clone = originals[0].cloneNode(true) as HTMLElement;
+  clone.classList.add('is-clone');
+  const blogItem = clone.querySelector('.blog-item');
+  if (blogItem) blogItem.classList.remove('show');
+  wrap.appendChild(clone);
 
-    // 前に clone
-    [...originals].reverse().forEach(el => {
-      const clone = el.cloneNode(true) as HTMLElement;
-      clone.classList.add('is-clone');
-      const blogItem = clone.querySelector('.blog-item');
-      if (blogItem) blogItem.classList.remove('show');
-      wrap.insertBefore(clone, wrap.firstChild);
-    });
+  wrap.scrollTo({
+    left: 0,
+    behavior: 'auto'
+  });
+};
 
-    // 本物の1枚目へ
-    wrap.scrollTo({
-      left: getSlidePosition(0),
-      behavior: 'auto'
-    });
-  };
-
-  const getSlidePosition = (index: number) => {
+const getSlidePosition = (index: number) => {
     const allSlides = wrap.querySelectorAll<HTMLElement>('.blog-item-wrap');
-    return allSlides[realLength + index].offsetLeft;
+    return allSlides[index].offsetLeft;
   };
 
   const goToSlide = (index: number, smooth = true) => {
@@ -486,47 +470,67 @@ const initAutoBlogScroll = () => {
     });
   };
 
-  const nextSlide = () => {
-    if (isTransitioning) return;
-    isTransitioning = true;
+const nextSlide = () => {
+  if (isTransitioning) return;
+  isTransitioning = true;
 
-    const allSlides = wrap.querySelectorAll<HTMLElement>('.blog-item-wrap');
-    const nextIndex = realLength + current + 1;
+  const allSlides = wrap.querySelectorAll<HTMLElement>('.blog-item-wrap');
+  const nextIndex = current + 1;
 
-    wrap.scrollTo({
-      left: allSlides[nextIndex].offsetLeft,
-      behavior: 'smooth'
-    });
+  // 次のスライドにshowを付ける（ふわっとアニメーション発火）
+  const nextItem = allSlides[nextIndex]?.querySelector('.blog-item');
+  if (nextItem) {
+    nextItem.classList.add('show');
+  }
 
-    current = (current + 1) % realLength;
-    updateDots();
-
-    setTimeout(() => {
-      if (current === 0) {
-        isResetting = true;
-        
-        const realFirstItem = originals[0].querySelector('.blog-item') as HTMLElement;
-        
-        if (realFirstItem) {
-          realFirstItem.style.transition = 'none';
-          realFirstItem.classList.add('show');
+const handleScrollEnd = () => {
+    if (current === 0) {
+      setTimeout(() => {
+        // 1枚目のふわっとアニメーションを無効化
+        const firstBlogItem = originals[0].querySelector('.blog-item') as HTMLElement;
+        if (firstBlogItem) {
+          firstBlogItem.style.transition = 'none';
+          firstBlogItem.classList.add('show');
         }
         
         wrap.scrollTo({
-          left: getSlidePosition(0),
+          left: allSlides[0].offsetLeft,
           behavior: 'auto'
         });
         
-        setTimeout(() => {
-          if (realFirstItem) {
-            realFirstItem.style.transition = '';
-          }
-          isResetting = false;
-        }, 100);
-      }
+        // クローンのshowを外す（次のループ用）
+        const cloneItem = wrap.querySelector('.is-clone .blog-item');
+        if (cloneItem) {
+          cloneItem.classList.remove('show');
+        }
+        
+        // 次のフレームでtransitionを戻す
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            if (firstBlogItem) {
+              firstBlogItem.style.transition = '';
+            }
+            isTransitioning = false;
+          });
+        });
+      }, 50);
+    } else {
       isTransitioning = false;
-    }, 450);
+    }
+    
+    wrap.removeEventListener('scrollend', handleScrollEnd);
   };
+
+  wrap.scrollTo({
+    left: allSlides[nextIndex].offsetLeft,
+    behavior: 'smooth'
+  });
+
+  current = (current + 1) % realLength;
+  updateDots();
+
+  wrap.addEventListener('scrollend', handleScrollEnd);
+};
 
   const startAuto = () => {
     stopAuto();
@@ -552,9 +556,6 @@ const initAutoBlogScroll = () => {
   updateDots();
   startAuto();
   
-  wrap.querySelectorAll('.is-clone .blog-item').forEach(el => {
-    el.classList.remove('show');
-  });
 };
 
 // ==========================================
