@@ -216,11 +216,18 @@ const handleDetailClick = (event: MouseEvent) => {
           const rect = details.getBoundingClientRect();
           const currentY = window.pageYOffset;
 
-          const targetY =
-            rect.top +
-            currentY -
-            bottomHeaderHeight.value -
-            10;
+// 最後の質問かどうかを判定
+const allDetails = document.querySelectorAll('.faq-item');
+const isLastItem = details === allDetails[allDetails.length - 1];
+
+// 最後の質問の場合はさらに余裕を持たせる
+const extraOffset = isLastItem ? 30 : 10;
+
+const targetY =
+  rect.top +
+  currentY -
+  bottomHeaderHeight.value -
+  extraOffset;
 
           window.scrollTo({
             top: targetY,
@@ -474,24 +481,35 @@ const initAutoBlogScroll = () => {
 
 const setupInfinite = () => {
   wrap.querySelectorAll('.spacer').forEach(el => el.remove());
+  wrap.querySelectorAll('.is-clone').forEach(el => el.remove());
 
-// 1枚目のクローンだけ追加（showなしで作成）
-  const clone = originals[0].cloneNode(true) as HTMLElement;
-  clone.classList.add('is-clone');
-  const blogItem = clone.querySelector('.blog-item');
-  if (blogItem) blogItem.classList.remove('show');
-  wrap.appendChild(clone);
+  // 最後の1枚を先頭にクローン
+  const lastClone = originals[realLength - 1].cloneNode(true) as HTMLElement;
+  lastClone.classList.add('is-clone');
+  lastClone.setAttribute('data-clone-of', String(realLength - 1));
+  const lastBlogItem = lastClone.querySelector('.blog-item');
+  if (lastBlogItem) lastBlogItem.classList.remove('show');
+  wrap.insertBefore(lastClone, wrap.firstChild);
 
+  // 最初の1枚を末尾にクローン
+  const firstClone = originals[0].cloneNode(true) as HTMLElement;
+  firstClone.classList.add('is-clone');
+  firstClone.setAttribute('data-clone-of', '0');
+  const firstBlogItem = firstClone.querySelector('.blog-item');
+  if (firstBlogItem) firstBlogItem.classList.remove('show');
+  wrap.appendChild(firstClone);
+
+  // 初期位置を調整（前方クローンの分だけオフセット）
   wrap.scrollTo({
-    left: 0,
+    left: originals[0].offsetLeft,
     behavior: 'auto'
   });
 };
 
 const getSlidePosition = (index: number) => {
-    const allSlides = wrap.querySelectorAll<HTMLElement>('.blog-item-wrap');
-    return allSlides[index].offsetLeft;
-  };
+  // クローンを除外した本物のスライドの位置を取得
+  return originals[index].offsetLeft;
+};
 
   const goToSlide = (index: number, smooth = true) => {
     if (isTransitioning) return;
@@ -510,59 +528,86 @@ const nextSlide = () => {
   isTransitioning = true;
 
   const allSlides = wrap.querySelectorAll<HTMLElement>('.blog-item-wrap');
-  const nextIndex = current + 1;
+  
+  // 現在の物理的な位置を取得
+  let currentPhysicalIndex = 0;
+  const scrollLeft = wrap.scrollLeft;
+  let minDistance = Infinity;
+  
+  allSlides.forEach((slide, index) => {
+    const distance = Math.abs(slide.offsetLeft - scrollLeft);
+    if (distance < minDistance) {
+      minDistance = distance;
+      currentPhysicalIndex = index;
+    }
+  });
+  
+  const nextPhysicalIndex = currentPhysicalIndex + 1;
 
-  // 次のスライドにshowを付ける（ふわっとアニメーション発火）
-  const nextItem = allSlides[nextIndex]?.querySelector('.blog-item');
+  // 次のスライドにshowを付ける
+  const nextSlide = allSlides[nextPhysicalIndex];
+  const nextItem = nextSlide?.querySelector('.blog-item');
   if (nextItem) {
     nextItem.classList.add('show');
   }
 
+  // スムーズスクロール
+  wrap.scrollTo({
+    left: allSlides[nextPhysicalIndex].offsetLeft,
+    behavior: 'smooth'
+  });
+
   const handleScrollEnd = () => {
-    if (current === 0) {
-      setTimeout(() => {
-        // 1枚目のふわっとアニメーションを無効化
-        const firstBlogItem = originals[0].querySelector('.blog-item') as HTMLElement;
-        if (firstBlogItem) {
-          firstBlogItem.style.transition = 'none';
-          firstBlogItem.classList.add('show');
-        }
-        
-        wrap.scrollTo({
-          left: allSlides[0].offsetLeft,
-          behavior: 'auto'
-        });
-        
-        // クローンのshowを外す（次のループ用）
-        const cloneItem = wrap.querySelector('.is-clone .blog-item');
-        if (cloneItem) {
-          cloneItem.classList.remove('show');
-        }
-        
-        // 次のフレームでtransitionを戻す
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            if (firstBlogItem) {
-              firstBlogItem.style.transition = '';
-            }
-            isTransitioning = false;
+    const currentSlide = allSlides[nextPhysicalIndex];
+    const isClone = currentSlide?.classList.contains('is-clone');
+    
+    if (isClone) {
+      const cloneOf = parseInt(currentSlide.getAttribute('data-clone-of') || '0');
+      
+      // 末尾のクローン（最初の1枚目のクローン）に到達
+      if (cloneOf === 0) {
+        setTimeout(() => {
+          const firstBlogItem = originals[0].querySelector('.blog-item') as HTMLElement;
+          if (firstBlogItem) {
+            firstBlogItem.style.transition = 'none';
+            firstBlogItem.classList.add('show');
+          }
+          
+          wrap.scrollTo({
+            left: originals[0].offsetLeft,
+            behavior: 'auto'
           });
-        });
-      }, 50);
+          
+          const cloneItem = currentSlide.querySelector('.blog-item');
+          if (cloneItem) {
+            cloneItem.classList.remove('show');
+          }
+          
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              if (firstBlogItem) {
+                firstBlogItem.style.transition = '';
+              }
+              isTransitioning = false;
+            });
+          });
+        }, 50);
+        
+        // ドットを1枚目に更新
+        current = 0;
+        updateDots();
+      }
     } else {
+      // 本物のスライドの場合、currentを更新
+      const realIndex = Array.from(originals).indexOf(currentSlide as HTMLElement);
+      if (realIndex !== -1) {
+        current = realIndex;
+        updateDots();
+      }
       isTransitioning = false;
     }
   };
 
-  wrap.scrollTo({
-    left: allSlides[nextIndex].offsetLeft,
-    behavior: 'smooth'
-  });
-
-  current = (current + 1) % realLength;
-  updateDots();
-
-  // Safari対応: scrollendがサポートされていない場合はsetTimeoutでフォールバック
   if ('onscrollend' in window) {
     wrap.addEventListener('scrollend', handleScrollEnd, { once: true });
   } else {
@@ -580,6 +625,126 @@ const nextSlide = () => {
       blogScrollTimer = undefined;
     }
   };
+  
+  // ===== 手動フリック時の処理 =====
+  let scrollTimeout: number | undefined;
+  
+const handleManualScroll = () => {
+  // 手動スクロール時は自動スクロールを一時停止
+  stopAuto();
+  
+  const allSlides = wrap.querySelectorAll<HTMLElement>('.blog-item-wrap');
+  const scrollLeft = wrap.scrollLeft;
+  
+  // 全てのスライド（クローン含む）にshowを付ける処理
+  allSlides.forEach(slide => {
+    const rect = slide.getBoundingClientRect();
+    const wrapRect = wrap.getBoundingClientRect();
+    
+    if (Math.abs(rect.left - wrapRect.left) < 100) {
+      const blogItem = slide.querySelector('.blog-item');
+      if (blogItem) blogItem.classList.add('show');
+    }
+  });
+
+  if (scrollTimeout) clearTimeout(scrollTimeout);
+  scrollTimeout = window.setTimeout(() => {
+    // 現在のスクロール位置を判定
+    let minDistance = Infinity;
+    let nearestIndex = 0;
+    let isClone = false;
+    let cloneOf = -1;
+
+    allSlides.forEach((slide, index) => {
+      const distance = Math.abs(slide.offsetLeft - scrollLeft);
+      if (distance < minDistance) {
+        minDistance = distance;
+        nearestIndex = index;
+        isClone = slide.classList.contains('is-clone');
+        if (isClone) {
+          cloneOf = parseInt(slide.getAttribute('data-clone-of') || '-1');
+        }
+      }
+    });
+
+    // クローンに停止した場合の処理
+    if (isClone && cloneOf >= 0) {
+      // 先頭のクローン（最後の1枚）の場合
+      if (cloneOf === realLength - 1) {
+        setTimeout(() => {
+          const lastBlogItem = originals[realLength - 1].querySelector('.blog-item') as HTMLElement;
+          if (lastBlogItem) {
+            lastBlogItem.style.transition = 'none';
+            lastBlogItem.classList.add('show');
+          }
+          
+          wrap.scrollTo({
+            left: originals[realLength - 1].offsetLeft,
+            behavior: 'auto'
+          });
+          
+          const cloneItem = allSlides[0].querySelector('.blog-item');
+          if (cloneItem) cloneItem.classList.remove('show');
+          
+          requestAnimationFrame(() => {
+            if (lastBlogItem) lastBlogItem.style.transition = '';
+          });
+          
+          current = realLength - 1;
+          updateDots();
+        }, 50);
+      }
+      // 末尾のクローン（最初の1枚）の場合
+      else if (cloneOf === 0) {
+        setTimeout(() => {
+          const firstBlogItem = originals[0].querySelector('.blog-item') as HTMLElement;
+          if (firstBlogItem) {
+            firstBlogItem.style.transition = 'none';
+            firstBlogItem.classList.add('show');
+          }
+          
+          wrap.scrollTo({
+            left: originals[0].offsetLeft,
+            behavior: 'auto'
+          });
+          
+          const cloneItem = allSlides[allSlides.length - 1].querySelector('.blog-item');
+          if (cloneItem) cloneItem.classList.remove('show');
+          
+          requestAnimationFrame(() => {
+            if (firstBlogItem) firstBlogItem.style.transition = '';
+          });
+          
+          current = 0;
+          updateDots();
+        }, 50);
+      }
+    } else {
+      // 本物のスライドの場合
+      let newCurrent = 0;
+      minDistance = Infinity;
+      
+      originals.forEach((slide, index) => {
+        const distance = Math.abs(slide.offsetLeft - scrollLeft);
+        if (distance < minDistance) {
+          minDistance = distance;
+          newCurrent = index;
+        }
+      });
+      
+      current = newCurrent;
+      updateDots();
+    }
+    
+    // 3秒後に自動スクロールを再開
+    setTimeout(() => {
+      startAuto();
+    }, 1500);
+    
+  }, 150);
+};
+  wrap.addEventListener('scroll', handleManualScroll, { passive: true });
+  // ===== ここまで追加 =====
 
   // ===== PC：auto slide 無効 =====
   if (window.innerWidth > 480) {
@@ -723,19 +888,19 @@ const blogList = [
 
 const faqList = [
   {
-    question: "サービスの利用に料金はかかりますか?",
+    question: "サービスの利用に料金はかかりますか？",
     answer: "基本プランは無料でご利用いただけます。有料オプションをご希望の場合のみ追加費用が発生します。",
   },
   {
-    question: "パスワードを忘れた場合はどうすればいいですか?",
+    question: "パスワードを忘れた場合はどうすればいいですか？",
     answer: "ログイン画面の「パスワードをお忘れの方」より再設定手続きを行ってください。",
   },
   {
-    question: "登録後にメールアドレスの変更は可能ですか?",
+    question: "登録後にメールアドレスの変更は可能ですか？",
     answer: "マイページ内のアカウント設定からメールアドレスの変更が可能です。",
   },
   {
-    question: "問い合わせの返信にはどれくらい時間がかかりますか?",
+    question: "問い合わせの返信にはどれくらい時間がかかりますか？",
     answer: "通常1〜2営業日以内にご返信しております。混雑時はお時間をいただく場合があります。",
   },
 ];
@@ -1478,12 +1643,12 @@ const faqList = [
   .section-wrap {
     max-width: 980px;
     width: 100%;
-    padding: 100px 0;
+    padding: 100px 0 ;
     margin: auto;
 
     @include mixin.max-screen(mixin.$small) {
       width: 90%;
-      padding: 50px 0;
+      padding: 50px 0 100px;
     }
 
     h5 {
