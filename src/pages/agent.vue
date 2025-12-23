@@ -1397,22 +1397,22 @@ const faqList = [
               letter-spacing: 0.5px;
             }
           
-            &::after {
-              content: '';
-            }
+            // &::after {
+            //   content: '';
+            // }
 
-            &.is-clamped::after {
-              content: '…';
-              position: absolute;
-              right: 17px;
-              bottom: 11px;
-              background: #fff;
+            // &.is-clamped::after {
+            //   content: '…';
+            //   position: absolute;
+            //   right: 17px;
+            //   bottom: 11px;
+            //   background: #fff;
 
-              @include mixin.max-screen(mixin.$small) {
-                right: 35px;
-                bottom: 21px;
-              }
-            }
+            //   @include mixin.max-screen(mixin.$small) {
+            //     right: 35px;
+            //     bottom: 21px;
+            //   }
+            // }
           } 
 
           .info-wrap, p {
