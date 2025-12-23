@@ -483,7 +483,7 @@ const nextSlide = () => {
     nextItem.classList.add('show');
   }
 
-const handleScrollEnd = () => {
+  const handleScrollEnd = () => {
     if (current === 0) {
       setTimeout(() => {
         // 1枚目のふわっとアニメーションを無効化
@@ -517,8 +517,6 @@ const handleScrollEnd = () => {
     } else {
       isTransitioning = false;
     }
-    
-    wrap.removeEventListener('scrollend', handleScrollEnd);
   };
 
   wrap.scrollTo({
@@ -529,9 +527,13 @@ const handleScrollEnd = () => {
   current = (current + 1) % realLength;
   updateDots();
 
-  wrap.addEventListener('scrollend', handleScrollEnd);
+  // Safari対応: scrollendがサポートされていない場合はsetTimeoutでフォールバック
+  if ('onscrollend' in window) {
+    wrap.addEventListener('scrollend', handleScrollEnd, { once: true });
+  } else {
+    setTimeout(handleScrollEnd, 500);
+  }
 };
-
   const startAuto = () => {
     stopAuto();
     blogScrollTimer = window.setInterval(nextSlide, 4000);
