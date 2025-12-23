@@ -78,7 +78,6 @@
   <section id="appeal">
     <div class="section-wrap">
       <h5>
-        年収提示型求職マッチングプラットフォーム
         <span>「イチヅケ」の魅力</span>
         <span class="mask"></span>
       </h5>
@@ -1157,7 +1156,7 @@ const faqList = [
 }
 
       @include mixin.max-screen(mixin.$small) {
-        font-size: 16px;
+        font-size: 20px;
         margin-bottom: 30px;
       }
 
@@ -1264,8 +1263,8 @@ const faqList = [
 }
 
     @include mixin.max-screen(mixin.$small) {
-      font-size: 16px;
-      margin-bottom: 30px;
+      font-size: 20px;
+      margin-bottom: 20px;
     }
 
     &.show {
