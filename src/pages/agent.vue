@@ -440,7 +440,6 @@ const initAutoBlogScroll = () => {
   }
   dotWrap.innerHTML = '';
   isTransitioning = false;
-  isResetting = false;
 
   // クローンを先に削除
   wrap.querySelectorAll('.is-clone').forEach(el => el.remove());
@@ -823,7 +822,7 @@ const faqList = [
       display: inline-block;
 
       @include mixin.max-screen(mixin.$small) {
-        padding: 12px 30px 12px;
+        padding: 10px 30px 11px;
         margin-top: 25px;
       }
 
