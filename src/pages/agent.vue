@@ -274,10 +274,16 @@ const doScroll = () => {
   const totalHeight = pointRect.height - windowHeight;
   const progress = Math.min(Math.max(scrolled / totalHeight, 0), 1);
 
-  const PHASE2_DELAY = 0.3;
+// フェーズ1: 1枚目ズームイン (0 ~ 0.2)
+  // フェーズ2: 1枚目維持 (0.2 ~ 0.35)
+  // フェーズ3: 2枚目表示 (0.35 ~ 0.55)
+  // フェーズ4: 2枚目維持 (0.55 ~ 0.7)
+  // フェーズ5: 3枚目表示 (0.7 ~ 0.9)
+  // フェーズ6: 3枚目維持 (0.9 ~ 1.0)
 
-  if (progress < 0.25) {
-    const t = progress / 0.25;
+  // フェーズ1: 1枚目ズームイン
+  if (progress < 0.2) {
+    const t = progress / 0.2;
     inner1.value.style.transform = `translate(-50%, -50%) scale(${0.5 + t * 0.5})`;
     mask1.value.style.clipPath = 'inset(0 0 0 0)';
     mask2.value.style.clipPath = 'inset(100% 0 0 0)';
@@ -288,35 +294,64 @@ const doScroll = () => {
     return;
   }
 
-  if (progress < 0.55 + PHASE2_DELAY) {
-    const t = (progress - (0.25 + PHASE2_DELAY)) / 0.3;
+  // フェーズ2: 1枚目維持
+  if (progress < 0.35) {
     inner1.value.style.transform = `translate(-50%, -50%) scale(1)`;
+    mask1.value.style.clipPath = 'inset(0 0 0 0)';
+    mask2.value.style.clipPath = 'inset(100% 0 0 0)';
+    mask3.value.style.clipPath = 'inset(100% 0 0 0)';
+    slide1.value.style.zIndex = "1";
+    slide2.value.style.zIndex = "2";
+    slide3.value.style.zIndex = "3";
+    return;
+  }
 
+  // フェーズ3: 2枚目表示
+  if (progress < 0.55) {
+    const t = (progress - 0.35) / 0.2;
+    inner1.value.style.transform = `translate(-50%, -50%) scale(1)`;
     mask1.value.style.clipPath = 'inset(0 0 0 0)';
     mask2.value.style.clipPath = `inset(${(1 - t) * 100}% 0 0 0)`;
     mask3.value.style.clipPath = 'inset(100% 0 0 0)';
-
     slide1.value.style.zIndex = "1";
     slide2.value.style.zIndex = "2";
     slide3.value.style.zIndex = "3";
     return;
   }
 
-  if (progress >= 0.55 + PHASE2_DELAY) {
-    const t = (progress - (0.55 + PHASE2_DELAY)) / (0.45 - PHASE2_DELAY);
-    const clampedT = Math.min(Math.max(t, 0), 1);
-
+  // フェーズ4: 2枚目維持
+  if (progress < 0.7) {
     inner1.value.style.transform = `translate(-50%, -50%) scale(1)`;
-
     mask1.value.style.clipPath = 'inset(0 0 0 0)';
     mask2.value.style.clipPath = 'inset(0 0 0 0)';
-    mask3.value.style.clipPath = `inset(${(1 - clampedT) * 100}% 0 0 0)`;
-
+    mask3.value.style.clipPath = 'inset(100% 0 0 0)';
     slide1.value.style.zIndex = "1";
     slide2.value.style.zIndex = "2";
     slide3.value.style.zIndex = "3";
     return;
   }
+
+  // フェーズ5: 3枚目表示
+  if (progress < 0.9) {
+    const t = (progress - 0.7) / 0.2;
+    inner1.value.style.transform = `translate(-50%, -50%) scale(1)`;
+    mask1.value.style.clipPath = 'inset(0 0 0 0)';
+    mask2.value.style.clipPath = 'inset(0 0 0 0)';
+    mask3.value.style.clipPath = `inset(${(1 - t) * 100}% 0 0 0)`;
+    slide1.value.style.zIndex = "1";
+    slide2.value.style.zIndex = "2";
+    slide3.value.style.zIndex = "3";
+    return;
+  }
+
+  // フェーズ6: 3枚目維持
+  inner1.value.style.transform = `translate(-50%, -50%) scale(1)`;
+  mask1.value.style.clipPath = 'inset(0 0 0 0)';
+  mask2.value.style.clipPath = 'inset(0 0 0 0)';
+  mask3.value.style.clipPath = 'inset(0 0 0 0)';
+  slide1.value.style.zIndex = "1";
+  slide2.value.style.zIndex = "2";
+  slide3.value.style.zIndex = "3";
 };
 
 const handleScroll = () => {
@@ -354,7 +389,7 @@ const createObservers = () => {
   if (io) io.disconnect();
   
   const isMobile = windowWidth.value <= 480;
-  const rootMargin = isMobile ? "0px 0px -10% 0px" : "0px 0px -20% 0px";
+  const rootMargin = isMobile ? "0px 0px -15% 0px" : "0px 0px -20% 0px";
 
   const allTargets = document.querySelectorAll<HTMLElement>(`
     #about .text-wrap,
@@ -398,13 +433,6 @@ const initAutoBlogScroll = () => {
   ) as HTMLElement | null;
   if (!dotWrap) return;
 
-  // 元スライド
-  const originals = Array.from(
-    wrap.querySelectorAll('.blog-item-wrap')
-  ) as HTMLElement[];
-  const realLength = originals.length;
-  if (realLength === 0) return;
-
   // ===== reset =====
   if (blogScrollTimer) {
     clearInterval(blogScrollTimer);
@@ -412,7 +440,17 @@ const initAutoBlogScroll = () => {
   }
   dotWrap.innerHTML = '';
   isTransitioning = false;
+  isResetting = false;
 
+  // クローンを先に削除
+  wrap.querySelectorAll('.is-clone').forEach(el => el.remove());
+
+  // 元スライド（クローン削除後に取得）
+  const originals = Array.from(
+    wrap.querySelectorAll('.blog-item-wrap')
+  ) as HTMLElement[];
+  const realLength = originals.length;
+  if (realLength === 0) return;
   // ===== dots =====
   let current = 0;
 
@@ -437,7 +475,6 @@ const initAutoBlogScroll = () => {
   });
 
 const setupInfinite = () => {
-  wrap.querySelectorAll('.is-clone').forEach(el => el.remove());
   wrap.querySelectorAll('.spacer').forEach(el => el.remove());
 
 // 1枚目のクローンだけ追加（showなしで作成）
@@ -781,12 +818,12 @@ const faqList = [
     .btn {
       background-color: mixin.$main;
       border-radius: 30px;
-      padding: 10px 40px 13px;
+      padding: 13px 40px 13px;
       margin-top: 20px;
       display: inline-block;
 
       @include mixin.max-screen(mixin.$small) {
-        padding: 12px 30px 15px;
+        padding: 12px 30px 12px;
         margin-top: 25px;
       }
 
@@ -960,7 +997,7 @@ const faqList = [
 
 #point {
   position: relative;
-  height: 300vh;
+  height: 400vh;
 
   .slides {
     position: sticky;

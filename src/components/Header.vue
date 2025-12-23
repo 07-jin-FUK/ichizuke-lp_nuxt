@@ -159,7 +159,7 @@ onUnmounted(() => {
     @include mixin.max-screen(mixin.$small) {
       display: block;
       font-size: 14px;
-      padding: 10px 25px 13px;
+      padding: 10px 25px 10px;
       right: 5%;
     }
 
@@ -182,11 +182,6 @@ onUnmounted(() => {
     bottom: 0px;
     z-index: 1000;
 
-    :global(.ios-safari-sp) {
-      .bottom-header {
-        padding-top: 30px;
-      }
-    }
 
     // 初期状態は非表示
     opacity: 0;
