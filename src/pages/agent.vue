@@ -26,20 +26,19 @@
   <section id="point" ref="pointSection">
     <div class="slides" ref="slides">
 
-      <div class="section-wrap slide slide1" data-index="0" ref="slide1">
-        <div class="mask" ref="mask1">
-          <div class="inner" ref="inner1" style="background-image: url(/images/img-point_1.jpg);">
-            <div class="text-wrap">
-              <h5>本気度の高い求職者へ最短でリーチ<span>できる。</span></h5>
-              <p>
-                イチヅケには、自分の市場価値を正しく知りたい意欲の高い求職者が集まります。
-                プロフィールを公開した段階で、転職意向が強い求職者が多数存在します。
-                従来のスカウト型よりレスポンス率が高く、アプローチの効率が大幅に改善できます。
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="section-wrap slide slide1" data-index="0" ref="slide1">
+  <div class="mask" ref="mask1">
+    <div class="inner" ref="inner1" style="background-image: url(/images/img-point_1.jpg);"></div>
+  </div>
+<div class="text-wrap" ref="textWrap1">
+    <h5>本気度の高い求職者へ最短でリーチ<span>できる。</span></h5>
+    <p>
+      イチヅケには、自分の市場価値を正しく知りたい意欲の高い求職者が集まります。
+      プロフィールを公開した段階で、転職意向が強い求職者が多数存在します。
+      従来のスカウト型よりレスポンス率が高く、アプローチの効率が大幅に改善できます。
+    </p>
+  </div>
+</div>
 
       <div class="section-wrap slide slide2" data-index="1" ref="slide2">
         <div class="mask" ref="mask2">
@@ -170,6 +169,8 @@ const mask1 = ref<HTMLElement | null>(null);
 const mask2 = ref<HTMLElement | null>(null);
 const mask3 = ref<HTMLElement | null>(null);
 const inner1 = ref<HTMLElement | null>(null);
+    const textWrap1 = ref<HTMLElement | null>(null);
+
 
 let io: IntersectionObserver | null = null;
 
@@ -254,7 +255,7 @@ let rafId: number | null = null;
 let isScrolling = false;
 
 const doScroll = () => {
-  if (!pointSection.value || !slide1.value || !mask1.value || !inner1.value) return;
+  if (!pointSection.value || !slide1.value || !mask1.value || !inner1.value || !textWrap1.value) return;
   if (!slide2.value || !mask2.value || !slide3.value || !mask3.value) return;
 
   const pointRect = pointSection.value.getBoundingClientRect();
@@ -265,16 +266,17 @@ const doScroll = () => {
   slide2.value.style.display = "block";
   slide3.value.style.display = "block";
 
-  if (pointRect.top > 0) {
-    inner1.value.style.transform = `translate(-50%, -50%) scale(0.5)`;
-    mask1.value.style.clipPath = 'inset(0 0 0 0)';
-    mask2.value.style.clipPath = 'inset(100% 0 0 0)';
-    mask3.value.style.clipPath = 'inset(100% 0 0 0)';
-    slide1.value.style.zIndex = "1";
-    slide2.value.style.zIndex = "2";
-    slide3.value.style.zIndex = "3";
-    return;
-  }
+if (pointRect.top > 0) {
+  inner1.value.style.transform = `translate(-50%, -50%) scale(0.5)`;
+  mask1.value.style.clipPath = 'inset(0 0 0 0)';
+  mask2.value.style.clipPath = 'inset(100% 0 0 0)';
+  mask3.value.style.clipPath = 'inset(100% 0 0 0)';
+  slide1.value.style.zIndex = "1";
+  slide2.value.style.zIndex = "2";
+  slide3.value.style.zIndex = "3";
+  textWrap1.value.style.opacity = '0';  // ← 追加
+  return;
+}
 
   const scrolled = Math.abs(pointRect.top);
   const totalHeight = pointRect.height - windowHeight;
@@ -287,18 +289,19 @@ const doScroll = () => {
   // フェーズ5: 3枚目表示 (0.7 ~ 0.9)
   // フェーズ6: 3枚目維持 (0.9 ~ 1.0)
 
-  // フェーズ1: 1枚目ズームイン
-  if (progress < 0.2) {
-    const t = progress / 0.2;
-    inner1.value.style.transform = `translate(-50%, -50%) scale(${0.5 + t * 0.5})`;
-    mask1.value.style.clipPath = 'inset(0 0 0 0)';
-    mask2.value.style.clipPath = 'inset(100% 0 0 0)';
-    mask3.value.style.clipPath = 'inset(100% 0 0 0)';
-    slide1.value.style.zIndex = "1";
-    slide2.value.style.zIndex = "2";
-    slide3.value.style.zIndex = "3";
-    return;
-  }
+// フェーズ1: 1枚目ズームイン
+if (progress < 0.2) {
+  const t = progress / 0.2;
+  inner1.value.style.transform = `translate(-50%, -50%) scale(${0.5 + t * 0.5})`;
+  mask1.value.style.clipPath = 'inset(0 0 0 0)';
+  mask2.value.style.clipPath = 'inset(100% 0 0 0)';
+  mask3.value.style.clipPath = 'inset(100% 0 0 0)';
+  slide1.value.style.zIndex = "1";
+  slide2.value.style.zIndex = "2";
+  slide3.value.style.zIndex = "3";
+  textWrap1.value.style.opacity = '0';
+  return;
+}
 
   // フェーズ2: 1枚目維持
   if (progress < 0.35) {
@@ -309,6 +312,8 @@ const doScroll = () => {
     slide1.value.style.zIndex = "1";
     slide2.value.style.zIndex = "2";
     slide3.value.style.zIndex = "3";
+      textWrap1.value.style.opacity = '1';  // ← 追加
+
     return;
   }
 
@@ -322,6 +327,7 @@ const doScroll = () => {
     slide1.value.style.zIndex = "1";
     slide2.value.style.zIndex = "2";
     slide3.value.style.zIndex = "3";
+      textWrap1.value.style.opacity = '1';  // ← 追加
     return;
   }
 
@@ -550,6 +556,12 @@ const nextSlide = () => {
   if (nextItem) {
     nextItem.classList.add('show');
   }
+  
+  // 移動開始時に即座にドットを更新
+const nextRealIndex = (current + 1) % realLength;
+current = nextRealIndex;
+updateDots();
+
 
   // スムーズスクロール
   wrap.scrollTo({
@@ -593,17 +605,14 @@ const nextSlide = () => {
           });
         }, 50);
         
-        // ドットを1枚目に更新
-        current = 0;
-        updateDots();
       }
     } else {
       // 本物のスライドの場合、currentを更新
-      const realIndex = Array.from(originals).indexOf(currentSlide as HTMLElement);
-      if (realIndex !== -1) {
-        current = realIndex;
-        updateDots();
-      }
+const realIndex = Array.from(originals).indexOf(currentSlide as HTMLElement);
+if (realIndex !== -1) {
+  current = realIndex;
+  updateDots();
+}
       isTransitioning = false;
     }
   };
@@ -1103,11 +1112,14 @@ const faqList = [
         }
 
         .logo-type {
-          margin-right: 5px;
+          margin-right: 10px;
+                      @include mixin.max-screen(mixin.$small) {
+                margin-right: 5px;
+            }
 
           img {
-            width: 120px;
-            height: 30px;
+            width: 160px;
+            height: 40px;
             object-fit: contain;
 
             @include mixin.max-screen(mixin.$small) {
@@ -1174,6 +1186,11 @@ const faqList = [
     position: absolute;
     inset: 0;
     overflow: hidden;
+    
+    &.slide1 > .text-wrap {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
     .mask {
       position: absolute;
@@ -1228,11 +1245,16 @@ const faqList = [
       }
 
       h5 {
-        font-size: 18px;
+        font-size: 20px;
         line-height: 1.7;
         letter-spacing: 0.54px;
         text-shadow: 0px 3px 7px #00000064;
         margin-bottom: 25px;
+              white-space: nowrap;
+
+                  @include mixin.max-screen(mixin.$small) {
+                 font-size: 18px;
+          }
 
         span {
           display: inline;
@@ -1244,10 +1266,14 @@ const faqList = [
       }
 
       p {
-        font-size: 14px;
+        font-size: 16px;
         letter-spacing: 0.42px;
         line-height: 1.8;
         text-shadow: 0px 3px 7px #00000040;
+        
+                  @include mixin.max-screen(mixin.$small) {
+                 font-size: 14px;
+          }
       }
     }
 
@@ -1302,7 +1328,7 @@ const faqList = [
     }
 
     h5 {
-      font-size: 20px;
+      font-size: 25px;
       letter-spacing: 0.6px;
       line-height: 1.5;
       text-align: center;
@@ -1315,6 +1341,7 @@ const faqList = [
         opacity 0.6s ease,
         transform 0.6s ease;
         @include mixin.max-screen(mixin.$small) {
+                  font-size: 25px;
   transition: 
     opacity 0.4s ease,
     transform 0.4s ease;
@@ -1410,7 +1437,7 @@ const faqList = [
   }
 
   h5 {
-    font-size: 20px;
+    font-size: 25px;
     letter-spacing: 0.6px;
     text-align: center;
     margin-bottom: 60px;
@@ -1652,7 +1679,7 @@ const faqList = [
     }
 
     h5 {
-      font-size: 20px;
+      font-size: 25px;
       text-align: center;
 
       opacity: 0;
@@ -1662,6 +1689,7 @@ const faqList = [
         transform 0.6s ease;
         
         @include mixin.max-screen(mixin.$small) {
+                  font-size: 20px;
   transition: 
     opacity 0.4s ease,
     transform 0.4s ease;
