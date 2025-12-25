@@ -425,6 +425,31 @@ const createObservers = () => {
   );
   
   allTargets.forEach(el => io!.observe(el));
+
+  // blog-wrapを監視（画面外に出たら1枚目にリセット）
+  if (isMobile) {
+    const blogWrap = document.querySelector('#blog .blog-wrap') as HTMLElement;
+    if (blogWrap) {
+      const blogWrapObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            // 画面外に出た時に1枚目にリセット
+            if (!entry.isIntersecting) {
+              const firstOriginal = blogWrap.querySelector('.blog-item-wrap:not(.is-clone)') as HTMLElement;
+              if (firstOriginal) {
+                blogWrap.scrollTo({ left: firstOriginal.offsetLeft, behavior: 'auto' });
+                const dots = document.querySelectorAll('#blog .blog-dot');
+                dots.forEach((d, i) => d.classList.toggle('active', i === 0));
+              }
+            }
+          });
+        },
+        { threshold: 0 }
+      );
+      
+      blogWrapObserver.observe(blogWrap);
+    }
+  }
 };
 
 // ==========================================
