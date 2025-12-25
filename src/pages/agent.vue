@@ -645,20 +645,33 @@ const handleManualScroll = () => {
   const allSlides = wrap.querySelectorAll<HTMLElement>('.blog-item-wrap');
   const scrollLeft = wrap.scrollLeft;
   
-  // スクロール中にリアルタイムでドットを更新
-  let nearestRealIndex = 0;
-  let minDistance = Infinity;
-  originals.forEach((slide, index) => {
-    const distance = Math.abs(slide.offsetLeft - scrollLeft);
-    if (distance < minDistance) {
-      minDistance = distance;
-      nearestRealIndex = index;
+// スクロール中にリアルタイムでドットを更新（クローン対応）
+let nearestRealIndex = 0;
+let minDistance = Infinity;
+
+// 全スライド（クローン含む）から最も近いものを探す
+allSlides.forEach((slide) => {
+  const distance = Math.abs(slide.offsetLeft - scrollLeft);
+  if (distance < minDistance) {
+    minDistance = distance;
+    // クローンの場合は対応する本物のインデックスを取得
+    if (slide.classList.contains('is-clone')) {
+      const cloneOf = parseInt(slide.getAttribute('data-clone-of') || '0');
+      nearestRealIndex = cloneOf;
+    } else {
+      // 本物のスライドの場合はoriginalsから探す
+      const realIndex = originals.indexOf(slide);
+      if (realIndex !== -1) {
+        nearestRealIndex = realIndex;
+      }
     }
-  });
-  if (current !== nearestRealIndex) {
-    current = nearestRealIndex;
-    updateDots();
   }
+});
+
+if (current !== nearestRealIndex) {
+  current = nearestRealIndex;
+  updateDots();
+}
   
   // 全てのスライド（クローン含む）にshowを付ける処理
   allSlides.forEach(slide => {
@@ -694,55 +707,58 @@ const handleManualScroll = () => {
     // クローンに停止した場合の処理
     if (isClone && cloneOf >= 0) {
       // 先頭のクローン（最後の1枚）の場合
-      if (cloneOf === realLength - 1) {
-        setTimeout(() => {
-          const lastBlogItem = originals[realLength - 1].querySelector('.blog-item') as HTMLElement;
-          if (lastBlogItem) {
-            lastBlogItem.style.transition = 'none';
-            lastBlogItem.classList.add('show');
-          }
-          
-          wrap.scrollTo({
-            left: originals[realLength - 1].offsetLeft,
-            behavior: 'auto'
-          });
-          
-          const cloneItem = allSlides[0].querySelector('.blog-item');
-          if (cloneItem) cloneItem.classList.remove('show');
-          
-          requestAnimationFrame(() => {
-            if (lastBlogItem) lastBlogItem.style.transition = '';
-          });
-          
-          current = realLength - 1;
-          updateDots();
-        }, 50);
-      }
-      // 末尾のクローン（最初の1枚）の場合
-      else if (cloneOf === 0) {
-        setTimeout(() => {
-          const firstBlogItem = originals[0].querySelector('.blog-item') as HTMLElement;
-          if (firstBlogItem) {
-            firstBlogItem.style.transition = 'none';
-            firstBlogItem.classList.add('show');
-          }
-          
-          wrap.scrollTo({
-            left: originals[0].offsetLeft,
-            behavior: 'auto'
-          });
-          
-          const cloneItem = allSlides[allSlides.length - 1].querySelector('.blog-item');
-          if (cloneItem) cloneItem.classList.remove('show');
-          
-          requestAnimationFrame(() => {
-            if (firstBlogItem) firstBlogItem.style.transition = '';
-          });
-          
-          current = 0;
-          updateDots();
-        }, 50);
-      }
+// 先頭のクローン（最後の1枚）の場合
+if (cloneOf === realLength - 1) {
+  // 即座にドットを更新
+  current = realLength - 1;
+  updateDots();
+  
+  setTimeout(() => {
+    const lastBlogItem = originals[realLength - 1].querySelector('.blog-item') as HTMLElement;
+    if (lastBlogItem) {
+      lastBlogItem.style.transition = 'none';
+      lastBlogItem.classList.add('show');
+    }
+    
+    wrap.scrollTo({
+      left: originals[realLength - 1].offsetLeft,
+      behavior: 'auto'
+    });
+    
+    const cloneItem = allSlides[0].querySelector('.blog-item');
+    if (cloneItem) cloneItem.classList.remove('show');
+    
+    requestAnimationFrame(() => {
+      if (lastBlogItem) lastBlogItem.style.transition = '';
+    });
+  }, 50);
+}
+// 末尾のクローン（最初の1枚）の場合
+else if (cloneOf === 0) {
+  // 即座にドットを更新
+  current = 0;
+  updateDots();
+  
+  setTimeout(() => {
+    const firstBlogItem = originals[0].querySelector('.blog-item') as HTMLElement;
+    if (firstBlogItem) {
+      firstBlogItem.style.transition = 'none';
+      firstBlogItem.classList.add('show');
+    }
+    
+    wrap.scrollTo({
+      left: originals[0].offsetLeft,
+      behavior: 'auto'
+    });
+    
+    const cloneItem = allSlides[allSlides.length - 1].querySelector('.blog-item');
+    if (cloneItem) cloneItem.classList.remove('show');
+    
+    requestAnimationFrame(() => {
+      if (firstBlogItem) firstBlogItem.style.transition = '';
+    });
+  }, 50);
+}
     } else {
       // 本物のスライドの場合
       let newCurrent = 0;
