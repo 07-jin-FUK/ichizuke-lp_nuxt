@@ -430,22 +430,25 @@ const createObservers = () => {
   if (isMobile) {
     const blogWrap = document.querySelector('#blog .blog-wrap') as HTMLElement;
     if (blogWrap) {
-      const blogWrapObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach(entry => {
-            // 画面外に出た時に1枚目にリセット
-            if (!entry.isIntersecting) {
-              const firstOriginal = blogWrap.querySelector('.blog-item-wrap:not(.is-clone)') as HTMLElement;
-              if (firstOriginal) {
-                blogWrap.scrollTo({ left: firstOriginal.offsetLeft, behavior: 'auto' });
-                const dots = document.querySelectorAll('#blog .blog-dot');
-                dots.forEach((d, i) => d.classList.toggle('active', i === 0));
-              }
-            }
-          });
-        },
-        { threshold: 0 }
-      );
+const blogWrapObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(entry => {
+      // 完全に画面外に出た時だけ1枚目にリセット
+      const rect = entry.target.getBoundingClientRect();
+      const isCompletelyOut = rect.bottom < 0 || rect.top > window.innerHeight;
+      
+      if (!entry.isIntersecting && isCompletelyOut) {
+        const firstOriginal = blogWrap.querySelector('.blog-item-wrap:not(.is-clone)') as HTMLElement;
+        if (firstOriginal) {
+          blogWrap.scrollTo({ left: firstOriginal.offsetLeft, behavior: 'auto' });
+          const dots = document.querySelectorAll('#blog .blog-dot');
+          dots.forEach((d, i) => d.classList.toggle('active', i === 0));
+        }
+      }
+    });
+  },
+  { threshold: 0 }
+);
       
       blogWrapObserver.observe(blogWrap);
     }
