@@ -426,29 +426,29 @@ const createObservers = () => {
   
   allTargets.forEach(el => io!.observe(el));
 
-  // blog-wrapを監視（画面外に出たら1枚目にリセット）
+// blog-wrapを監視（画面外に出たら1枚目にリセット）
   if (isMobile) {
     const blogWrap = document.querySelector('#blog .blog-wrap') as HTMLElement;
     if (blogWrap) {
-const blogWrapObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach(entry => {
-      // 完全に画面外に出た時だけ1枚目にリセット
-      const rect = entry.target.getBoundingClientRect();
-      const isCompletelyOut = rect.bottom < 0 || rect.top > window.innerHeight;
-      
-      if (!entry.isIntersecting && isCompletelyOut) {
-        const firstOriginal = blogWrap.querySelector('.blog-item-wrap:not(.is-clone)') as HTMLElement;
-        if (firstOriginal) {
-          blogWrap.scrollTo({ left: firstOriginal.offsetLeft, behavior: 'auto' });
-          const dots = document.querySelectorAll('#blog .blog-dot');
-          dots.forEach((d, i) => d.classList.toggle('active', i === 0));
-        }
-      }
-    });
-  },
-  { threshold: 0 }
-);
+      const blogWrapObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            // 完全に画面外に出た時だけ1枚目にリセット
+            const rect = entry.target.getBoundingClientRect();
+            const isCompletelyOut = rect.bottom < 0 || rect.top > window.innerHeight;
+            
+            if (!entry.isIntersecting && isCompletelyOut) {
+              const firstOriginal = blogWrap.querySelector('.blog-item-wrap:not(.is-clone)') as HTMLElement;
+              if (firstOriginal) {
+                blogWrap.scrollTo({ left: firstOriginal.offsetLeft, behavior: 'auto' });
+                const dots = document.querySelectorAll('#blog .blog-dot');
+                dots.forEach((d, i) => d.classList.toggle('active', i === 0));
+              }
+            }
+          });
+        },
+        { threshold: 0 }
+      );
       
       blogWrapObserver.observe(blogWrap);
     }
@@ -634,13 +634,8 @@ updateDots();
         }, 50);
         
       }
-    } else {
-      // 本物のスライドの場合、currentを更新
-const realIndex = Array.from(originals).indexOf(currentSlide as HTMLElement);
-if (realIndex !== -1) {
-  current = realIndex;
-  updateDots();
-}
+} else {
+      // 本物のスライドの場合
       isTransitioning = false;
     }
   };
