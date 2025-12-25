@@ -645,6 +645,21 @@ const handleManualScroll = () => {
   const allSlides = wrap.querySelectorAll<HTMLElement>('.blog-item-wrap');
   const scrollLeft = wrap.scrollLeft;
   
+  // スクロール中にリアルタイムでドットを更新
+  let nearestRealIndex = 0;
+  let minDistance = Infinity;
+  originals.forEach((slide, index) => {
+    const distance = Math.abs(slide.offsetLeft - scrollLeft);
+    if (distance < minDistance) {
+      minDistance = distance;
+      nearestRealIndex = index;
+    }
+  });
+  if (current !== nearestRealIndex) {
+    current = nearestRealIndex;
+    updateDots();
+  }
+  
   // 全てのスライド（クローン含む）にshowを付ける処理
   allSlides.forEach(slide => {
     const rect = slide.getBoundingClientRect();
