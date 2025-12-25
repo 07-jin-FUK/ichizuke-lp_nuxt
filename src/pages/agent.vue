@@ -585,17 +585,18 @@ const nextSlide = () => {
     nextItem.classList.add('show');
   }
   
-  // 移動開始時に即座にドットを更新
-const nextRealIndex = (current + 1) % realLength;
-current = nextRealIndex;
-updateDots();
-
-
-  // スムーズスクロール
+// スムーズスクロール
   wrap.scrollTo({
     left: allSlides[nextPhysicalIndex].offsetLeft,
     behavior: 'smooth'
   });
+
+  // 少し遅らせてドットを更新（スクロール開始後）
+  setTimeout(() => {
+    const nextRealIndex = (current + 1) % realLength;
+    current = nextRealIndex;
+    updateDots();
+  }, 150);
 
   const handleScrollEnd = () => {
     const currentSlide = allSlides[nextPhysicalIndex];
