@@ -379,11 +379,13 @@ const createObservers = () => {
   const isMiddle = window.innerWidth > 836 && window.innerWidth <= 1060; // 3個表示
   const isTablet = window.innerWidth > 480 && window.innerWidth <= 836; // 2個表示
   const isMobile = window.innerWidth <= 480;
+  const isPC = window.innerWidth > 1060;  // ⭐️ PC判定を追加
   const rootMargin = isMobile ? "0px 0px -15% 0px" : "0px 0px -20% 0px";
 
-  const isPC = window.innerWidth > 1060;
-  const blogSelector = isTablet || isPC ? "" : "#blog .blog-wrap .blog-item-wrap:not(.is-clone) .blog-item,";
-
+  // ⭐️ タブレットまたはPCの場合はブログアイテムを監視対象から除外
+  const blogSelector = (isTablet || isPC)  // ⭐️ ここを修正
+    ? "" 
+    : "#blog .blog-wrap .blog-item-wrap:not(.is-clone) .blog-item,";
   const allTargets = document.querySelectorAll<HTMLElement>(`
     #about .text-wrap,
     #about img,
@@ -440,6 +442,9 @@ const createObservers = () => {
 // ==========================================
 let blogScrollTimer: number | undefined;
 let isTransitioning = false;
+
+let handleManualScrollFunc: ((event: Event) => void) | null = null; 
+
 const initAutoBlogScroll = () => {
   const wrap = document.querySelector("#blog .blog-wrap") as HTMLElement | null;
   if (!wrap) return;
@@ -454,6 +459,12 @@ const initAutoBlogScroll = () => {
   }
   dotWrap.innerHTML = "";
   isTransitioning = false;
+  
+    if (handleManualScrollFunc) {
+    wrap.removeEventListener("scroll", handleManualScrollFunc);
+    handleManualScrollFunc = null;
+  }
+
 
   // クローンを先に削除
   wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
@@ -967,27 +978,53 @@ const initAutoBlogScroll = () => {
         updateDots();
       }
 
-      // 1.5秒後に自動スクロールを再開
+// 1.5秒後に自動スクロールを再開
       setTimeout(() => {
+        // PC幅になっていたら自動スクロールを開始しない
+        if (window.innerWidth > 1060) return;
         startAuto();
       }, 1500);
     }, 150);
   };
-  wrap.addEventListener("scroll", handleManualScroll, { passive: true });
-  
-    if (window.innerWidth > 1060) {
+    
+
+
+// ===== PC：auto slide 無効 =====
+  if (window.innerWidth > 1060) {
+    // 自動スクロールを確実に停止
+    stopAuto();
+    
+    // トランジション中フラグをリセット
+    isTransitioning = false;
+    
     wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
     wrap.scrollTo({ left: 0, behavior: "auto" });
     updateDots();
     
-    // ⭐️ PC時は全てのブログアイテムに強制的にshowを付ける
+    // PC時は全てのブログアイテムに強制的にshowを付ける
     originals.forEach((slide) => {
       const item = slide.querySelector(".blog-item");
-      if (item) item.classList.add("show");
+      if (item) {
+        item.style.transition = "none";
+        item.classList.add("show");
+      }
     });
     
+    // トランジションを戻す
+    requestAnimationFrame(() => {
+      originals.forEach((slide) => {
+        const item = slide.querySelector(".blog-item");
+        if (item) item.style.transition = "";
+      });
+    });
+    
+    // PCではスクロールリスナーを登録しない
     return;
   }
+
+  // タブレット・モバイルのみスクロールリスナーを登録
+  wrap.addEventListener("scroll", handleManualScroll, { passive: true });
+  handleManualScrollFunc = handleManualScroll;
 
   setupInfinite();
   updateDots();
@@ -1054,12 +1091,15 @@ const handleResize = async () => {
   await nextTick();
   await nextTick();
 
+  // ⭐️ 順序を変更：先にブログを初期化してからObserverを作成
   initAutoBlogScroll();
 
   await nextTick();
   applyEllipsis();
 
   updateBottomHeaderHeight();
+  
+  // ⭐️ Observerは最後に作成（ブログアイテムのshowが付いた後）
   createObservers();
 };
 
@@ -1097,6 +1137,15 @@ onUnmounted(() => {
   if (blogScrollTimer) {
     clearInterval(blogScrollTimer);
     blogScrollTimer = undefined;
+  }
+
+  // ⭐️ ブログのスクロールリスナーも削除
+  if (handleManualScrollFunc) {
+    const wrap = document.querySelector("#blog .blog-wrap") as HTMLElement | null;
+    if (wrap) {
+      wrap.removeEventListener("scroll", handleManualScrollFunc);
+    }
+    handleManualScrollFunc = null;
   }
 
   document.body.style.paddingBottom = "";
@@ -1968,6 +2017,9 @@ const faqList = [
 
             .date {
               font-size: 13px;
+              line-height: 1;
+              margin-top: 2px;
+              
             }
 
             .category {

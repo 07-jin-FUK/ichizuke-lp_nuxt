@@ -159,7 +159,7 @@ onUnmounted(() => {
     @include mixin.max-screen(mixin.$small) {
       display: block;
       font-size: 14px;
-      padding: 10px 25px 12px;
+      padding: 11px 25px 12px;
       right: 5%;
     }
 
