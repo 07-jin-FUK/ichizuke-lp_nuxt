@@ -2018,7 +2018,9 @@ const faqList = [
             .date {
               font-size: 13px;
               line-height: 1;
+            @include mixin.max-screen(mixin.$small) {
               margin-top: 2px;
+            }
               
             }
 
