@@ -505,59 +505,92 @@ const initAutoBlogScroll = () => {
     });
   }
 
-  const setupInfinite = () => {
-    wrap.querySelectorAll(".spacer").forEach((el) => el.remove());
-    wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
+//   const setupInfinite = () => {
+//     wrap.querySelectorAll(".spacer").forEach((el) => el.remove());
+//     wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
 
-    // 最後の1枚を先頭にクローン
-    const lastClone = originals[realLength - 1].cloneNode(true) as HTMLElement;
-    lastClone.classList.add("is-clone");
-    lastClone.setAttribute("data-clone-of", String(realLength - 1));
-    const lastBlogItem = lastClone.querySelector(".blog-item");
-    if (lastBlogItem) lastBlogItem.classList.remove("show");
-    wrap.insertBefore(lastClone, wrap.firstChild);
+//     // 最後の1枚を先頭にクローン
+//     const lastClone = originals[realLength - 1].cloneNode(true) as HTMLElement;
+//     lastClone.classList.add("is-clone");
+//     lastClone.setAttribute("data-clone-of", String(realLength - 1));
+//     const lastBlogItem = lastClone.querySelector(".blog-item");
+//     if (lastBlogItem) lastBlogItem.classList.remove("show");
+//     wrap.insertBefore(lastClone, wrap.firstChild);
 
-    // 最初の1枚を末尾にクローン
-    const firstClone = originals[0].cloneNode(true) as HTMLElement;
-    firstClone.classList.add("is-clone");
-    firstClone.setAttribute("data-clone-of", "0");
-    const firstBlogItem = firstClone.querySelector(".blog-item");
-    if (firstBlogItem) firstBlogItem.classList.remove("show");
-    wrap.appendChild(firstClone);
+//     // 最初の1枚を末尾にクローン
+//     const firstClone = originals[0].cloneNode(true) as HTMLElement;
+//     firstClone.classList.add("is-clone");
+//     firstClone.setAttribute("data-clone-of", "0");
+//     const firstBlogItem = firstClone.querySelector(".blog-item");
+//     if (firstBlogItem) firstBlogItem.classList.remove("show");
+//     wrap.appendChild(firstClone);
 
-    // 1060px：3枚目もクローン（末尾に追加）
-    if (isMiddle) {
-      const secondClone = originals[1].cloneNode(true) as HTMLElement;
-      secondClone.classList.add("is-clone");
-      secondClone.setAttribute("data-clone-of", "1");
-      const secondBlogItem = secondClone.querySelector(".blog-item");
-      if (secondBlogItem) secondBlogItem.classList.remove("show");
-      wrap.appendChild(secondClone);
+//     // 1060px：3枚目もクローン（末尾に追加）
+//     if (isMiddle) {
+//       const secondClone = originals[1].cloneNode(true) as HTMLElement;
+//       secondClone.classList.add("is-clone");
+//       secondClone.setAttribute("data-clone-of", "1");
+//       const secondBlogItem = secondClone.querySelector(".blog-item");
+//       if (secondBlogItem) secondBlogItem.classList.remove("show");
+//       wrap.appendChild(secondClone);
 
-      const thirdClone = originals[2].cloneNode(true) as HTMLElement;
-      thirdClone.classList.add("is-clone");
-      thirdClone.setAttribute("data-clone-of", "2");
-      const thirdBlogItem = thirdClone.querySelector(".blog-item");
-      if (thirdBlogItem) thirdBlogItem.classList.remove("show");
-      wrap.appendChild(thirdClone);
-    }
+//       const thirdClone = originals[2].cloneNode(true) as HTMLElement;
+//       thirdClone.classList.add("is-clone");
+//       thirdClone.setAttribute("data-clone-of", "2");
+//       const thirdBlogItem = thirdClone.querySelector(".blog-item");
+//       if (thirdBlogItem) thirdBlogItem.classList.remove("show");
+//       wrap.appendChild(thirdClone);
+//     }
 
-    // タブレット：2枚目もクローン（末尾に追加）
-    if (isTablet) {
-      const secondClone = originals[1].cloneNode(true) as HTMLElement;
-      secondClone.classList.add("is-clone");
-      secondClone.setAttribute("data-clone-of", "1");
-      const secondBlogItem = secondClone.querySelector(".blog-item");
-      if (secondBlogItem) secondBlogItem.classList.remove("show");
-      wrap.appendChild(secondClone);
-    }
+//     // タブレット：2枚目もクローン（末尾に追加）
+//     if (isTablet) {
+//       const secondClone = originals[1].cloneNode(true) as HTMLElement;
+//       secondClone.classList.add("is-clone");
+//       secondClone.setAttribute("data-clone-of", "1");
+//       const secondBlogItem = secondClone.querySelector(".blog-item");
+//       if (secondBlogItem) secondBlogItem.classList.remove("show");
+//       wrap.appendChild(secondClone);
+//     }
 
-    // 初期位置を調整（前方クローンの分だけオフセット）
-    wrap.scrollTo({
-      left: originals[0].offsetLeft,
-      behavior: "auto",
-    });
-  };
+//     // 初期位置を調整（前方クローンの分だけオフセット）
+//     wrap.scrollTo({
+//       left: originals[0].offsetLeft,
+//       behavior: "auto",
+//     });
+//   };
+
+const setupInfinite = () => {
+  wrap.querySelectorAll(".spacer").forEach((el) => el.remove());
+  wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
+
+  // 前方に10枚クローン（本物4枚を2.5周分）
+  for (let i = 0; i < 10; i++) {
+    const originalIndex = (realLength - 1) - (i % realLength);
+    const clone = originals[originalIndex].cloneNode(true) as HTMLElement;
+    clone.classList.add("is-clone", "is-clone-before");
+    clone.setAttribute("data-clone-of", String(originalIndex));
+    const blogItem = clone.querySelector(".blog-item");
+    if (blogItem) blogItem.classList.remove("show");
+    wrap.insertBefore(clone, wrap.firstChild);
+  }
+
+  // 後方に10枚クローン（本物4枚を2.5周分）
+  for (let i = 0; i < 10; i++) {
+    const originalIndex = i % realLength;
+    const clone = originals[originalIndex].cloneNode(true) as HTMLElement;
+    clone.classList.add("is-clone", "is-clone-after");
+    clone.setAttribute("data-clone-of", String(originalIndex));
+    const blogItem = clone.querySelector(".blog-item");
+    if (blogItem) blogItem.classList.remove("show");
+    wrap.appendChild(clone);
+  }
+
+  // 初期位置を1枚目の本物に設定
+  wrap.scrollTo({
+    left: originals[0].offsetLeft,
+    behavior: "auto",
+  });
+};
 
   const getSlidePosition = (index: number) => {
     return originals[index].offsetLeft;
@@ -575,32 +608,33 @@ const initAutoBlogScroll = () => {
     });
   };
 
-  const updateVisibleSlidesForScroll = () => {
-    if (!isTablet && !isMiddle) return;
+const updateVisibleSlidesForScroll = () => {
+  if (!isTablet && !isMiddle) return;
 
-    const allSlides = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
-    const scrollLeft = wrap.scrollLeft;
-    const wrapWidth = wrap.offsetWidth;
+  const allSlides = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
+  const scrollLeft = wrap.scrollLeft;
+  const wrapWidth = wrap.offsetWidth;
 
-    allSlides.forEach((slide) => {
-      const slideLeft = slide.offsetLeft - scrollLeft;
-      const slideRight = slideLeft + slide.offsetWidth;
+  allSlides.forEach((slide) => {
+    const slideLeft = slide.offsetLeft - scrollLeft;
+    const slideRight = slideLeft + slide.offsetWidth;
 
-      const slideWidth = slide.offsetWidth;
-      const visibleWidth = Math.min(slideRight, wrapWidth) - Math.max(slideLeft, 0);
-      const visibilityRatio = visibleWidth / slideWidth;
+    const slideWidth = slide.offsetWidth;
+    const visibleWidth = Math.min(slideRight, wrapWidth) - Math.max(slideLeft, 0);
+    const visibilityRatio = visibleWidth / slideWidth;
 
-      const blogItem = slide.querySelector(".blog-item");
+    const blogItem = slide.querySelector(".blog-item");
 
-      if (blogItem) {
-        if (visibilityRatio > 0.5) {
-          blogItem.classList.add("show");
-        } else {
-          blogItem.classList.remove("show");
-        }
+    if (blogItem) {
+      // ⭐ 本物もクローンも同じように扱う（クローンを除外しない）
+      if (visibilityRatio > 0.5) {
+        blogItem.classList.add("show");
+      } else {
+        blogItem.classList.remove("show");
       }
-    });
-  };
+    }
+  });
+};
 
   const nextSlide = () => {
     if (isTransitioning) return;
@@ -749,227 +783,265 @@ const initAutoBlogScroll = () => {
     }
   };
 
-  // ===== 手動フリック時の処理 =====
-  let scrollTimeout: number | undefined;
+// ===== 手動フリック時の処理 =====
+let scrollTimeout: number | undefined;
+let isJumping = false;
 
-  const handleManualScroll = () => {
-    stopAuto();
+const handleManualScroll = () => {
+  stopAuto();
 
-    const allSlides = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
-    const scrollLeft = wrap.scrollLeft;
+  const allSlides = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
+  const scrollLeft = wrap.scrollLeft;
 
-    // ★★★ タブレット：スクロール中に常に表示を更新（即座にshowを削除） ★★★
-    if (isTablet || isMiddle) {
-      // requestAnimationFrameで確実に実行
-      requestAnimationFrame(() => {
-        updateVisibleSlidesForScroll(); // ← 関数名変更
-      });
-    }
+  // ★★★ タブレット:スクロール中に常に表示を更新 ★★★
+  // ⭐ ジャンプ中はスキップ（これが重要！）
+  if ((isTablet || isMiddle) && !isJumping) {
+    requestAnimationFrame(() => {
+      updateVisibleSlidesForScroll();
+    });
+  }
 
-    // スクロール中にリアルタイムでドットを更新（クローン対応）
-    if (!isTablet) {
-      let nearestRealIndex = 0;
-      let minDistance = Infinity;
+  // スクロール中にリアルタイムでドットを更新(クローン対応)
+  if (!isTablet) {
+    let nearestRealIndex = 0;
+    let minDistance = Infinity;
 
-      allSlides.forEach((slide) => {
-        const distance = Math.abs(slide.offsetLeft - scrollLeft);
-        if (distance < minDistance) {
-          minDistance = distance;
-          if (slide.classList.contains("is-clone")) {
-            const cloneOf = parseInt(slide.getAttribute("data-clone-of") || "0");
-            nearestRealIndex = cloneOf;
-          } else {
-            const realIndex = originals.indexOf(slide);
-            if (realIndex !== -1) {
-              nearestRealIndex = realIndex;
-            }
+    allSlides.forEach((slide) => {
+      const distance = Math.abs(slide.offsetLeft - scrollLeft);
+      if (distance < minDistance) {
+        minDistance = distance;
+        if (slide.classList.contains("is-clone")) {
+          const cloneOf = parseInt(slide.getAttribute("data-clone-of") || "0");
+          nearestRealIndex = cloneOf;
+        } else {
+          const realIndex = originals.indexOf(slide);
+          if (realIndex !== -1) {
+            nearestRealIndex = realIndex;
           }
         }
-      });
-
-      if (current !== nearestRealIndex) {
-        current = nearestRealIndex;
-        updateDots();
       }
+    });
+
+    if (current !== nearestRealIndex) {
+      current = nearestRealIndex;
+      updateDots();
     }
+  }
 
-    // ★★★ スマホ：全てのスライド（クローン含む）にshowを付ける処理 ★★★
-    if (!isTablet) {
-      allSlides.forEach((slide) => {
-        const rect = slide.getBoundingClientRect();
-        const wrapRect = wrap.getBoundingClientRect();
+  // ★★★ スマホ:全てのスライド(クローン含む)にshowを付ける処理 ★★★
+  // ⭐ ジャンプ中はスキップ
+  if (!isTablet && !isJumping) {
+    allSlides.forEach((slide) => {
+      const rect = slide.getBoundingClientRect();
+      const wrapRect = wrap.getBoundingClientRect();
 
-        if (Math.abs(rect.left - wrapRect.left) < 100) {
-          const blogItem = slide.querySelector(".blog-item");
-          if (blogItem) blogItem.classList.add("show");
+      if (Math.abs(rect.left - wrapRect.left) < 100) {
+        const blogItem = slide.querySelector(".blog-item");
+        if (blogItem) blogItem.classList.add("show");
+      }
+    });
+  }
+
+  if (scrollTimeout) clearTimeout(scrollTimeout);
+  scrollTimeout = window.setTimeout(() => {
+    // 現在のスクロール位置を判定
+    const currentScrollLeft = wrap.scrollLeft;
+    const wrapWidth = wrap.scrollWidth;
+    const viewportWidth = wrap.offsetWidth;
+    
+    let minDistance = Infinity;
+    let nearestIndex = 0;
+    let isCloneFlag = false;
+    let cloneOf = -1;
+
+    allSlides.forEach((slide, index) => {
+      const distance = Math.abs(slide.offsetLeft - currentScrollLeft);
+      if (distance < minDistance) {
+        minDistance = distance;
+        nearestIndex = index;
+        isCloneFlag = slide.classList.contains("is-clone");
+        if (isCloneFlag) {
+          cloneOf = parseInt(slide.getAttribute("data-clone-of") || "-1");
         }
-      });
-    }
+      }
+    });
 
-    if (scrollTimeout) clearTimeout(scrollTimeout);
-    scrollTimeout = window.setTimeout(() => {
-      // 現在のスクロール位置を判定
-      const currentScrollLeft = wrap.scrollLeft;
-      let minDistance = Infinity;
-      let nearestIndex = 0;
-      let isCloneFlag = false;
-      let cloneOf = -1;
+    const scrollThreshold = viewportWidth * 1.5;
+    
+    if (isCloneFlag && cloneOf >= 0) {
+      // ========== 前方クローン領域からのジャンプ ==========
+      if (currentScrollLeft < scrollThreshold) {
+        const targetOriginal = originals[cloneOf];
+        if (targetOriginal) {
+          // ⭐ ジャンプ開始
+          isJumping = true;
+          
+          // 1. 先にすべてのクローンからshowを削除
+          wrap.querySelectorAll(".is-clone .blog-item").forEach((cloneItem) => {
+            cloneItem.classList.remove("show");
+          });
 
-      allSlides.forEach((slide, index) => {
-        const distance = Math.abs(slide.offsetLeft - currentScrollLeft);
-        if (distance < minDistance) {
-          minDistance = distance;
-          nearestIndex = index;
-          isCloneFlag = slide.classList.contains("is-clone");
-          if (isCloneFlag) {
-            cloneOf = parseInt(slide.getAttribute("data-clone-of") || "-1");
-          }
-        }
-      });
-
-      // クローンに停止した場合の処理
-      if (isCloneFlag && cloneOf >= 0) {
-        // 先頭のクローン（最後の1枚=4枚目のクローン）の場合
-        if (cloneOf === realLength - 1) {
-          if (!isTablet) {
-            current = realLength - 1;
-            updateDots();
-          }
-
-          // ★★★ ジャンプ前に本物の要素にshowを付けておく ★★★
-          const lastBlogItem = originals[realLength - 1].querySelector(".blog-item") as HTMLElement;
-          if (lastBlogItem) {
-            lastBlogItem.style.transition = "none";
-            lastBlogItem.classList.add("show");
-          }
-
-          // ★★★ 1060px：3枚目にもshowを付けておく ★★★
-          let thirdLastItem: HTMLElement | null = null;
-          if (isMiddle && originals[realLength - 3]) {
-            thirdLastItem = originals[realLength - 3].querySelector(".blog-item") as HTMLElement;
-            if (thirdLastItem) {
-              thirdLastItem.style.transition = "none";
-              thirdLastItem.classList.add("show");
-            }
-          }
-
-          // ★★★ ジャンプ先に表示されるクローン（1枚目、2枚目）にもshowを付けておく ★★★
-          let firstCloneItem: HTMLElement | null = null;
-          let secondCloneItem: HTMLElement | null = null;
-
+          // 2. タブレット・1060px:一旦すべてのshowを削除
           if (isTablet || isMiddle) {
-            const firstClone = wrap.querySelector('.blog-item-wrap.is-clone[data-clone-of="0"]') as HTMLElement;
-            if (firstClone) {
-              firstCloneItem = firstClone.querySelector(".blog-item") as HTMLElement;
-              if (firstCloneItem) {
-                firstCloneItem.style.transition = "none";
-                firstCloneItem.classList.add("show");
-              }
-            }
-          }
-          // ★★★ ここに追加 ★★★
-          if (isMiddle) {
-            const secondClone = wrap.querySelector('.blog-item-wrap.is-clone[data-clone-of="1"]') as HTMLElement;
-            if (secondClone) {
-              secondCloneItem = secondClone.querySelector(".blog-item") as HTMLElement;
-              if (secondCloneItem) {
-                secondCloneItem.style.transition = "none";
-                secondCloneItem.classList.add("show");
-              }
-            }
+            const allItems = wrap.querySelectorAll(".blog-item");
+            allItems.forEach((item) => item.classList.remove("show"));
           }
 
-          setTimeout(() => {
-            wrap.scrollTo({
-              left: originals[realLength - 1].offsetLeft,
-              behavior: "auto",
-            });
-
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                if (lastBlogItem) lastBlogItem.style.transition = "";
-                if (secondLastItem) secondLastItem.style.transition = "";
-                if (thirdLastItem) thirdLastItem.style.transition = "";
-                if (firstCloneItem) firstCloneItem.style.transition = "";
-                if (secondCloneItem) secondCloneItem.style.transition = ""; // ← この行を追加
-
-                if (isTablet || isMiddle) {
-                  // ← ここを修正
-                  updateVisibleSlidesForScroll(); // ← 関数名変更
-                }
-              });
-            });
-          }, 50);
-        }
-        // 末尾のクローン（最初の1枚）の場合
-        else if (cloneOf === 0) {
+          // ⭐⭐⭐ 3. ジャンプ先に表示される全てのスライド(本物もクローンも)を取得 ⭐⭐⭐
+          const targetScrollLeft = targetOriginal.offsetLeft;
+          const allSlidesForJump = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
+          const visibleSlides: HTMLElement[] = [];
+          
+          allSlidesForJump.forEach((slide) => {
+            const slideLeft = slide.offsetLeft;
+            const slideRight = slideLeft + slide.offsetWidth;
+            const viewportLeft = targetScrollLeft;
+            const viewportRight = targetScrollLeft + wrap.offsetWidth;
+            
+            // ジャンプ後に画面内に入るスライドを判定
+            if (slideRight > viewportLeft && slideLeft < viewportRight) {
+              visibleSlides.push(slide);
+            }
+          });
+          
+          // ⭐⭐⭐ 4. 表示される全てのスライドに transition: none + show を付ける ⭐⭐⭐
+          visibleSlides.forEach((slide) => {
+            const blogItem = slide.querySelector(".blog-item") as HTMLElement;
+            if (blogItem) {
+              blogItem.style.transition = "none";
+              blogItem.classList.add("show");
+            }
+          });
+          
+          // 5. 即座にジャンプ
+          wrap.scrollTo({
+            left: targetOriginal.offsetLeft,
+            behavior: "auto",
+          });
+          
+          // 6. ドットを更新
           if (!isTablet) {
-            current = 0;
+            current = cloneOf;
             updateDots();
           }
-
-          // ★★★ ジャンプ前に本物の要素にshowを付けておく ★★★
-          const firstBlogItem = originals[0].querySelector(".blog-item") as HTMLElement;
-          if (firstBlogItem) {
-            firstBlogItem.style.transition = "none";
-            firstBlogItem.classList.add("show");
-          }
-
-          // タブレット：2枚目にもshow
-          let secondBlogItem: HTMLElement | null = null;
-          if (isTablet) {
-            secondBlogItem = originals[1]?.querySelector(".blog-item") as HTMLElement;
-            if (secondBlogItem) {
-              secondBlogItem.style.transition = "none";
-              secondBlogItem.classList.add("show");
-            }
-          }
-
-          // ★★★ 1060px：3枚目にもshow ★★★
-          let thirdBlogItem: HTMLElement | null = null;
-          if (isMiddle) {
-            thirdBlogItem = originals[2]?.querySelector(".blog-item") as HTMLElement;
-            if (thirdBlogItem) {
-              thirdBlogItem.style.transition = "none";
-              thirdBlogItem.classList.add("show");
-            }
-          }
-
-          setTimeout(() => {
-            wrap.scrollTo({
-              left: originals[0].offsetLeft,
-              behavior: "auto",
-            });
-
+          
+          // 7. transitionを戻す & ジャンプ完了
+          requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                if (firstBlogItem) firstBlogItem.style.transition = "";
-                if (secondBlogItem) secondBlogItem.style.transition = "";
-                if (thirdBlogItem) thirdBlogItem.style.transition = "";
-
-                if (isTablet || isMiddle) {
-                  // ← ここを修正
-                  updateVisibleSlidesForScroll(); // ← 関数名変更
+              // 全てのスライドのtransitionを戻す
+              visibleSlides.forEach((slide) => {
+                const blogItem = slide.querySelector(".blog-item") as HTMLElement;
+                if (blogItem) {
+                  blogItem.style.transition = "";
                 }
               });
+              
+              // ⭐ ジャンプ完了
+              isJumping = false;
             });
-          }, 50);
+          });
         }
-      } else if (isTablet || isMiddle) {
-        // ← ここを修正
+      }
+      // ========== 後方クローン領域からのジャンプ ==========
+      else if (currentScrollLeft > wrapWidth - viewportWidth - scrollThreshold) {
+        const targetOriginal = originals[cloneOf];
+        if (targetOriginal) {
+          // ⭐ ジャンプ開始
+          isJumping = true;
+          
+          // 1. 先にすべてのクローンからshowを削除
+          wrap.querySelectorAll(".is-clone .blog-item").forEach((cloneItem) => {
+            cloneItem.classList.remove("show");
+          });
+
+          // 2. タブレット・1060px:一旦すべてのshowを削除
+          if (isTablet || isMiddle) {
+            const allItems = wrap.querySelectorAll(".blog-item");
+            allItems.forEach((item) => item.classList.remove("show"));
+          }
+
+          // ⭐⭐⭐ 3. ジャンプ先に表示される全てのスライド(本物もクローンも)を取得 ⭐⭐⭐
+          const targetScrollLeft = targetOriginal.offsetLeft;
+          const allSlidesForJump = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
+          const visibleSlides: HTMLElement[] = [];
+          
+          allSlidesForJump.forEach((slide) => {
+            const slideLeft = slide.offsetLeft;
+            const slideRight = slideLeft + slide.offsetWidth;
+            const viewportLeft = targetScrollLeft;
+            const viewportRight = targetScrollLeft + wrap.offsetWidth;
+            
+            // ジャンプ後に画面内に入るスライドを判定
+            if (slideRight > viewportLeft && slideLeft < viewportRight) {
+              visibleSlides.push(slide);
+            }
+          });
+          
+          // ⭐⭐⭐ 4. 表示される全てのスライドに transition: none + show を付ける ⭐⭐⭐
+          visibleSlides.forEach((slide) => {
+            const blogItem = slide.querySelector(".blog-item") as HTMLElement;
+            if (blogItem) {
+              blogItem.style.transition = "none";
+              blogItem.classList.add("show");
+            }
+          });
+          
+          // 5. 即座にジャンプ
+          wrap.scrollTo({
+            left: targetOriginal.offsetLeft,
+            behavior: "auto",
+          });
+          
+          // 6. ドットを更新
+          if (!isTablet) {
+            current = cloneOf;
+            updateDots();
+          }
+          
+          // 7. transitionを戻す & ジャンプ完了
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              // 全てのスライドのtransitionを戻す
+              visibleSlides.forEach((slide) => {
+                const blogItem = slide.querySelector(".blog-item") as HTMLElement;
+                if (blogItem) {
+                  blogItem.style.transition = "";
+                }
+              });
+              
+              // ⭐ ジャンプ完了
+              isJumping = false;
+            });
+          });
+        }
+      }
+      // クローン領域の中央付近にいる場合はジャンプしない
+      else {
+        // ドットとshowの更新のみ
+        if (isTablet || isMiddle) {
+          requestAnimationFrame(() => {
+            updateVisibleSlidesForScroll();
+          });
+        } else {
+          let newCurrent = cloneOf;
+          current = newCurrent;
+          updateDots();
+        }
+      }
+    } else {
+      // 本物のスライドにいる場合はドット更新のみ
+      if (isTablet || isMiddle) {
         requestAnimationFrame(() => {
-          updateVisibleSlidesForScroll(); // ← 関数名変更
+          updateVisibleSlidesForScroll();
         });
-      } else if (!isTablet && !isMiddle) {
-        // ← ここを修正
-        // 本物のスライドの場合（スマホのみドット更新）
+      } else {
         let newCurrent = 0;
-        minDistance = Infinity;
+        let newMinDistance = Infinity;
 
         originals.forEach((slide, index) => {
           const distance = Math.abs(slide.offsetLeft - currentScrollLeft);
-          if (distance < minDistance) {
-            minDistance = distance;
+          if (distance < newMinDistance) {
+            newMinDistance = distance;
             newCurrent = index;
           }
         });
@@ -977,31 +1049,25 @@ const initAutoBlogScroll = () => {
         current = newCurrent;
         updateDots();
       }
+    }
 
-// 1.5秒後に自動スクロールを再開
-      setTimeout(() => {
-        // PC幅になっていたら自動スクロールを開始しない
-        if (window.innerWidth > 1060) return;
-        startAuto();
-      }, 1500);
-    }, 150);
-  };
-    
+    // 1.5秒後に自動スクロールを再開
+    setTimeout(() => {
+      if (window.innerWidth > 1060) return;
+      startAuto();
+    }, 1500);
+  }, 150);
+};
 
-
-// ===== PC：auto slide 無効 =====
+  // ===== PC：auto slide 無効 =====
   if (window.innerWidth > 1060) {
-    // 自動スクロールを確実に停止
     stopAuto();
-    
-    // トランジション中フラグをリセット
     isTransitioning = false;
     
     wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
     wrap.scrollTo({ left: 0, behavior: "auto" });
     updateDots();
     
-    // PC時は全てのブログアイテムに強制的にshowを付ける
     originals.forEach((slide) => {
       const item = slide.querySelector(".blog-item");
       if (item) {
@@ -1010,7 +1076,6 @@ const initAutoBlogScroll = () => {
       }
     });
     
-    // トランジションを戻す
     requestAnimationFrame(() => {
       originals.forEach((slide) => {
         const item = slide.querySelector(".blog-item");
@@ -1018,9 +1083,9 @@ const initAutoBlogScroll = () => {
       });
     });
     
-    // PCではスクロールリスナーを登録しない
     return;
   }
+
 
   // タブレット・モバイルのみスクロールリスナーを登録
   wrap.addEventListener("scroll", handleManualScroll, { passive: true });
