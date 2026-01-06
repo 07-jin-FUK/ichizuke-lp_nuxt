@@ -82,14 +82,15 @@ const applyIOSSafariClass = () => {
 // visualViewportでbottom補正
 // ================================
 const updateBottomHeaderPosition = () => {
+  // スマホのみ実行（480px以下）
+  const isSP = window.innerWidth <= 480;
+  if (!isSP) return;
+
   const bottomHeader = document.querySelector('.bottom-header') as HTMLElement;
   if (!bottomHeader || !window.visualViewport) return;
 
   const vv = window.visualViewport;
-
-  // 表示領域の下端との差分
-  const offset =
-    window.innerHeight - (vv.height + vv.offsetTop);
+  const offset = window.innerHeight - (vv.height + vv.offsetTop);
 
   bottomHeader.style.bottom = `${Math.max(offset, 0)}px`;
 };
