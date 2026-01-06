@@ -1577,9 +1577,8 @@ const faqList = [
       }
 
       @include mixin.max-screen(mixin.$small) {
-        top: unset;
+        top: 60%;
         right: 5%;
-        bottom: 10%;
         transform: unset;
         width: 90%;
       }
@@ -1651,6 +1650,7 @@ const faqList = [
 
       @include mixin.max-screen(mixin.$small) {
         left: unset;
+        top:60%;
         right: 5%;
       }
     }
