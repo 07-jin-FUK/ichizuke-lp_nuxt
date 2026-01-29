@@ -1606,7 +1606,7 @@ const faqList = [
         top: 50%;
         left: 50%;
   width: 101%;  // ← 100%から101%に変更
-  height: 101%; 
+  height: 100%; 
         transform: translate(-50%, -50%) scale(1);
         transform-origin: center center;
         background-position: center center;
