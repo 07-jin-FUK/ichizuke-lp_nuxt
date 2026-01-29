@@ -1570,13 +1570,14 @@ const faqList = [
   position: relative;
   height: 400vh;
 
-  .slides {
-    position: sticky;
-    top: 0;
-    width: 100vw;
-    height: calc(100vh - var(--bottom-header-height));
-    overflow: hidden;
-  }
+.slides {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);  // ← 画面左端に揃える
+  height: calc(100vh - var(--bottom-header-height));
+  overflow: hidden;
+}
 
   .section-wrap {
     position: absolute;
@@ -1592,7 +1593,7 @@ const faqList = [
       position: absolute;
       inset: 0;
       clip-path: inset(0 0 0 0);
-      background: #fff;
+      background: transparent; 
       z-index: 2;
       overflow: hidden;
 
@@ -1604,8 +1605,8 @@ const faqList = [
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 100%;
-        height: 100%;
+  width: 101%;  // ← 100%から101%に変更
+  height: 101%; 
         transform: translate(-50%, -50%) scale(1);
         transform-origin: center center;
         background-position: center center;
