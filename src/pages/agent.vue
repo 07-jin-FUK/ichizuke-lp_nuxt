@@ -4,7 +4,7 @@
       <h1>
         <span>求職者が求めていた</span>
         <span>新たなアプローチ</span>
-        <span class="logo-type"><img src="/images/logo_white.svg" decoding="async" loading="eager" alt="「イチヅケ」" /></span>
+        <span class="logo-type"><img src="/images/logo_black.svg" decoding="async" loading="eager" alt="「イチヅケ」" /></span>
       </h1>
       <div class="btn"><p>転職エージェント無料登録</p></div>
       <h2>
@@ -23,8 +23,8 @@
           <span class="logo-type"><img src="/images/logo.svg" decoding="async" loading="eager" alt="「イチヅケ」" /></span>
           は、
         </h5>
-        <h5>求職者の"市場価値"を可視化し、新たなアプローチで求職者とのマッチングを実現するキャリアプラットフォームです。</h5>
-        <p>求職者がプロフィールを登録すると、企業・エージェントは年収提示ベースのオファーを提示でき、求職者はその提示額と熱意をもとに、最も関心の高いエージェントとのみコンタクトを開始します。</p>
+        <h5>転職エージェントが、求職者のキャリアに対して”市場価値診断”を行い、マッチ度が高かった上位2社の転職エージェントにのみ求職者と接点が持てる、完全成果報酬型のマッチングシステムです。</h5>
+        <p>無駄なコストや工数を抑えつつ、求職者と効率的に出会える環境を提供しています。</p>
       </div>
       <img src="/images/mock.svg" alt="モック" class="mock" />
     </div>
@@ -37,11 +37,9 @@
           <div class="inner" ref="inner1" style="background-image: url(/images/img-point_1.jpg)"></div>
         </div>
         <div class="text-wrap" ref="textWrap1">
-          <h5>
-            本気度の高い求職者へ最短でリーチ
-            <span>できる。</span>
-          </h5>
-          <p>イチヅケには、自分の市場価値を正しく知りたい意欲の高い求職者が集まります。 プロフィールを公開した段階で、転職意向が強い求職者が多数存在します。 従来のスカウト型よりレスポンス率が高く、アプローチの効率が大幅に改善できます。</p>
+            <h1>Point. 1</h1>
+          <h5>求職者集めのコスト・工数を削減</h5>
+          <p>求職者集めを運営側が担うため、転職エージェント自身が広告出稿やメディア運営などの施策に多くの時間や費用を割く必要がありません。面談などの本来注力すべき業務に集中でき、効率的な求職者獲得が可能です。</p>
         </div>
       </div>
 
@@ -49,8 +47,9 @@
         <div class="mask" ref="mask2">
           <div class="inner" style="background-image: url(/images/img-point_2.jpg)">
             <div class="text-wrap">
-              <h5>競合エージェントとの差別化が図れる。</h5>
-              <p>求職者側は "提示額(年収)＋熱量" を基準に比較します。 高評価を提示できるほど求職者との接点を確保しやすく、 良い提案をできる転職エージェント様が、正当に選ばれる環境が整っています。</p>
+                  <h1>Point. 2</h1>
+              <h5>完全成果報酬型で、低リスク</h5>
+              <p>初期費用・固定月額費用は0円。市場価値診断を行っただけでは費用は発生せず、採用成立による手数料も一切かかりません。<span>成果報酬型のため、導入・運用リスクを抑えて新たな求職者獲得チャネルを試すことができます。</span></p>
             </div>
           </div>
         </div>
@@ -60,8 +59,9 @@
         <div class="mask" ref="mask3">
           <div class="inner" style="background-image: url(/images/img-point_3.jpg)">
             <div class="text-wrap">
-              <h5>データに基づいた採用活動ができる。</h5>
-              <p>様々な職種・スキル・経験値の人材が、どのような反応を得ているのか。 市場価値のトレンドを知るヒントになります。 求人戦略・求職者への提案精度・顧客へのレポートに活用でき、 データドリブンな転職支援が可能になります。</p>
+                  <h1>Point. 3</h1>
+              <h5>競合状態になりにくい</h5>
+              <p>一般的なスカウトサービスでは、同じ求職者に多くの転職エージェントが同時に接触し、競合状態になりやすい傾向があります。<span>本システムでは限られたエージェントのみが接点を持てるため、多数の競合に埋もれることがありません。</span></p>
             </div>
           </div>
         </div>
@@ -72,8 +72,9 @@
   <section id="appeal">
     <div class="section-wrap">
       <h5>
-        <span>「イチヅケ」の魅力</span>
-        <span class="mask"></span>
+                  <span class="logo-title block"><img src="/images/logo.svg" decoding="async" loading="eager" alt="「イチヅケ」" /><span class="title-next">の魅力</span></span>
+
+        <span class="mask block"></span>
       </h5>
       <div class="appeal-wrap">
         <div class="appeal-item" v-for="(item, index) in appealItems" :key="index">
@@ -1222,18 +1223,18 @@ onUnmounted(() => {
 const appealItems = [
   {
     img: "/images/img-appeal_1.jpg",
-    title: "求職者へのアプローチ無制限",
-    text: "求職者へは、回数・上限なく提案が可能。オファー枠やメッセージ上限に縛られず、候補者への接触スピードと量の両面を高め、機会損失を防ぎながらアクティブな獲得が行えます。",
+    title: "マッチした求職者だけ通知",
+    text: "あらかじめ設定した条件に合致した求職者から登録があった場合にのみ通知が届く仕組みのため、条件外の求職者情報の確認に時間を取られることがありません。",
   },
   {
     img: "/images/img-appeal_2.jpg",
-    title: "採用コストの効率化",
-    text: "求職者のスキル・経験・実績などの情報を確認したうえで、提示したい年収を示すことで、求職者の最終的に大きな判断材料の「年収」から判断しやすくなり、ミスマッチを最小化します。",
+    title: "ターゲティング",
+    text: "通知が届いた求職者情報を確認したうえで、「会いたい」と思った場合にのみ市場価値診断を行えるので、狙った求職者にのみアプローチすることが可能です。",
   },
   {
     img: "/images/img-appeal_3.jpg",
-    title: "求職者と直接コンタクト",
-    text: "条件を満たすと求職者とダイレクトにやり取りが可能になります。仲介を挟まないためレスポンスが早く、提案の温度感がそのまま届き、意思決定の速度と成約率が向上します。",
+    title: "マッチ後、同時にチャット開始",
+    text: "市場価値診断の結果、転職エージェント側と求職者のマッチが成立すると、チャット機能が同時に開放されます。以降は通常のフローで自由にやり取りできます。",
   },
 ];
 
@@ -1291,8 +1292,8 @@ const faqList = [
 #hero {
   width: 100%;
   height: 100vh;
-  background-image: url(/images/img-hero.jpg);
-  background-position: center;
+  background-image: url(/images/img-top-hero2.jpg);
+  background-position: center 5%;
   background-size: cover;
   align-content: center;
   position: relative;
@@ -1330,11 +1331,11 @@ const faqList = [
 
     h1 {
       font-size: 35px;
-      color: white;
+      color: #1A1A1A;
       font-weight: 500;
       letter-spacing: 1.05px;
       line-height: 1.7;
-      text-shadow: 0px 3px 6px #0000005c;
+     text-shadow: 0px 3px 6px #FFFFFF91;
 
       @include mixin.max-screen(mixin.$small) {
         font-size: 25px;
@@ -1345,7 +1346,7 @@ const faqList = [
 
         &.logo-type {
           img {
-            filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.4));
+            filter: drop-shadow(0px 3px 6px #FFFFFFC7);
             width: 280px;
             height: 75px;
             margin-top: 10px;
@@ -1388,11 +1389,11 @@ const faqList = [
 
     h2 {
       font-size: 30px;
-      color: white;
+      color: #000;
       font-weight: 500;
       letter-spacing: 0.9px;
       line-height: 1;
-      text-shadow: 0px 3px 6px #0000005c;
+text-shadow: 0px 3px 6px #FFFFFF7B;
       margin-top: 30px;
 
       @include mixin.max-screen(mixin.$small) {
@@ -1402,7 +1403,8 @@ const faqList = [
 
       span {
         font-size: 80px;
-        color: mixin.$main;
+        color: #FFCE00;
+        text-shadow: 0px 3px 6px #00000036 !important;
         letter-spacing: 2.4px;
         text-shadow: none;
         min-width: 60px;
@@ -1629,8 +1631,10 @@ const faqList = [
       top: 50%;
       right: 150px;
       transform: translateY(-50%);
-      max-width: 390px;
-      color: white;
+      max-width: 440px;
+      color: #000000;
+       background: rgba(255, 255, 255, 0.8);
+       padding: 37px 30px 30px 30px ;
       z-index: 3;
 
       @include mixin.screen(mixin.$large, 1060px) {
@@ -1648,13 +1652,20 @@ const faqList = [
         transform: unset;
         width: 90%;
       }
+      
+      h1{
+        font-size: 40px;
+        color: #FFCE00;
+       font-family: adobe-handwriting-ernie, sans-serif;
+       font-weight: 400;
+       line-height: 1;
+      }
 
       h5 {
         font-size: 20px;
         line-height: 1.7;
         letter-spacing: 0.54px;
-        text-shadow: 0px 3px 7px #00000064;
-        margin-bottom: 25px;
+        margin-bottom: 15px;
         white-space: nowrap;
 
         @include mixin.max-screen(mixin.$small) {
@@ -1671,10 +1682,13 @@ const faqList = [
       }
 
       p {
-        font-size: 16px;
+        font-size: 14px;
         letter-spacing: 0.42px;
         line-height: 1.8;
-        text-shadow: 0px 3px 7px #00000040;
+        
+        span{
+            display: block;
+        }
 
         @include mixin.max-screen(mixin.$small) {
           font-size: 14px;
@@ -1702,6 +1716,24 @@ const faqList = [
     &.slide2 .text-wrap {
       right: unset;
       left: 150px;
+      @include mixin.screen(mixin.$large, 1060px) {
+        top: 75%;
+        left: 50px; // ← タブレット用追加
+      }
+
+      @include mixin.screen(mixin.$small, mixin.$large) {
+        top: 70%;
+        left: 50px; // ← タブレット用追加
+      }
+
+      @include mixin.max-screen(mixin.$small) {
+        left: unset;
+        top:60%;
+        right: 5%;
+      }
+    }
+    
+        &.slide3 .text-wrap {
       top: 75%;
 
       @include mixin.screen(mixin.$large, 1060px) {
@@ -1749,6 +1781,8 @@ const faqList = [
     }
 
     &.slide3 .mask .inner {
+              background-position: 0% 30%;
+              scale: 1.1;
       @include mixin.max-screen(mixin.$small) {
         background-position: 15% 0;
       }
@@ -1795,9 +1829,24 @@ const faqList = [
         transform: scale(1);
         // will-change: opacity, transform;
       }
-
-      span {
+      
+      
+      .block {
         display: block;
+      }
+      
+      .logo-title{
+        display:flex;
+        justify-content: center;
+        align-items: baseline;
+        gap: 10px;
+        img{
+            width: 150px;
+        }
+        
+        .title-next{
+         line-height: 1;
+        }
       }
     }
 

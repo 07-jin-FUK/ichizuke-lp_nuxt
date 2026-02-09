@@ -1,14 +1,6 @@
 export default defineNuxtPlugin(() => {
-  const route = useRoute()
-
-  // agent ページ
-  if (route.path === '/agent') {
-    loadTypekit('https://use.typekit.net/xxv3ubw.js')
-  }
-
-  // job-seeker ページ
-  if (route.path === '/job-seeker') {
-    loadTypekit('https://use.typekit.net/kas5wck.js') 
+  if (process.client) {
+    loadTypekit('https://use.typekit.net/kas5wck.js')
   }
 })
 

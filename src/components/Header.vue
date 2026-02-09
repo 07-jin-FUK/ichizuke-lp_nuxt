@@ -232,4 +232,9 @@ onUnmounted(() => {
   }
 }
 
+.long{
+    width: 200px !important;
+    white-space: nowrap;
+}
+
 </style>
