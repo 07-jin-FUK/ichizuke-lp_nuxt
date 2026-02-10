@@ -4,14 +4,17 @@
       <h1>
         <span>求職者が求めていた</span>
         <span>新たなアプローチ</span>
-        <span class="logo-type"><img src="/images/logo_black.svg" decoding="async" loading="eager" alt="「イチヅケ」" /></span>
+        <span class="logo-type">「<img src="/images/logo.svg" decoding="async" loading="eager" alt="「イチヅケ」" />」</span>
       </h1>
-      <div class="btn"><p>転職エージェント無料登録</p></div>
+      <div class="btn"><p>無料登録はこちら</p></div>
+ 
       <h2>
-        掲載料金・初期費用
-        <span>0</span>
+              <span class="campain">※オープンキャンペーン</span>
+        今なら初期費用
+        <span class="number">0</span>
         円
       </h2>
+      
     </div>
     <div class="wave" fetchpriority="high"></div>
   </div>
@@ -19,7 +22,7 @@
   <section id="about">
     <div class="section-wrap about-top">
       <div class="text-wrap">
-        <h5>
+        <h5 class="bottom-in">
           <span class="logo-type"><img src="/images/logo.svg" decoding="async" loading="eager" alt="「イチヅケ」" /></span>
           は、
         </h5>
@@ -72,7 +75,7 @@
   <section id="appeal">
     <div class="section-wrap">
       <h5>
-                  <span class="logo-title block"><img src="/images/logo.svg" decoding="async" loading="eager" alt="「イチヅケ」" /><span class="title-next">の魅力</span></span>
+                  <span class="logo-title block">「イチヅケ」の魅力</span>
 
         <span class="mask block"></span>
       </h5>
@@ -91,7 +94,7 @@
 
   <section id="blog">
     <div class="section-wrap">
-      <h5>イチヅケブログ</h5>
+      <h5>転職コラム</h5>
 
       <div class="blog-wrap">
         <div class="blog-item-wrap" v-for="(item, index) in blogList" :key="index">
@@ -1269,19 +1272,27 @@ const blogList = [
 const faqList = [
   {
     question: "サービスの利用に料金はかかりますか？",
-    answer: "基本プランは無料でご利用いただけます。有料オプションをご希望の場合のみ追加費用が発生します。",
+    answer: "成果発生時のみかかります。初期費用、固定月額費用は0円です。また、市場価値診断を行っただけでは費用は発生せず、採用成功時の手数料もありません。",
   },
   {
-    question: "パスワードを忘れた場合はどうすればいいですか？",
-    answer: "ログイン画面の「パスワードをお忘れの方」より再設定手続きを行ってください。",
+    question: "どのタイミングで成果報酬が発生しますか？",
+    answer: "市場価値診断をした求職者とマッチして登録となり、チャット欄が解放された際に成果発生となります。求職者の任意で登録が追加されて、チャット欄が解放されたタイミングでも成果対象となります。",
   },
   {
-    question: "登録後にメールアドレスの変更は可能ですか？",
-    answer: "マイページ内のアカウント設定からメールアドレスの変更が可能です。",
+    question: "成果報酬費用はいくらですか？",
+    answer: "お問い合わせください。",
   },
   {
-    question: "問い合わせの返信にはどれくらい時間がかかりますか？",
-    answer: "通常1〜2営業日以内にご返信しております。混雑時はお時間をいただく場合があります。",
+    question: "どのような求職者が登録していますか？",
+    answer: "転職エージェントと出会いたい＆市場価値を知りたい求職者です。",
+  },
+    {
+    question: "利用開始までのステップは？",
+    answer: "まずはお問い合わせください。お申込み完了後、マイページを作成させていただきます。マイページ提供後、必要情報をご登録いただくと利用可能になります。",
+  },
+    {
+    question: "契約期間や最低利用期間はありますか？",
+    answer: "契約期間・最低利用期間はございません。",
   },
 ];
 </script>
@@ -1334,28 +1345,47 @@ const faqList = [
       color: #1A1A1A;
       font-weight: 500;
       letter-spacing: 1.05px;
-      line-height: 1.7;
+      line-height: 1.6;
      text-shadow: 0px 3px 6px #FFFFFF91;
 
       @include mixin.max-screen(mixin.$small) {
         font-size: 25px;
+        color: #fff;
+           text-shadow: 0px 3px 6px #0000005c;
       }
 
       span {
         display: block;
 
         &.logo-type {
+            display: flex;
+            font-size: 50px;
+            font-weight: bold;
+    margin: 0 0 0 -27px;
           img {
             filter: drop-shadow(0px 3px 6px #FFFFFFC7);
-            width: 280px;
-            height: 75px;
-            margin-top: 10px;
-            margin-left: 5px;
+            width: 200px;
+            height: auto;
+            margin: 0px 15px;
+
+            
+              // アンチエイリアシングを強制
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  // SVGのレンダリング品質を向上
+  image-rendering: auto;
+  image-rendering: -webkit-optimize-contrast;
+  
+  // transform でサブピクセルレンダリング
+  transform: translateZ(0);
+  backface-visibility: hidden;
 
             @include mixin.max-screen(mixin.$small) {
               width: 200px;
               height: 40px;
               margin-top: 15px;
+                 filter: brightness(0) invert(1);
             }
           }
         }
@@ -1365,7 +1395,7 @@ const faqList = [
     .btn {
       background-color: mixin.$main;
       border-radius: 30px;
-      padding: 13px 40px 13px;
+      padding: 14px 40px;
       margin-top: 20px;
       display: inline-block;
 
@@ -1387,37 +1417,56 @@ const faqList = [
       }
     }
 
-    h2 {
-      font-size: 30px;
-      color: #000;
-      font-weight: 500;
-      letter-spacing: 0.9px;
-      line-height: 1;
-text-shadow: 0px 3px 6px #FFFFFF7B;
-      margin-top: 30px;
+h2 {
+  font-size: 30px;
+  color: #000;
+  font-weight: 500;
+  letter-spacing: 0.9px;
+  line-height: 1;
+  text-shadow: 0px 3px 6px #FFFFFF7B;
+  margin-top: 28px;
+  position: relative; // 追加
 
-      @include mixin.max-screen(mixin.$small) {
-        font-size: 24px;
-        margin-top: 0px;
-      }
+  @include mixin.max-screen(mixin.$small) {
+    font-size: 24px;
+    margin-top: 0px;
+    padding-top: 22px;
+    color: #fff;
+       text-shadow: 0px 3px 6px #0000005c;
+  }
 
-      span {
-        font-size: 80px;
-        color: #FFCE00;
-        text-shadow: 0px 3px 6px #00000036 !important;
-        letter-spacing: 2.4px;
-        text-shadow: none;
-        min-width: 60px;
-        display: inline-block;
-        text-align: end;
-        margin-right: 10px;
+  .number {
+    font-size: 80px;
+    color: #FFCE00;
+    text-shadow: 0px 3px 6px #00000036 !important;
+    letter-spacing: 2.4px;
+    text-shadow: none;
+    min-width: 60px;
+    display: inline-block;
+    text-align: end;
+    margin-right: 10px;
 
-        @include mixin.max-screen(mixin.$small) {
-          font-size: 70px;
-          min-width: 55px;
-        }
-      }
+    @include mixin.max-screen(mixin.$small) {
+      font-size: 70px;
+      min-width: 55px;
     }
+  }
+}
+
+.campain {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  font-size: 16px;
+  line-height: 1;
+text-shadow: 0px 3px 6px #FFFFFF7B;
+
+  @include mixin.max-screen(mixin.$small) {
+    font-size: 14px;
+      top: 40px;
+         text-shadow: 0px 3px 6px #0000005c;
+  }
+}
   }
 
   .wave {
@@ -1497,6 +1546,9 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         line-height: 1.7;
         display: flex;
         align-items: baseline;
+        color: #1d1d1d;
+        margin-bottom: 5px;
+
 
         @include mixin.max-screen(mixin.$small) {
           font-size: 16px;
@@ -1510,9 +1562,18 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
           }
 
           img {
-            width: 160px;
-            height: 40px;
+            width: 120px;
+            height: auto;
             object-fit: contain;
+              // アンチエイリアシングを改善
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  image-rendering: auto;
+  image-rendering: -webkit-optimize-contrast;
+  
+  // サブピクセルレンダリング
+  transform: translateZ(0);
+  backface-visibility: hidden;
 
             @include mixin.max-screen(mixin.$small) {
               width: 100px;
@@ -1523,16 +1584,22 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       }
 
       p {
-        font-size: 15px;
-        letter-spacing: 0.45px;
-        line-height: 1.73;
-        margin-top: 40px;
+        font-size: 18px;
+        letter-spacing: 0.54px;
+        line-height: 1.7;
+        margin-top: 17px;
+                color: #1d1d1d;
+
 
         @include mixin.max-screen(mixin.$small) {
-          font-size: 14px;
-          margin-top: 25px;
+          font-size: 16px;
+          margin-top: 15px;
         }
       }
+      
+    //   .bottom-in{
+    //     margin-bottom: 5px;
+    //   }
     }
 
     img {
@@ -1647,9 +1714,10 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       }
 
       @include mixin.max-screen(mixin.$small) {
-        top: 60%;
+        top: 45%;
         right: 5%;
         transform: unset;
+        padding: 32px 25px 25px ;
         width: 90%;
       }
       
@@ -1665,7 +1733,9 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         font-size: 20px;
         line-height: 1.7;
         letter-spacing: 0.54px;
-        margin-bottom: 15px;
+        margin-bottom: 19px;
+        margin-top: 3px;
+        font-weight: 500;
         white-space: nowrap;
 
         @include mixin.max-screen(mixin.$small) {
@@ -1722,13 +1792,12 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       }
 
       @include mixin.screen(mixin.$small, mixin.$large) {
-        top: 70%;
         left: 50px; // ← タブレット用追加
       }
 
       @include mixin.max-screen(mixin.$small) {
         left: unset;
-        top:60%;
+        top:45%;
         right: 5%;
       }
     }
@@ -1742,13 +1811,13 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       }
 
       @include mixin.screen(mixin.$small, mixin.$large) {
-        top: 70%;
-        left: 50px; // ← タブレット用追加
+        top: 67%;
+        right: 10px !important; // ← タブレット用追加
       }
 
       @include mixin.max-screen(mixin.$small) {
         left: unset;
-        top:60%;
+        top:50%;
         right: 5%;
       }
     }
@@ -1781,12 +1850,26 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
     }
 
     &.slide3 .mask .inner {
-              background-position: 0% 30%;
-              scale: 1.1;
+              background-position: 0% 15%;
+              scale: 1.2;
+                    @include mixin.screen(mixin.$small, mixin.$large) {
+        background-position: 15% 15%;
+      }
       @include mixin.max-screen(mixin.$small) {
-        background-position: 15% 0;
+        background-position: 3% 14%;
       }
     }
+    
+    // ← これを追加
+&.slide3 .text-wrap {
+  transform: translateY(-50%) scale(0.833); // 1 ÷ 1.2 = 0.833で元のサイズに
+  right:-3.5%;
+  transform-origin: center center;
+  
+  @include mixin.max-screen(mixin.$small) {
+    transform: scale(0.833); // モバイルはtranslateYなし
+  }
+}
   }
 }
 
@@ -1809,11 +1892,33 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       line-height: 1.5;
       text-align: center;
       margin-bottom: 60px;
-
       position: relative;
+      padding-bottom: 5px; // 追加
+      
+      &::after { // 追加
+        content: "";
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%) skewX(-12deg) rotate(-1.5deg);
+        width: 230px;
+        height: 6px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 6' preserveAspectRatio='none'%3E%3Cpath d='M2,3 Q40,2.5 80,3.2 T158,3' stroke='%23FFE419' stroke-width='4.5' fill='none' stroke-linecap='round' opacity='0.75'/%3E%3Cpath d='M1,3.5 Q35,2.8 75,3.5 T157,3.2' stroke='%23FFE419' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.4'/%3E%3Cpath d='M3,2.8 Q45,3.2 85,2.9 T159,3.1' stroke='%23FFE419' stroke-width='2' fill='none' stroke-linecap='round' opacity='0.3'/%3E%3C/svg%3E");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        filter: blur(0.2px);
+        
+        @include mixin.max-screen(mixin.$small) {
+          width: 195px;
+          height: 5px;
+          bottom: 3px;
+        }
+      }
+
       opacity: 0;
       transform: scale(0.95) translateZ(0);
       transition: opacity 0.6s ease, transform 0.6s ease;
+      
       @include mixin.max-screen(mixin.$small) {
         font-size: 25px;
         transition: opacity 0.4s ease, transform 0.4s ease;
@@ -1842,6 +1947,15 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         gap: 10px;
         img{
             width: 150px;
+              // アンチエイリアシングを改善
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  image-rendering: auto;
+  image-rendering: -webkit-optimize-contrast;
+  
+  // サブピクセルレンダリング
+  transform: translateZ(0);
+  backface-visibility: hidden;
         }
         
         .title-next{
@@ -1960,32 +2074,49 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
     padding: 50px 5%;
     margin: auto;
   }
-
-  h5 {
-    font-size: 25px;
-    letter-spacing: 0.6px;
-    text-align: center;
-    margin-bottom: 60px;
-
-    opacity: 0;
-    transform: scale(0.95) translateZ(0);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-
+h5 {
+  font-size: 25px;
+  letter-spacing: 0.6px;
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  padding-bottom: 5px;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%) skewX(-12deg) rotate(-1.5deg);
+    width: 160px;
+    height: 6px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 6' preserveAspectRatio='none'%3E%3Cpath d='M2,3 Q40,2.5 80,3.2 T158,3' stroke='%23FFE419' stroke-width='4.5' fill='none' stroke-linecap='round' opacity='0.75'/%3E%3Cpath d='M1,3.5 Q35,2.8 75,3.5 T157,3.2' stroke='%23FFE419' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.4'/%3E%3Cpath d='M3,2.8 Q45,3.2 85,2.9 T159,3.1' stroke='%23FFE419' stroke-width='2' fill='none' stroke-linecap='round' opacity='0.3'/%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    filter: blur(0.2px);
+    
     @include mixin.max-screen(mixin.$small) {
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    @include mixin.max-screen(mixin.$small) {
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
-
-    &.show {
-      opacity: 1;
-      transform: scale(1);
-      //   will-change: opacity, transform;
+      width: 130px;
+      height: 5px;
+      bottom: 0px;
     }
   }
+
+  opacity: 0;
+  transform: scale(0.95) translateZ(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+
+  @include mixin.max-screen(mixin.$small) {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  &.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
   .section-wrap {
     max-width: 980px;
@@ -2265,9 +2396,31 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       padding: 50px 0 100px;
     }
 
-    h5 {
-      font-size: 25px;
-      text-align: center;
+h5 {
+  font-size: 25px;
+  text-align: center;
+  position: relative; // 追加
+  padding-bottom: 5px; // 追加
+
+  &::after { // 追加
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%) skewX(-12deg) rotate(-1.5deg);
+    width: 170px;
+    height: 6px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 6' preserveAspectRatio='none'%3E%3Cpath d='M2,3 Q40,2.5 80,3.2 T158,3' stroke='%23FFE419' stroke-width='4.5' fill='none' stroke-linecap='round' opacity='0.75'/%3E%3Cpath d='M1,3.5 Q35,2.8 75,3.5 T157,3.2' stroke='%23FFE419' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.4'/%3E%3Cpath d='M3,2.8 Q45,3.2 85,2.9 T159,3.1' stroke='%23FFE419' stroke-width='2' fill='none' stroke-linecap='round' opacity='0.3'/%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    filter: blur(0.2px);
+    
+    @include mixin.max-screen(mixin.$small) {
+      width: 140px;
+      height: 5px;
+      bottom: 0px;
+    }
+  }
 
       opacity: 0;
       transform: scale(0.95) translateZ(0);
