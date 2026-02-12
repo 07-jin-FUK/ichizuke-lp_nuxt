@@ -2,7 +2,7 @@
   <header class="header" :class="{ 'is-open': isActive, 'is-sticky': overHeroContent }">
     <!-- <a href="/login" target="_blank" class="btn" v-if="route.path !== '/job-seeker'">企業ログイン</a> -->
     <div class="btn" v-if="route.path !== '/job-seeker'"><p>企業ログイン</p></div>
-    <div class="btn btn-sp" v-if="route.path !== '/job-seeker'"><p>ログイン</p></div>
+    <!-- <div class="btn btn-sp" v-if="route.path !== '/job-seeker'"><p>ログイン</p></div> -->
     <div 
       v-if="route.path === '/agent'" 
       class="bottom-header" 

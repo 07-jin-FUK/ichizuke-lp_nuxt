@@ -4,17 +4,20 @@
       <h1>
         <span>求職者が求めていた</span>
         <span>新たなアプローチ</span>
-        <span class="logo-type">「<img src="/images/logo.svg" decoding="async" loading="eager" alt="「イチヅケ」" />」</span>
+        <span class="logo-type">
+          「
+          <img src="/images/logo.svg" decoding="async" loading="eager" alt="「イチヅケ」" />
+          」
+        </span>
       </h1>
       <div class="btn"><p>無料登録はこちら</p></div>
- 
+
       <h2>
-              <span class="campain">※オープンキャンペーン</span>
+        <span class="campain">オープンキャンペーン</span>
         今なら初期費用
         <span class="number">0</span>
         円
       </h2>
-      
     </div>
     <div class="wave" fetchpriority="high"></div>
   </div>
@@ -40,7 +43,7 @@
           <div class="inner" ref="inner1" style="background-image: url(/images/img-point_1.jpg)"></div>
         </div>
         <div class="text-wrap" ref="textWrap1">
-            <h1>Point. 1</h1>
+          <h1>Point. 1</h1>
           <h5>求職者集めのコスト・工数を削減</h5>
           <p>求職者集めを運営側が担うため、転職エージェント自身が広告出稿やメディア運営などの施策に多くの時間や費用を割く必要がありません。面談などの本来注力すべき業務に集中でき、効率的な求職者獲得が可能です。</p>
         </div>
@@ -50,9 +53,12 @@
         <div class="mask" ref="mask2">
           <div class="inner" style="background-image: url(/images/img-point_2.jpg)">
             <div class="text-wrap">
-                  <h1>Point. 2</h1>
+              <h1>Point. 2</h1>
               <h5>完全成果報酬型で、低リスク</h5>
-              <p>初期費用・固定月額費用は0円。市場価値診断を行っただけでは費用は発生せず、採用成立による手数料も一切かかりません。<span>成果報酬型のため、導入・運用リスクを抑えて新たな求職者獲得チャネルを試すことができます。</span></p>
+              <p>
+                初期費用・固定月額費用は0円。市場価値診断を行っただけでは費用は発生せず、採用成立による手数料も一切かかりません。
+                <span>成果報酬型のため、導入・運用リスクを抑えて新たな求職者獲得チャネルを試すことができます。</span>
+              </p>
             </div>
           </div>
         </div>
@@ -62,9 +68,12 @@
         <div class="mask" ref="mask3">
           <div class="inner" style="background-image: url(/images/img-point_3.jpg)">
             <div class="text-wrap">
-                  <h1>Point. 3</h1>
+              <h1>Point. 3</h1>
               <h5>競合状態になりにくい</h5>
-              <p>一般的なスカウトサービスでは、同じ求職者に多くの転職エージェントが同時に接触し、競合状態になりやすい傾向があります。<span>本システムでは限られたエージェントのみが接点を持てるため、多数の競合に埋もれることがありません。</span></p>
+              <p>
+                一般的なスカウトサービスでは、同じ求職者に多くの転職エージェントが同時に接触し、競合状態になりやすい傾向があります。
+                <span>本システムでは限られたエージェントのみが接点を持てるため、多数の競合に埋もれることがありません。</span>
+              </p>
             </div>
           </div>
         </div>
@@ -75,14 +84,16 @@
   <section id="appeal">
     <div class="section-wrap">
       <h5>
-                  <span class="logo-title block">「イチヅケ」の魅力</span>
+        <span class="logo-title block">「イチヅケ」の魅力</span>
 
         <span class="mask block"></span>
       </h5>
       <div class="appeal-wrap">
         <div class="appeal-item" v-for="(item, index) in appealItems" :key="index">
           <span class="mask"></span>
-          <img :src="item.img" :alt="item.title" />
+<div class="img-wrap">
+  <img :src="item.img" :alt="item.title" />
+</div>
           <div class="text-content">
             <p class="ttl">{{ item.title }}</p>
             <p>{{ item.text }}</p>
@@ -177,7 +188,7 @@ const handleDetailClick = (event: MouseEvent) => {
         { height: content.offsetHeight + "px", opacity: "1" },
         { height: "0px", opacity: "0" },
       ],
-      { duration: 150, easing: "ease-out" }
+      { duration: 150, easing: "ease-out" },
     );
     closingAnim.onfinish = () => details.removeAttribute("open");
   } else {
@@ -190,7 +201,7 @@ const handleDetailClick = (event: MouseEvent) => {
             { height: openContent.offsetHeight + "px", opacity: "1" },
             { height: "0px", opacity: "0" },
           ],
-          { duration: 150, easing: "ease-out" }
+          { duration: 150, easing: "ease-out" },
         );
         closingAnim.onfinish = () => openDetail.removeAttribute("open");
       }
@@ -226,7 +237,7 @@ const handleDetailClick = (event: MouseEvent) => {
         { height: "0px", opacity: "0" },
         { height: content.offsetHeight + "px", opacity: "1" },
       ],
-      { duration: 150, easing: "ease-out" }
+      { duration: 150, easing: "ease-out" },
     );
   }
 };
@@ -383,13 +394,14 @@ const createObservers = () => {
   const isMiddle = window.innerWidth > 836 && window.innerWidth <= 1060; // 3個表示
   const isTablet = window.innerWidth > 480 && window.innerWidth <= 836; // 2個表示
   const isMobile = window.innerWidth <= 480;
-  const isPC = window.innerWidth > 1060;  // ⭐️ PC判定を追加
+  const isPC = window.innerWidth > 1060; // ⭐️ PC判定を追加
   const rootMargin = isMobile ? "0px 0px -15% 0px" : "0px 0px -20% 0px";
 
   // ⭐️ タブレットまたはPCの場合はブログアイテムを監視対象から除外
-  const blogSelector = (isTablet || isPC)  // ⭐️ ここを修正
-    ? "" 
-    : "#blog .blog-wrap .blog-item-wrap:not(.is-clone) .blog-item,";
+  const blogSelector =
+    isTablet || isPC // ⭐️ ここを修正
+      ? ""
+      : "#blog .blog-wrap .blog-item-wrap:not(.is-clone) .blog-item,";
   const allTargets = document.querySelectorAll<HTMLElement>(`
     #about .text-wrap,
     #about img,
@@ -408,7 +420,7 @@ const createObservers = () => {
         entry.target.classList.toggle("show", entry.isIntersecting);
       });
     },
-    { threshold: 0.1, rootMargin }
+    { threshold: 0.1, rootMargin },
   );
 
   allTargets.forEach((el) => io!.observe(el));
@@ -434,7 +446,7 @@ const createObservers = () => {
             }
           });
         },
-        { threshold: 0 }
+        { threshold: 0 },
       );
 
       blogWrapObserver.observe(blogWrap);
@@ -447,7 +459,7 @@ const createObservers = () => {
 let blogScrollTimer: number | undefined;
 let isTransitioning = false;
 
-let handleManualScrollFunc: ((event: Event) => void) | null = null; 
+let handleManualScrollFunc: ((event: Event) => void) | null = null;
 
 const initAutoBlogScroll = () => {
   const wrap = document.querySelector("#blog .blog-wrap") as HTMLElement | null;
@@ -463,12 +475,11 @@ const initAutoBlogScroll = () => {
   }
   dotWrap.innerHTML = "";
   isTransitioning = false;
-  
-    if (handleManualScrollFunc) {
+
+  if (handleManualScrollFunc) {
     wrap.removeEventListener("scroll", handleManualScrollFunc);
     handleManualScrollFunc = null;
   }
-
 
   // クローンを先に削除
   wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
@@ -509,92 +520,92 @@ const initAutoBlogScroll = () => {
     });
   }
 
-//   const setupInfinite = () => {
-//     wrap.querySelectorAll(".spacer").forEach((el) => el.remove());
-//     wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
+  //   const setupInfinite = () => {
+  //     wrap.querySelectorAll(".spacer").forEach((el) => el.remove());
+  //     wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
 
-//     // 最後の1枚を先頭にクローン
-//     const lastClone = originals[realLength - 1].cloneNode(true) as HTMLElement;
-//     lastClone.classList.add("is-clone");
-//     lastClone.setAttribute("data-clone-of", String(realLength - 1));
-//     const lastBlogItem = lastClone.querySelector(".blog-item");
-//     if (lastBlogItem) lastBlogItem.classList.remove("show");
-//     wrap.insertBefore(lastClone, wrap.firstChild);
+  //     // 最後の1枚を先頭にクローン
+  //     const lastClone = originals[realLength - 1].cloneNode(true) as HTMLElement;
+  //     lastClone.classList.add("is-clone");
+  //     lastClone.setAttribute("data-clone-of", String(realLength - 1));
+  //     const lastBlogItem = lastClone.querySelector(".blog-item");
+  //     if (lastBlogItem) lastBlogItem.classList.remove("show");
+  //     wrap.insertBefore(lastClone, wrap.firstChild);
 
-//     // 最初の1枚を末尾にクローン
-//     const firstClone = originals[0].cloneNode(true) as HTMLElement;
-//     firstClone.classList.add("is-clone");
-//     firstClone.setAttribute("data-clone-of", "0");
-//     const firstBlogItem = firstClone.querySelector(".blog-item");
-//     if (firstBlogItem) firstBlogItem.classList.remove("show");
-//     wrap.appendChild(firstClone);
+  //     // 最初の1枚を末尾にクローン
+  //     const firstClone = originals[0].cloneNode(true) as HTMLElement;
+  //     firstClone.classList.add("is-clone");
+  //     firstClone.setAttribute("data-clone-of", "0");
+  //     const firstBlogItem = firstClone.querySelector(".blog-item");
+  //     if (firstBlogItem) firstBlogItem.classList.remove("show");
+  //     wrap.appendChild(firstClone);
 
-//     // 1060px：3枚目もクローン（末尾に追加）
-//     if (isMiddle) {
-//       const secondClone = originals[1].cloneNode(true) as HTMLElement;
-//       secondClone.classList.add("is-clone");
-//       secondClone.setAttribute("data-clone-of", "1");
-//       const secondBlogItem = secondClone.querySelector(".blog-item");
-//       if (secondBlogItem) secondBlogItem.classList.remove("show");
-//       wrap.appendChild(secondClone);
+  //     // 1060px：3枚目もクローン（末尾に追加）
+  //     if (isMiddle) {
+  //       const secondClone = originals[1].cloneNode(true) as HTMLElement;
+  //       secondClone.classList.add("is-clone");
+  //       secondClone.setAttribute("data-clone-of", "1");
+  //       const secondBlogItem = secondClone.querySelector(".blog-item");
+  //       if (secondBlogItem) secondBlogItem.classList.remove("show");
+  //       wrap.appendChild(secondClone);
 
-//       const thirdClone = originals[2].cloneNode(true) as HTMLElement;
-//       thirdClone.classList.add("is-clone");
-//       thirdClone.setAttribute("data-clone-of", "2");
-//       const thirdBlogItem = thirdClone.querySelector(".blog-item");
-//       if (thirdBlogItem) thirdBlogItem.classList.remove("show");
-//       wrap.appendChild(thirdClone);
-//     }
+  //       const thirdClone = originals[2].cloneNode(true) as HTMLElement;
+  //       thirdClone.classList.add("is-clone");
+  //       thirdClone.setAttribute("data-clone-of", "2");
+  //       const thirdBlogItem = thirdClone.querySelector(".blog-item");
+  //       if (thirdBlogItem) thirdBlogItem.classList.remove("show");
+  //       wrap.appendChild(thirdClone);
+  //     }
 
-//     // タブレット：2枚目もクローン（末尾に追加）
-//     if (isTablet) {
-//       const secondClone = originals[1].cloneNode(true) as HTMLElement;
-//       secondClone.classList.add("is-clone");
-//       secondClone.setAttribute("data-clone-of", "1");
-//       const secondBlogItem = secondClone.querySelector(".blog-item");
-//       if (secondBlogItem) secondBlogItem.classList.remove("show");
-//       wrap.appendChild(secondClone);
-//     }
+  //     // タブレット：2枚目もクローン（末尾に追加）
+  //     if (isTablet) {
+  //       const secondClone = originals[1].cloneNode(true) as HTMLElement;
+  //       secondClone.classList.add("is-clone");
+  //       secondClone.setAttribute("data-clone-of", "1");
+  //       const secondBlogItem = secondClone.querySelector(".blog-item");
+  //       if (secondBlogItem) secondBlogItem.classList.remove("show");
+  //       wrap.appendChild(secondClone);
+  //     }
 
-//     // 初期位置を調整（前方クローンの分だけオフセット）
-//     wrap.scrollTo({
-//       left: originals[0].offsetLeft,
-//       behavior: "auto",
-//     });
-//   };
+  //     // 初期位置を調整（前方クローンの分だけオフセット）
+  //     wrap.scrollTo({
+  //       left: originals[0].offsetLeft,
+  //       behavior: "auto",
+  //     });
+  //   };
 
-const setupInfinite = () => {
-  wrap.querySelectorAll(".spacer").forEach((el) => el.remove());
-  wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
+  const setupInfinite = () => {
+    wrap.querySelectorAll(".spacer").forEach((el) => el.remove());
+    wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
 
-  // 前方に10枚クローン（本物4枚を2.5周分）
-  for (let i = 0; i < 10; i++) {
-    const originalIndex = (realLength - 1) - (i % realLength);
-    const clone = originals[originalIndex].cloneNode(true) as HTMLElement;
-    clone.classList.add("is-clone", "is-clone-before");
-    clone.setAttribute("data-clone-of", String(originalIndex));
-    const blogItem = clone.querySelector(".blog-item");
-    if (blogItem) blogItem.classList.remove("show");
-    wrap.insertBefore(clone, wrap.firstChild);
-  }
+    // 前方に10枚クローン（本物4枚を2.5周分）
+    for (let i = 0; i < 10; i++) {
+      const originalIndex = realLength - 1 - (i % realLength);
+      const clone = originals[originalIndex].cloneNode(true) as HTMLElement;
+      clone.classList.add("is-clone", "is-clone-before");
+      clone.setAttribute("data-clone-of", String(originalIndex));
+      const blogItem = clone.querySelector(".blog-item");
+      if (blogItem) blogItem.classList.remove("show");
+      wrap.insertBefore(clone, wrap.firstChild);
+    }
 
-  // 後方に10枚クローン（本物4枚を2.5周分）
-  for (let i = 0; i < 10; i++) {
-    const originalIndex = i % realLength;
-    const clone = originals[originalIndex].cloneNode(true) as HTMLElement;
-    clone.classList.add("is-clone", "is-clone-after");
-    clone.setAttribute("data-clone-of", String(originalIndex));
-    const blogItem = clone.querySelector(".blog-item");
-    if (blogItem) blogItem.classList.remove("show");
-    wrap.appendChild(clone);
-  }
+    // 後方に10枚クローン（本物4枚を2.5周分）
+    for (let i = 0; i < 10; i++) {
+      const originalIndex = i % realLength;
+      const clone = originals[originalIndex].cloneNode(true) as HTMLElement;
+      clone.classList.add("is-clone", "is-clone-after");
+      clone.setAttribute("data-clone-of", String(originalIndex));
+      const blogItem = clone.querySelector(".blog-item");
+      if (blogItem) blogItem.classList.remove("show");
+      wrap.appendChild(clone);
+    }
 
-  // 初期位置を1枚目の本物に設定
-  wrap.scrollTo({
-    left: originals[0].offsetLeft,
-    behavior: "auto",
-  });
-};
+    // 初期位置を1枚目の本物に設定
+    wrap.scrollTo({
+      left: originals[0].offsetLeft,
+      behavior: "auto",
+    });
+  };
 
   const getSlidePosition = (index: number) => {
     return originals[index].offsetLeft;
@@ -612,33 +623,33 @@ const setupInfinite = () => {
     });
   };
 
-const updateVisibleSlidesForScroll = () => {
-  if (!isTablet && !isMiddle) return;
+  const updateVisibleSlidesForScroll = () => {
+    if (!isTablet && !isMiddle) return;
 
-  const allSlides = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
-  const scrollLeft = wrap.scrollLeft;
-  const wrapWidth = wrap.offsetWidth;
+    const allSlides = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
+    const scrollLeft = wrap.scrollLeft;
+    const wrapWidth = wrap.offsetWidth;
 
-  allSlides.forEach((slide) => {
-    const slideLeft = slide.offsetLeft - scrollLeft;
-    const slideRight = slideLeft + slide.offsetWidth;
+    allSlides.forEach((slide) => {
+      const slideLeft = slide.offsetLeft - scrollLeft;
+      const slideRight = slideLeft + slide.offsetWidth;
 
-    const slideWidth = slide.offsetWidth;
-    const visibleWidth = Math.min(slideRight, wrapWidth) - Math.max(slideLeft, 0);
-    const visibilityRatio = visibleWidth / slideWidth;
+      const slideWidth = slide.offsetWidth;
+      const visibleWidth = Math.min(slideRight, wrapWidth) - Math.max(slideLeft, 0);
+      const visibilityRatio = visibleWidth / slideWidth;
 
-    const blogItem = slide.querySelector(".blog-item");
+      const blogItem = slide.querySelector(".blog-item");
 
-    if (blogItem) {
-      // ⭐ 本物もクローンも同じように扱う（クローンを除外しない）
-      if (visibilityRatio > 0.5) {
-        blogItem.classList.add("show");
-      } else {
-        blogItem.classList.remove("show");
+      if (blogItem) {
+        // ⭐ 本物もクローンも同じように扱う（クローンを除外しない）
+        if (visibilityRatio > 0.5) {
+          blogItem.classList.add("show");
+        } else {
+          blogItem.classList.remove("show");
+        }
       }
-    }
-  });
-};
+    });
+  };
 
   const nextSlide = () => {
     if (isTransitioning) return;
@@ -787,291 +798,291 @@ const updateVisibleSlidesForScroll = () => {
     }
   };
 
-// ===== 手動フリック時の処理 =====
-let scrollTimeout: number | undefined;
-let isJumping = false;
+  // ===== 手動フリック時の処理 =====
+  let scrollTimeout: number | undefined;
+  let isJumping = false;
 
-const handleManualScroll = () => {
-  stopAuto();
+  const handleManualScroll = () => {
+    stopAuto();
 
-  const allSlides = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
-  const scrollLeft = wrap.scrollLeft;
+    const allSlides = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
+    const scrollLeft = wrap.scrollLeft;
 
-  // ★★★ タブレット:スクロール中に常に表示を更新 ★★★
-  // ⭐ ジャンプ中はスキップ（これが重要！）
-  if ((isTablet || isMiddle) && !isJumping) {
-    requestAnimationFrame(() => {
-      updateVisibleSlidesForScroll();
-    });
-  }
-
-  // スクロール中にリアルタイムでドットを更新(クローン対応)
-  if (!isTablet) {
-    let nearestRealIndex = 0;
-    let minDistance = Infinity;
-
-    allSlides.forEach((slide) => {
-      const distance = Math.abs(slide.offsetLeft - scrollLeft);
-      if (distance < minDistance) {
-        minDistance = distance;
-        if (slide.classList.contains("is-clone")) {
-          const cloneOf = parseInt(slide.getAttribute("data-clone-of") || "0");
-          nearestRealIndex = cloneOf;
-        } else {
-          const realIndex = originals.indexOf(slide);
-          if (realIndex !== -1) {
-            nearestRealIndex = realIndex;
-          }
-        }
-      }
-    });
-
-    if (current !== nearestRealIndex) {
-      current = nearestRealIndex;
-      updateDots();
+    // ★★★ タブレット:スクロール中に常に表示を更新 ★★★
+    // ⭐ ジャンプ中はスキップ（これが重要！）
+    if ((isTablet || isMiddle) && !isJumping) {
+      requestAnimationFrame(() => {
+        updateVisibleSlidesForScroll();
+      });
     }
-  }
 
-  // ★★★ スマホ:全てのスライド(クローン含む)にshowを付ける処理 ★★★
-  // ⭐ ジャンプ中はスキップ
-  if (!isTablet && !isJumping) {
-    allSlides.forEach((slide) => {
-      const rect = slide.getBoundingClientRect();
-      const wrapRect = wrap.getBoundingClientRect();
+    // スクロール中にリアルタイムでドットを更新(クローン対応)
+    if (!isTablet) {
+      let nearestRealIndex = 0;
+      let minDistance = Infinity;
 
-      if (Math.abs(rect.left - wrapRect.left) < 100) {
-        const blogItem = slide.querySelector(".blog-item");
-        if (blogItem) blogItem.classList.add("show");
-      }
-    });
-  }
-
-  if (scrollTimeout) clearTimeout(scrollTimeout);
-  scrollTimeout = window.setTimeout(() => {
-    // 現在のスクロール位置を判定
-    const currentScrollLeft = wrap.scrollLeft;
-    const wrapWidth = wrap.scrollWidth;
-    const viewportWidth = wrap.offsetWidth;
-    
-    let minDistance = Infinity;
-    let nearestIndex = 0;
-    let isCloneFlag = false;
-    let cloneOf = -1;
-
-    allSlides.forEach((slide, index) => {
-      const distance = Math.abs(slide.offsetLeft - currentScrollLeft);
-      if (distance < minDistance) {
-        minDistance = distance;
-        nearestIndex = index;
-        isCloneFlag = slide.classList.contains("is-clone");
-        if (isCloneFlag) {
-          cloneOf = parseInt(slide.getAttribute("data-clone-of") || "-1");
-        }
-      }
-    });
-
-    const scrollThreshold = viewportWidth * 1.5;
-    
-    if (isCloneFlag && cloneOf >= 0) {
-      // ========== 前方クローン領域からのジャンプ ==========
-      if (currentScrollLeft < scrollThreshold) {
-        const targetOriginal = originals[cloneOf];
-        if (targetOriginal) {
-          // ⭐ ジャンプ開始
-          isJumping = true;
-          
-          // 1. 先にすべてのクローンからshowを削除
-          wrap.querySelectorAll(".is-clone .blog-item").forEach((cloneItem) => {
-            cloneItem.classList.remove("show");
-          });
-
-          // 2. タブレット・1060px:一旦すべてのshowを削除
-          if (isTablet || isMiddle) {
-            const allItems = wrap.querySelectorAll(".blog-item");
-            allItems.forEach((item) => item.classList.remove("show"));
+      allSlides.forEach((slide) => {
+        const distance = Math.abs(slide.offsetLeft - scrollLeft);
+        if (distance < minDistance) {
+          minDistance = distance;
+          if (slide.classList.contains("is-clone")) {
+            const cloneOf = parseInt(slide.getAttribute("data-clone-of") || "0");
+            nearestRealIndex = cloneOf;
+          } else {
+            const realIndex = originals.indexOf(slide);
+            if (realIndex !== -1) {
+              nearestRealIndex = realIndex;
+            }
           }
+        }
+      });
 
-          // ⭐⭐⭐ 3. ジャンプ先に表示される全てのスライド(本物もクローンも)を取得 ⭐⭐⭐
-          const targetScrollLeft = targetOriginal.offsetLeft;
-          const allSlidesForJump = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
-          const visibleSlides: HTMLElement[] = [];
-          
-          allSlidesForJump.forEach((slide) => {
-            const slideLeft = slide.offsetLeft;
-            const slideRight = slideLeft + slide.offsetWidth;
-            const viewportLeft = targetScrollLeft;
-            const viewportRight = targetScrollLeft + wrap.offsetWidth;
-            
-            // ジャンプ後に画面内に入るスライドを判定
-            if (slideRight > viewportLeft && slideLeft < viewportRight) {
-              visibleSlides.push(slide);
+      if (current !== nearestRealIndex) {
+        current = nearestRealIndex;
+        updateDots();
+      }
+    }
+
+    // ★★★ スマホ:全てのスライド(クローン含む)にshowを付ける処理 ★★★
+    // ⭐ ジャンプ中はスキップ
+    if (!isTablet && !isJumping) {
+      allSlides.forEach((slide) => {
+        const rect = slide.getBoundingClientRect();
+        const wrapRect = wrap.getBoundingClientRect();
+
+        if (Math.abs(rect.left - wrapRect.left) < 100) {
+          const blogItem = slide.querySelector(".blog-item");
+          if (blogItem) blogItem.classList.add("show");
+        }
+      });
+    }
+
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = window.setTimeout(() => {
+      // 現在のスクロール位置を判定
+      const currentScrollLeft = wrap.scrollLeft;
+      const wrapWidth = wrap.scrollWidth;
+      const viewportWidth = wrap.offsetWidth;
+
+      let minDistance = Infinity;
+      let nearestIndex = 0;
+      let isCloneFlag = false;
+      let cloneOf = -1;
+
+      allSlides.forEach((slide, index) => {
+        const distance = Math.abs(slide.offsetLeft - currentScrollLeft);
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearestIndex = index;
+          isCloneFlag = slide.classList.contains("is-clone");
+          if (isCloneFlag) {
+            cloneOf = parseInt(slide.getAttribute("data-clone-of") || "-1");
+          }
+        }
+      });
+
+      const scrollThreshold = viewportWidth * 1.5;
+
+      if (isCloneFlag && cloneOf >= 0) {
+        // ========== 前方クローン領域からのジャンプ ==========
+        if (currentScrollLeft < scrollThreshold) {
+          const targetOriginal = originals[cloneOf];
+          if (targetOriginal) {
+            // ⭐ ジャンプ開始
+            isJumping = true;
+
+            // 1. 先にすべてのクローンからshowを削除
+            wrap.querySelectorAll(".is-clone .blog-item").forEach((cloneItem) => {
+              cloneItem.classList.remove("show");
+            });
+
+            // 2. タブレット・1060px:一旦すべてのshowを削除
+            if (isTablet || isMiddle) {
+              const allItems = wrap.querySelectorAll(".blog-item");
+              allItems.forEach((item) => item.classList.remove("show"));
             }
-          });
-          
-          // ⭐⭐⭐ 4. 表示される全てのスライドに transition: none + show を付ける ⭐⭐⭐
-          visibleSlides.forEach((slide) => {
-            const blogItem = slide.querySelector(".blog-item") as HTMLElement;
-            if (blogItem) {
-              blogItem.style.transition = "none";
-              blogItem.classList.add("show");
+
+            // ⭐⭐⭐ 3. ジャンプ先に表示される全てのスライド(本物もクローンも)を取得 ⭐⭐⭐
+            const targetScrollLeft = targetOriginal.offsetLeft;
+            const allSlidesForJump = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
+            const visibleSlides: HTMLElement[] = [];
+
+            allSlidesForJump.forEach((slide) => {
+              const slideLeft = slide.offsetLeft;
+              const slideRight = slideLeft + slide.offsetWidth;
+              const viewportLeft = targetScrollLeft;
+              const viewportRight = targetScrollLeft + wrap.offsetWidth;
+
+              // ジャンプ後に画面内に入るスライドを判定
+              if (slideRight > viewportLeft && slideLeft < viewportRight) {
+                visibleSlides.push(slide);
+              }
+            });
+
+            // ⭐⭐⭐ 4. 表示される全てのスライドに transition: none + show を付ける ⭐⭐⭐
+            visibleSlides.forEach((slide) => {
+              const blogItem = slide.querySelector(".blog-item") as HTMLElement;
+              if (blogItem) {
+                blogItem.style.transition = "none";
+                blogItem.classList.add("show");
+              }
+            });
+
+            // 5. 即座にジャンプ
+            wrap.scrollTo({
+              left: targetOriginal.offsetLeft,
+              behavior: "auto",
+            });
+
+            // 6. ドットを更新
+            if (!isTablet) {
+              current = cloneOf;
+              updateDots();
             }
-          });
-          
-          // 5. 即座にジャンプ
-          wrap.scrollTo({
-            left: targetOriginal.offsetLeft,
-            behavior: "auto",
-          });
-          
-          // 6. ドットを更新
-          if (!isTablet) {
-            current = cloneOf;
+
+            // 7. transitionを戻す & ジャンプ完了
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                // 全てのスライドのtransitionを戻す
+                visibleSlides.forEach((slide) => {
+                  const blogItem = slide.querySelector(".blog-item") as HTMLElement;
+                  if (blogItem) {
+                    blogItem.style.transition = "";
+                  }
+                });
+
+                // ⭐ ジャンプ完了
+                isJumping = false;
+              });
+            });
+          }
+        }
+        // ========== 後方クローン領域からのジャンプ ==========
+        else if (currentScrollLeft > wrapWidth - viewportWidth - scrollThreshold) {
+          const targetOriginal = originals[cloneOf];
+          if (targetOriginal) {
+            // ⭐ ジャンプ開始
+            isJumping = true;
+
+            // 1. 先にすべてのクローンからshowを削除
+            wrap.querySelectorAll(".is-clone .blog-item").forEach((cloneItem) => {
+              cloneItem.classList.remove("show");
+            });
+
+            // 2. タブレット・1060px:一旦すべてのshowを削除
+            if (isTablet || isMiddle) {
+              const allItems = wrap.querySelectorAll(".blog-item");
+              allItems.forEach((item) => item.classList.remove("show"));
+            }
+
+            // ⭐⭐⭐ 3. ジャンプ先に表示される全てのスライド(本物もクローンも)を取得 ⭐⭐⭐
+            const targetScrollLeft = targetOriginal.offsetLeft;
+            const allSlidesForJump = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
+            const visibleSlides: HTMLElement[] = [];
+
+            allSlidesForJump.forEach((slide) => {
+              const slideLeft = slide.offsetLeft;
+              const slideRight = slideLeft + slide.offsetWidth;
+              const viewportLeft = targetScrollLeft;
+              const viewportRight = targetScrollLeft + wrap.offsetWidth;
+
+              // ジャンプ後に画面内に入るスライドを判定
+              if (slideRight > viewportLeft && slideLeft < viewportRight) {
+                visibleSlides.push(slide);
+              }
+            });
+
+            // ⭐⭐⭐ 4. 表示される全てのスライドに transition: none + show を付ける ⭐⭐⭐
+            visibleSlides.forEach((slide) => {
+              const blogItem = slide.querySelector(".blog-item") as HTMLElement;
+              if (blogItem) {
+                blogItem.style.transition = "none";
+                blogItem.classList.add("show");
+              }
+            });
+
+            // 5. 即座にジャンプ
+            wrap.scrollTo({
+              left: targetOriginal.offsetLeft,
+              behavior: "auto",
+            });
+
+            // 6. ドットを更新
+            if (!isTablet) {
+              current = cloneOf;
+              updateDots();
+            }
+
+            // 7. transitionを戻す & ジャンプ完了
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                // 全てのスライドのtransitionを戻す
+                visibleSlides.forEach((slide) => {
+                  const blogItem = slide.querySelector(".blog-item") as HTMLElement;
+                  if (blogItem) {
+                    blogItem.style.transition = "";
+                  }
+                });
+
+                // ⭐ ジャンプ完了
+                isJumping = false;
+              });
+            });
+          }
+        }
+        // クローン領域の中央付近にいる場合はジャンプしない
+        else {
+          // ドットとshowの更新のみ
+          if (isTablet || isMiddle) {
+            requestAnimationFrame(() => {
+              updateVisibleSlidesForScroll();
+            });
+          } else {
+            let newCurrent = cloneOf;
+            current = newCurrent;
             updateDots();
           }
-          
-          // 7. transitionを戻す & ジャンプ完了
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              // 全てのスライドのtransitionを戻す
-              visibleSlides.forEach((slide) => {
-                const blogItem = slide.querySelector(".blog-item") as HTMLElement;
-                if (blogItem) {
-                  blogItem.style.transition = "";
-                }
-              });
-              
-              // ⭐ ジャンプ完了
-              isJumping = false;
-            });
-          });
         }
-      }
-      // ========== 後方クローン領域からのジャンプ ==========
-      else if (currentScrollLeft > wrapWidth - viewportWidth - scrollThreshold) {
-        const targetOriginal = originals[cloneOf];
-        if (targetOriginal) {
-          // ⭐ ジャンプ開始
-          isJumping = true;
-          
-          // 1. 先にすべてのクローンからshowを削除
-          wrap.querySelectorAll(".is-clone .blog-item").forEach((cloneItem) => {
-            cloneItem.classList.remove("show");
-          });
-
-          // 2. タブレット・1060px:一旦すべてのshowを削除
-          if (isTablet || isMiddle) {
-            const allItems = wrap.querySelectorAll(".blog-item");
-            allItems.forEach((item) => item.classList.remove("show"));
-          }
-
-          // ⭐⭐⭐ 3. ジャンプ先に表示される全てのスライド(本物もクローンも)を取得 ⭐⭐⭐
-          const targetScrollLeft = targetOriginal.offsetLeft;
-          const allSlidesForJump = wrap.querySelectorAll<HTMLElement>(".blog-item-wrap");
-          const visibleSlides: HTMLElement[] = [];
-          
-          allSlidesForJump.forEach((slide) => {
-            const slideLeft = slide.offsetLeft;
-            const slideRight = slideLeft + slide.offsetWidth;
-            const viewportLeft = targetScrollLeft;
-            const viewportRight = targetScrollLeft + wrap.offsetWidth;
-            
-            // ジャンプ後に画面内に入るスライドを判定
-            if (slideRight > viewportLeft && slideLeft < viewportRight) {
-              visibleSlides.push(slide);
-            }
-          });
-          
-          // ⭐⭐⭐ 4. 表示される全てのスライドに transition: none + show を付ける ⭐⭐⭐
-          visibleSlides.forEach((slide) => {
-            const blogItem = slide.querySelector(".blog-item") as HTMLElement;
-            if (blogItem) {
-              blogItem.style.transition = "none";
-              blogItem.classList.add("show");
-            }
-          });
-          
-          // 5. 即座にジャンプ
-          wrap.scrollTo({
-            left: targetOriginal.offsetLeft,
-            behavior: "auto",
-          });
-          
-          // 6. ドットを更新
-          if (!isTablet) {
-            current = cloneOf;
-            updateDots();
-          }
-          
-          // 7. transitionを戻す & ジャンプ完了
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              // 全てのスライドのtransitionを戻す
-              visibleSlides.forEach((slide) => {
-                const blogItem = slide.querySelector(".blog-item") as HTMLElement;
-                if (blogItem) {
-                  blogItem.style.transition = "";
-                }
-              });
-              
-              // ⭐ ジャンプ完了
-              isJumping = false;
-            });
-          });
-        }
-      }
-      // クローン領域の中央付近にいる場合はジャンプしない
-      else {
-        // ドットとshowの更新のみ
+      } else {
+        // 本物のスライドにいる場合はドット更新のみ
         if (isTablet || isMiddle) {
           requestAnimationFrame(() => {
             updateVisibleSlidesForScroll();
           });
         } else {
-          let newCurrent = cloneOf;
+          let newCurrent = 0;
+          let newMinDistance = Infinity;
+
+          originals.forEach((slide, index) => {
+            const distance = Math.abs(slide.offsetLeft - currentScrollLeft);
+            if (distance < newMinDistance) {
+              newMinDistance = distance;
+              newCurrent = index;
+            }
+          });
+
           current = newCurrent;
           updateDots();
         }
       }
-    } else {
-      // 本物のスライドにいる場合はドット更新のみ
-      if (isTablet || isMiddle) {
-        requestAnimationFrame(() => {
-          updateVisibleSlidesForScroll();
-        });
-      } else {
-        let newCurrent = 0;
-        let newMinDistance = Infinity;
 
-        originals.forEach((slide, index) => {
-          const distance = Math.abs(slide.offsetLeft - currentScrollLeft);
-          if (distance < newMinDistance) {
-            newMinDistance = distance;
-            newCurrent = index;
-          }
-        });
-
-        current = newCurrent;
-        updateDots();
-      }
-    }
-
-    // 1.5秒後に自動スクロールを再開
-    setTimeout(() => {
-      if (window.innerWidth > 1060) return;
-      startAuto();
-    }, 1500);
-  }, 150);
-};
+      // 1.5秒後に自動スクロールを再開
+      setTimeout(() => {
+        if (window.innerWidth > 1060) return;
+        startAuto();
+      }, 1500);
+    }, 150);
+  };
 
   // ===== PC：auto slide 無効 =====
   if (window.innerWidth > 1060) {
     stopAuto();
     isTransitioning = false;
-    
+
     wrap.querySelectorAll(".is-clone").forEach((el) => el.remove());
     wrap.scrollTo({ left: 0, behavior: "auto" });
     updateDots();
-    
+
     originals.forEach((slide) => {
       const item = slide.querySelector(".blog-item");
       if (item) {
@@ -1079,17 +1090,16 @@ const handleManualScroll = () => {
         item.classList.add("show");
       }
     });
-    
+
     requestAnimationFrame(() => {
       originals.forEach((slide) => {
         const item = slide.querySelector(".blog-item");
         if (item) item.style.transition = "";
       });
     });
-    
+
     return;
   }
-
 
   // タブレット・モバイルのみスクロールリスナーを登録
   wrap.addEventListener("scroll", handleManualScroll, { passive: true });
@@ -1167,7 +1177,7 @@ const handleResize = async () => {
   applyEllipsis();
 
   updateBottomHeaderHeight();
-  
+
   // ⭐️ Observerは最後に作成（ブログアイテムのshowが付いた後）
   createObservers();
 };
@@ -1286,11 +1296,11 @@ const faqList = [
     question: "どのような求職者が登録していますか？",
     answer: "転職エージェントと出会いたい＆市場価値を知りたい求職者です。",
   },
-    {
+  {
     question: "利用開始までのステップは？",
     answer: "まずはお問い合わせください。お申込み完了後、マイページを作成させていただきます。マイページ提供後、必要情報をご登録いただくと利用可能になります。",
   },
-    {
+  {
     question: "契約期間や最低利用期間はありますか？",
     answer: "契約期間・最低利用期間はございません。",
   },
@@ -1322,7 +1332,7 @@ const faqList = [
       display: block;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.15);
+      background-color: rgba(0, 0, 0, 0.2);
       position: absolute;
       top: 0;
       left: 0;
@@ -1342,50 +1352,52 @@ const faqList = [
 
     h1 {
       font-size: 35px;
-      color: #1A1A1A;
+      color: #1a1a1a;
       font-weight: 500;
       letter-spacing: 1.05px;
       line-height: 1.6;
-     text-shadow: 0px 3px 6px #FFFFFF91;
+      text-shadow: 0px 3px 6px #ffffff91;
 
       @include mixin.max-screen(mixin.$small) {
         font-size: 25px;
         color: #fff;
-           text-shadow: 0px 3px 6px #0000005c;
+        text-shadow: 0px 3px 6px #0000005c;
       }
 
       span {
         display: block;
 
         &.logo-type {
-            display: flex;
-            font-size: 50px;
-            font-weight: bold;
-    margin: 0 0 0 -27px;
+          display: flex;
+          font-size: 50px;
+          font-weight: bold;
+          margin: 0 0 0 -27px;
+          @include mixin.max-screen(mixin.$small) {
+            text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25); // ← ブラーを大きく、透明度を下げる
+          }
           img {
-            filter: drop-shadow(0px 3px 6px #FFFFFFC7);
+            filter: drop-shadow(0px 3px 6px #ffffffc7);
             width: 200px;
             height: auto;
             margin: 0px 15px;
 
-            
-              // アンチエイリアシングを強制
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  
-  // SVGのレンダリング品質を向上
-  image-rendering: auto;
-  image-rendering: -webkit-optimize-contrast;
-  
-  // transform でサブピクセルレンダリング
-  transform: translateZ(0);
-  backface-visibility: hidden;
+            // アンチエイリアシングを強制
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+
+            // SVGのレンダリング品質を向上
+            image-rendering: auto;
+            image-rendering: -webkit-optimize-contrast;
+
+            // transform でサブピクセルレンダリング
+            transform: translateZ(0);
+            backface-visibility: hidden;
 
             @include mixin.max-screen(mixin.$small) {
               width: 200px;
               height: 40px;
               margin-top: 15px;
-          filter: brightness(0) invert(1) drop-shadow(0px 3px 6px rgba(0,0,0,0.36));
+              filter: brightness(0) invert(1) drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.36));
             }
           }
         }
@@ -1417,56 +1429,56 @@ const faqList = [
       }
     }
 
-h2 {
-  font-size: 30px;
-  color: #000;
-  font-weight: 500;
-  letter-spacing: 0.9px;
-  line-height: 1;
-  text-shadow: 0px 3px 6px #FFFFFF7B;
-  margin-top: 28px;
-  position: relative; // 追加
+    h2 {
+      font-size: 30px;
+      color: #000;
+      font-weight: 500;
+      letter-spacing: 0.9px;
+      line-height: 1;
+      text-shadow: 0px 3px 6px #ffffff7b;
+      margin-top: 28px;
+      position: relative; // 追加
 
-  @include mixin.max-screen(mixin.$small) {
-    font-size: 24px;
-    margin-top: 0px;
-    padding-top: 22px;
-    color: #fff;
-       text-shadow: 0px 3px 6px #0000005c;
-  }
+      @include mixin.max-screen(mixin.$small) {
+        font-size: 24px;
+        margin-top: 0px;
+        padding-top: 22px;
+        color: #fff;
+        text-shadow: 0px 3px 6px #0000005c;
+      }
 
-  .number {
-    font-size: 80px;
-    color: #FFCE00;
-    text-shadow: 0px 3px 6px #00000036 !important;
-    letter-spacing: 2.4px;
-    text-shadow: none;
-    min-width: 60px;
-    display: inline-block;
-    text-align: end;
-    margin-right: 10px;
+      .number {
+        font-size: 80px;
+        color: #ffce00;
+        text-shadow: 0px 3px 6px #00000036 !important;
+        letter-spacing: 2.4px;
+        text-shadow: none;
+        min-width: 60px;
+        display: inline-block;
+        text-align: end;
+        margin-right: 10px;
 
-    @include mixin.max-screen(mixin.$small) {
-      font-size: 70px;
-      min-width: 55px;
+        @include mixin.max-screen(mixin.$small) {
+          font-size: 70px;
+          min-width: 55px;
+        }
+      }
     }
-  }
-}
 
-.campain {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  font-size: 16px;
-  line-height: 1;
-text-shadow: 0px 3px 6px #FFFFFF7B;
+    .campain {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      font-size: 16px;
+      line-height: 1;
+      text-shadow: 0px 3px 6px #ffffff7b;
 
-  @include mixin.max-screen(mixin.$small) {
-    font-size: 14px;
-      top: 40px;
-         text-shadow: 0px 3px 6px #0000005c;
-  }
-}
+      @include mixin.max-screen(mixin.$small) {
+        font-size: 14px;
+        top: 40px;
+        text-shadow: 0px 3px 6px #0000005c;
+      }
+    }
   }
 
   .wave {
@@ -1524,14 +1536,18 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
 
       opacity: 0;
       transform: scale(0.95) translateZ(0);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
 
       @include mixin.screen(mixin.$small, mixin.$large) {
         max-width: 600px; // ← タブレット用の幅を追加
       }
 
       @include mixin.max-screen(mixin.$small) {
-        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition:
+          opacity 0.4s ease,
+          transform 0.4s ease;
       }
 
       &.show {
@@ -1549,7 +1565,6 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         color: #1d1d1d;
         margin-bottom: 5px;
 
-
         @include mixin.max-screen(mixin.$small) {
           font-size: 16px;
           margin-bottom: 0px;
@@ -1565,15 +1580,15 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
             width: 120px;
             height: auto;
             object-fit: contain;
-              // アンチエイリアシングを改善
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  image-rendering: auto;
-  image-rendering: -webkit-optimize-contrast;
-  
-  // サブピクセルレンダリング
-  transform: translateZ(0);
-  backface-visibility: hidden;
+            // アンチエイリアシングを改善
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            image-rendering: auto;
+            image-rendering: -webkit-optimize-contrast;
+
+            // サブピクセルレンダリング
+            transform: translateZ(0);
+            backface-visibility: hidden;
 
             @include mixin.max-screen(mixin.$small) {
               width: 100px;
@@ -1588,18 +1603,17 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         letter-spacing: 0.54px;
         line-height: 1.7;
         margin-top: 17px;
-                color: #1d1d1d;
-
+        color: #1d1d1d;
 
         @include mixin.max-screen(mixin.$small) {
           font-size: 16px;
           margin-top: 15px;
         }
       }
-      
-    //   .bottom-in{
-    //     margin-bottom: 5px;
-    //   }
+
+      //   .bottom-in{
+      //     margin-bottom: 5px;
+      //   }
     }
 
     img {
@@ -1610,7 +1624,9 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
 
       opacity: 0;
       transform: scale(0.95) translateZ(0);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
 
       @include mixin.screen(mixin.$large, 1060px) {
         width: 380px; // ← 画像サイズ変更
@@ -1623,7 +1639,9 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       }
 
       @include mixin.max-screen(mixin.$small) {
-        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition:
+          opacity 0.4s ease,
+          transform 0.4s ease;
       }
 
       &.show {
@@ -1639,14 +1657,14 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
   position: relative;
   height: 400vh;
 
-.slides {
-  position: sticky;
-  top: 0;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);  // ← 画面左端に揃える
-  height: calc(100vh - var(--bottom-header-height));
-  overflow: hidden;
-}
+  .slides {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    margin-left: calc(50% - 50vw); // ← 画面左端に揃える
+    height: calc(100vh - var(--bottom-header-height));
+    overflow: hidden;
+  }
 
   .section-wrap {
     position: absolute;
@@ -1662,7 +1680,7 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       position: absolute;
       inset: 0;
       clip-path: inset(0 0 0 0);
-      background: transparent; 
+      background: transparent;
       z-index: 2;
       overflow: hidden;
 
@@ -1674,8 +1692,8 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         position: absolute;
         top: 50%;
         left: 50%;
-  width: 101%;  // ← 100%から101%に変更
-  height: 100%; 
+        width: 101%; // ← 100%から101%に変更
+        height: 100%;
         transform: translate(-50%, -50%) scale(1);
         transform-origin: center center;
         background-position: center center;
@@ -1700,8 +1718,8 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       transform: translateY(-50%);
       max-width: 440px;
       color: #000000;
-       background: rgba(255, 255, 255, 0.8);
-       padding: 37px 30px 30px 30px ;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 37px 30px 30px 30px;
       z-index: 3;
 
       @include mixin.screen(mixin.$large, 1060px) {
@@ -1714,19 +1732,20 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       }
 
       @include mixin.max-screen(mixin.$small) {
-        top: 45%;
+        top: 55%;
         right: 5%;
         transform: unset;
-        padding: 32px 25px 25px ;
+        padding: 27px 20px 15px;
+        background: rgba(255, 255, 255, 0.9);
         width: 90%;
       }
-      
-      h1{
+
+      h1 {
         font-size: 40px;
-        color: #FFCE00;
-       font-family: adobe-handwriting-ernie, sans-serif;
-       font-weight: 400;
-       line-height: 1;
+        color: #ffce00;
+        font-family: adobe-handwriting-ernie, sans-serif;
+        font-weight: 400;
+        line-height: 1;
       }
 
       h5 {
@@ -1755,9 +1774,9 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         font-size: 14px;
         letter-spacing: 0.42px;
         line-height: 1.8;
-        
-        span{
-            display: block;
+
+        span {
+          display: block;
         }
 
         @include mixin.max-screen(mixin.$small) {
@@ -1792,20 +1811,19 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
 
       @include mixin.screen(mixin.$small, mixin.$large) {
         left: 50px; // ← タブレット用追加
-        top:62%;
+        top: 62%;
       }
 
       @include mixin.max-screen(mixin.$small) {
         left: unset;
-        top:45%;
+        top: 51%;
         right: 5%;
       }
     }
-    
-        &.slide3 .text-wrap {
-      top: 75%;
-      right:92px;
 
+    &.slide3 .text-wrap {
+      top: 75%;
+      right: 92px;
 
       @include mixin.screen(mixin.$large, 1060px) {
         top: 75%;
@@ -1819,7 +1837,7 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
 
       @include mixin.max-screen(mixin.$small) {
         left: unset;
-        top:50%;
+        top: 55%;
         right: 5%;
       }
     }
@@ -1847,31 +1865,32 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         background-position: 90% 0;
       }
       @include mixin.max-screen(mixin.$small) {
-        background-position: 83% 0;
+  background-position: 83% 100%;
+    background-size: 550%; 
       }
     }
 
     &.slide3 .mask .inner {
-              background-position: 0% 15%;
-              scale: 1.2;
-                    @include mixin.screen(mixin.$small, mixin.$large) {
+      background-position: 0% 15%;
+      scale: 1.2;
+      @include mixin.screen(mixin.$small, mixin.$large) {
         background-position: 15% 15%;
       }
       @include mixin.max-screen(mixin.$small) {
         background-position: 3% 14%;
       }
     }
-    
+
     // ← これを追加
-&.slide3 .text-wrap {
-  transform: translateY(-50%) scale(0.833); // 1 ÷ 1.2 = 0.833で元のサイズに
-  transform-origin: center center;
-  
-  @include mixin.max-screen(mixin.$small) {
-    transform: scale(0.833); // モバイルはtranslateYなし
-   right:-3.5%;
-  }
-}
+    &.slide3 .text-wrap {
+      transform: translateY(-50%) scale(0.833); // 1 ÷ 1.2 = 0.833で元のサイズに
+      transform-origin: center center;
+
+      @include mixin.max-screen(mixin.$small) {
+        transform: scale(0.833); // モバイルはtranslateYなし
+        right: -3.5%;
+      }
+    }
   }
 }
 
@@ -1896,8 +1915,9 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       margin-bottom: 60px;
       position: relative;
       padding-bottom: 5px; // 追加
-      
-      &::after { // 追加
+
+      &::after {
+        // 追加
         content: "";
         position: absolute;
         bottom: 3px;
@@ -1909,7 +1929,7 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         background-size: 100% 100%;
         background-repeat: no-repeat;
         filter: blur(0.2px);
-        
+
         @include mixin.max-screen(mixin.$small) {
           width: 195px;
           height: 5px;
@@ -1919,11 +1939,15 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
 
       opacity: 0;
       transform: scale(0.95) translateZ(0);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+
       @include mixin.max-screen(mixin.$small) {
         font-size: 25px;
-        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition:
+          opacity 0.4s ease,
+          transform 0.4s ease;
       }
 
       @include mixin.max-screen(mixin.$small) {
@@ -1936,32 +1960,31 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         transform: scale(1);
         // will-change: opacity, transform;
       }
-      
-      
+
       .block {
         display: block;
       }
-      
-      .logo-title{
-        display:flex;
+
+      .logo-title {
+        display: flex;
         justify-content: center;
         align-items: baseline;
         gap: 10px;
-        img{
-            width: 150px;
-              // アンチエイリアシングを改善
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  image-rendering: auto;
-  image-rendering: -webkit-optimize-contrast;
-  
-  // サブピクセルレンダリング
-  transform: translateZ(0);
-  backface-visibility: hidden;
+        img {
+          width: 150px;
+          // アンチエイリアシングを改善
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          image-rendering: auto;
+          image-rendering: -webkit-optimize-contrast;
+
+          // サブピクセルレンダリング
+          transform: translateZ(0);
+          backface-visibility: hidden;
         }
-        
-        .title-next{
-         line-height: 1;
+
+        .title-next {
+          line-height: 1;
         }
       }
     }
@@ -1994,7 +2017,9 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
 
         opacity: 0;
         transform: scale(0.95) translateZ(0);
-        transition: opacity 0.6s ease, transform 0.6s ease;
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
 
         @include mixin.screen(mixin.$small, mixin.$large) {
           max-width: 100%;
@@ -2005,7 +2030,9 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
         }
 
         @include mixin.max-screen(mixin.$small) {
-          transition: opacity 0.4s ease, transform 0.4s ease;
+          transition:
+            opacity 0.4s ease,
+            transform 0.4s ease;
           max-width: unset;
         }
 
@@ -2014,20 +2041,27 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
           transform: scale(1);
         }
 
-        img {
-          width: 200px;
-          height: auto;
-          aspect-ratio: 1 / 1;
-          object-fit: cover;
-          object-position: center;
-          border-radius: 50%;
-          margin: auto auto 15px;
+.img-wrap {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;      // ← これがズームをクリップする
+  flex-shrink: 0;
+  margin: auto auto 15px;
 
-          @include mixin.screen(mixin.$small, mixin.$large) {
-            margin-right: 30px;
-            margin-bottom: 0px;
-          }
-        }
+  @include mixin.screen(mixin.$small, mixin.$large) {
+    margin-right: 30px;
+    margin-bottom: 0px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    // border-radius は削除（親が持つ）
+  }
+}
 
         .text-content {
           @include mixin.screen(mixin.$small, mixin.$large) {
@@ -2055,6 +2089,9 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
             margin: 0;
           }
         }
+          &:first-child .img-wrap img {
+    transform: scale(1.2);
+  }
       }
     }
   }
@@ -2076,49 +2113,53 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
     padding: 50px 5%;
     margin: auto;
   }
-h5 {
-  font-size: 25px;
-  letter-spacing: 0.6px;
-  text-align: center;
-  margin-bottom: 60px;
-  position: relative;
-  padding-bottom: 5px;
-  
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%) skewX(-12deg) rotate(-1.5deg);
-    width: 160px;
-    height: 6px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 6' preserveAspectRatio='none'%3E%3Cpath d='M2,3 Q40,2.5 80,3.2 T158,3' stroke='%23FFE419' stroke-width='4.5' fill='none' stroke-linecap='round' opacity='0.75'/%3E%3Cpath d='M1,3.5 Q35,2.8 75,3.5 T157,3.2' stroke='%23FFE419' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.4'/%3E%3Cpath d='M3,2.8 Q45,3.2 85,2.9 T159,3.1' stroke='%23FFE419' stroke-width='2' fill='none' stroke-linecap='round' opacity='0.3'/%3E%3C/svg%3E");
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    filter: blur(0.2px);
-    
+  h5 {
+    font-size: 25px;
+    letter-spacing: 0.6px;
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+    padding-bottom: 5px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%) skewX(-12deg) rotate(-1.5deg);
+      width: 160px;
+      height: 6px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 6' preserveAspectRatio='none'%3E%3Cpath d='M2,3 Q40,2.5 80,3.2 T158,3' stroke='%23FFE419' stroke-width='4.5' fill='none' stroke-linecap='round' opacity='0.75'/%3E%3Cpath d='M1,3.5 Q35,2.8 75,3.5 T157,3.2' stroke='%23FFE419' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.4'/%3E%3Cpath d='M3,2.8 Q45,3.2 85,2.9 T159,3.1' stroke='%23FFE419' stroke-width='2' fill='none' stroke-linecap='round' opacity='0.3'/%3E%3C/svg%3E");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      filter: blur(0.2px);
+
+      @include mixin.max-screen(mixin.$small) {
+        width: 130px;
+        height: 5px;
+        bottom: 0px;
+      }
+    }
+
+    opacity: 0;
+    transform: scale(0.95) translateZ(0);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
+
     @include mixin.max-screen(mixin.$small) {
-      width: 130px;
-      height: 5px;
-      bottom: 0px;
+      transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    &.show {
+      opacity: 1;
+      transform: scale(1);
     }
   }
-
-  opacity: 0;
-  transform: scale(0.95) translateZ(0);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-
-  @include mixin.max-screen(mixin.$small) {
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
-
-  &.show {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
 
   .section-wrap {
     max-width: 980px;
@@ -2221,10 +2262,14 @@ h5 {
 
           opacity: 0;
           transform: scale(0.95) translateZ(0);
-          transition: opacity 0.6s ease, transform 0.6s ease;
+          transition:
+            opacity 0.6s ease,
+            transform 0.6s ease;
 
           @include mixin.max-screen(mixin.$small) {
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition:
+              opacity 0.4s ease,
+              transform 0.4s ease;
           }
 
           &.show {
@@ -2266,10 +2311,9 @@ h5 {
             .date {
               font-size: 13px;
               line-height: 1;
-            @include mixin.max-screen(mixin.$small) {
-              margin-top: 2px;
-            }
-              
+              @include mixin.max-screen(mixin.$small) {
+                margin-top: 2px;
+              }
             }
 
             .category {
@@ -2350,10 +2394,14 @@ h5 {
 
       opacity: 0;
       transform: scale(0.95) translateZ(0);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
 
       @include mixin.max-screen(mixin.$small) {
-        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition:
+          opacity 0.4s ease,
+          transform 0.4s ease;
       }
 
       &.show {
@@ -2398,39 +2446,44 @@ h5 {
       padding: 50px 0 100px;
     }
 
-h5 {
-  font-size: 25px;
-  text-align: center;
-  position: relative; // 追加
-  padding-bottom: 5px; // 追加
+    h5 {
+      font-size: 25px;
+      text-align: center;
+      position: relative; // 追加
+      padding-bottom: 5px; // 追加
 
-  &::after { // 追加
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%) skewX(-12deg) rotate(-1.5deg);
-    width: 170px;
-    height: 6px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 6' preserveAspectRatio='none'%3E%3Cpath d='M2,3 Q40,2.5 80,3.2 T158,3' stroke='%23FFE419' stroke-width='4.5' fill='none' stroke-linecap='round' opacity='0.75'/%3E%3Cpath d='M1,3.5 Q35,2.8 75,3.5 T157,3.2' stroke='%23FFE419' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.4'/%3E%3Cpath d='M3,2.8 Q45,3.2 85,2.9 T159,3.1' stroke='%23FFE419' stroke-width='2' fill='none' stroke-linecap='round' opacity='0.3'/%3E%3C/svg%3E");
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    filter: blur(0.2px);
-    
-    @include mixin.max-screen(mixin.$small) {
-      width: 140px;
-      height: 5px;
-      bottom: 0px;
-    }
-  }
+      &::after {
+        // 追加
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 50%;
+        transform: translateX(-50%) skewX(-12deg) rotate(-1.5deg);
+        width: 170px;
+        height: 6px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 6' preserveAspectRatio='none'%3E%3Cpath d='M2,3 Q40,2.5 80,3.2 T158,3' stroke='%23FFE419' stroke-width='4.5' fill='none' stroke-linecap='round' opacity='0.75'/%3E%3Cpath d='M1,3.5 Q35,2.8 75,3.5 T157,3.2' stroke='%23FFE419' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.4'/%3E%3Cpath d='M3,2.8 Q45,3.2 85,2.9 T159,3.1' stroke='%23FFE419' stroke-width='2' fill='none' stroke-linecap='round' opacity='0.3'/%3E%3C/svg%3E");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        filter: blur(0.2px);
+
+        @include mixin.max-screen(mixin.$small) {
+          width: 140px;
+          height: 5px;
+          bottom: 0px;
+        }
+      }
 
       opacity: 0;
       transform: scale(0.95) translateZ(0);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
 
       @include mixin.max-screen(mixin.$small) {
         font-size: 20px;
-        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition:
+          opacity 0.4s ease,
+          transform 0.4s ease;
       }
 
       &.show {
@@ -2449,10 +2502,14 @@ h5 {
 
       opacity: 0;
       transform: scale(0.95) translateZ(0);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
 
       @include mixin.max-screen(mixin.$small) {
-        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition:
+          opacity 0.4s ease,
+          transform 0.4s ease;
       }
 
       &.show {
