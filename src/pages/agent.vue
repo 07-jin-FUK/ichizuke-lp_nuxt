@@ -1373,7 +1373,7 @@ const faqList = [
           font-weight: bold;
           margin: 0 0 0 -27px;
           @include mixin.max-screen(mixin.$small) {
-            text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25); // ← ブラーを大きく、透明度を下げる
+            text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15); // ← ブラーを大きく、透明度を下げる
           }
           img {
             filter: drop-shadow(0px 3px 6px #ffffffc7);
@@ -1397,7 +1397,7 @@ const faqList = [
               width: 200px;
               height: 40px;
               margin-top: 15px;
-              filter: brightness(0) invert(1) drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.36));
+              filter: brightness(0) invert(1) drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.5));
             }
           }
         }
