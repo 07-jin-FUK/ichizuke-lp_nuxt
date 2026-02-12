@@ -1415,7 +1415,7 @@ const faqList = [
 
       @include mixin.max-screen(mixin.$small) {
         padding: 10px 65px 11px;
-        margin-top: 25px;
+        margin-top: 15px;
       }
 
       p {
@@ -1444,7 +1444,7 @@ const faqList = [
       @include mixin.max-screen(mixin.$small) {
         font-size: 24px;
         margin-top: 0px;
-        padding-top: 22px;
+        padding-top: 12px;
         color: #fff;
         text-shadow: 0px 3px 6px #0000005c;
       }
