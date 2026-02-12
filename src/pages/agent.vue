@@ -10,12 +10,12 @@
           」
         </span>
       </h1>
-      <div class="btn"><p>無料登録はこちら</p></div>
+      <div class="btn width-long"><p>無料登録はこちら</p></div>
 
       <h2>
         <span class="campain">オープンキャンペーン</span>
         今なら初期費用
-        <span class="number">0</span>
+<span class="number">0</span>
         円
       </h2>
     </div>
@@ -1414,7 +1414,7 @@ const faqList = [
       display: inline-block;
 
       @include mixin.max-screen(mixin.$small) {
-        padding: 10px 30px 11px;
+        padding: 10px 65px 11px;
         margin-top: 25px;
       }
 
@@ -1462,7 +1462,8 @@ const faqList = [
 
         @include mixin.max-screen(mixin.$small) {
           font-size: 70px;
-          min-width: 55px;
+          min-width: 43px;
+            margin-right: 0px;
         }
       }
     }
@@ -1748,7 +1749,7 @@ const faqList = [
         font-family: adobe-handwriting-ernie, sans-serif;
         font-weight: 400;
         line-height: 1;
-text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.45);
+text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
       }
 
       h5 {
