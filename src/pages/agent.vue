@@ -1385,7 +1385,7 @@ const faqList = [
               width: 200px;
               height: 40px;
               margin-top: 15px;
-                 filter: brightness(0) invert(1);
+          filter: brightness(0) invert(1) drop-shadow(0px 3px 6px rgba(0,0,0,0.36));
             }
           }
         }
