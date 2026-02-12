@@ -1347,7 +1347,7 @@ const faqList = [
 
 @include mixin.max-screen(mixin.$small) {
   padding-left: 0;        // ← 左寄せを解除
-  left: 53%;
+  left: 57%;
   transform: translateX(-50%);
   bottom: 13%;            // ← 縦位置はそのまま
   width:75%;
@@ -1748,7 +1748,7 @@ const faqList = [
         font-family: adobe-handwriting-ernie, sans-serif;
         font-weight: 400;
         line-height: 1;
-          text-shadow:0px 4px 8px rgba(0,0,0,0.3)
+text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.45);
       }
 
       h5 {
