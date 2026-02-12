@@ -121,7 +121,7 @@
       </div>
 
       <div class="blog-dots"></div>
-      <div class="btn"><p>ブログ一覧へ</p></div>
+      <div class="btn"><p>コラム一覧へ</p></div>
     </div>
   </section>
 
