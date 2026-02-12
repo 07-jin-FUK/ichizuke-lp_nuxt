@@ -1478,7 +1478,7 @@ const faqList = [
 
       @include mixin.max-screen(mixin.$small) {
         font-size: 14px;
-        top: 40px;
+        top: 30px;
         text-shadow: 0px 3px 6px #0000005c;
       }
     }
