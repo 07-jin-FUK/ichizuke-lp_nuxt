@@ -1748,7 +1748,7 @@ const faqList = [
         font-family: adobe-handwriting-ernie, sans-serif;
         font-weight: 400;
         line-height: 1;
-text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.45);
+text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.45);
       }
 
       h5 {
