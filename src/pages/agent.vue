@@ -1324,7 +1324,7 @@ const faqList = [
   }
 
   @include mixin.max-screen(mixin.$small) {
-    background-position: 66% 70%;
+    background-position: 74% 70%;
     background-size: 320%;
 
     &::before {
@@ -1332,7 +1332,7 @@ const faqList = [
       display: block;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.25);
       position: absolute;
       top: 0;
       left: 0;
@@ -1345,10 +1345,13 @@ const faqList = [
     bottom: 21.875%;
     z-index: 1;
 
-    @include mixin.max-screen(mixin.$small) {
-      padding-left: 8%;
-      bottom: 13%;
-    }
+@include mixin.max-screen(mixin.$small) {
+  padding-left: 0;        // ← 左寄せを解除
+  left: 53%;
+  transform: translateX(-50%);
+  bottom: 13%;            // ← 縦位置はそのまま
+  width:75%;
+}
 
     h1 {
       font-size: 35px;
@@ -1379,7 +1382,6 @@ const faqList = [
             filter: drop-shadow(0px 3px 6px #ffffffc7);
             width: 200px;
             height: auto;
-            margin: 0px 15px;
 
             // アンチエイリアシングを強制
             -webkit-font-smoothing: antialiased;
@@ -1746,6 +1748,7 @@ const faqList = [
         font-family: adobe-handwriting-ernie, sans-serif;
         font-weight: 400;
         line-height: 1;
+          text-shadow:0px 4px 8px rgba(0,0,0,0.3)
       }
 
       h5 {
