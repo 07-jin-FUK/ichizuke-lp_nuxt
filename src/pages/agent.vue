@@ -1793,6 +1793,7 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
 
       @include mixin.screen(mixin.$small, mixin.$large) {
         left: 50px; // ← タブレット用追加
+        top:62%;
       }
 
       @include mixin.max-screen(mixin.$small) {
@@ -1804,14 +1805,16 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
     
         &.slide3 .text-wrap {
       top: 75%;
+      right:92px;
+
 
       @include mixin.screen(mixin.$large, 1060px) {
         top: 75%;
-        left: 50px; // ← タブレット用追加
+        right: 10px; // ← タブレット用追加
       }
 
       @include mixin.screen(mixin.$small, mixin.$large) {
-        top: 67%;
+        top: 68%;
         right: 10px !important; // ← タブレット用追加
       }
 
@@ -1863,11 +1866,11 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
     // ← これを追加
 &.slide3 .text-wrap {
   transform: translateY(-50%) scale(0.833); // 1 ÷ 1.2 = 0.833で元のサイズに
-  right:-3.5%;
   transform-origin: center center;
   
   @include mixin.max-screen(mixin.$small) {
     transform: scale(0.833); // モバイルはtranslateYなし
+   right:-3.5%;
   }
 }
   }
