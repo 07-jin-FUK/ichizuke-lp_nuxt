@@ -1787,7 +1787,6 @@ text-shadow: 0px 3px 6px #FFFFFF7B;
       right: unset;
       left: 150px;
       @include mixin.screen(mixin.$large, 1060px) {
-        top: 75%;
         left: 50px; // ← タブレット用追加
       }
 
