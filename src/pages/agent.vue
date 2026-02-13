@@ -1649,6 +1649,7 @@ const faqList = [
 
   @include mixin.max-screen(mixin.$small) {
         width: 100%;
+          height: auto; 
     transition:
       opacity 0.4s ease,
       transform 0.4s ease;
@@ -1691,7 +1692,7 @@ const faqList = [
     }
 
     @include mixin.max-screen(mixin.$small) {
-      width: 52.55%;
+      width: 36%;
     }
   }
 }
