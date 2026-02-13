@@ -1692,7 +1692,8 @@ const faqList = [
     }
 
     @include mixin.max-screen(mixin.$small) {
-      width: 36%;
+      width: 35.6%;
+      left:50%;
     }
   }
 }
