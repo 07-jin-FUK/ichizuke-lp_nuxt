@@ -32,7 +32,10 @@
         <h5>転職エージェントが、求職者のキャリアに対して”市場価値診断”を行い、マッチ度が高かった上位2社の転職エージェントにのみ求職者と接点が持てる、完全成果報酬型のマッチングシステムです。</h5>
         <p>無駄なコストや工数を抑えつつ、求職者と効率的に出会える環境を提供しています。</p>
       </div>
-      <img src="/images/mock.svg" alt="モック" class="mock" />
+    <div class="mock-container">
+      <img src="/images/mock.svg" alt="背景黄色" class="mock mock-base" />
+      <img src="/images/img-mobile-on.png" alt="検索" class="mock mock-overlay" />
+    </div>
     </div>
   </section>
 
@@ -405,6 +408,7 @@ const createObservers = () => {
   const allTargets = document.querySelectorAll<HTMLElement>(`
     #about .text-wrap,
     #about img,
+    #about .mock-container,
     #appeal .appeal-wrap .appeal-item,
     #appeal .section-wrap > h5,
     #blog .section-wrap > h5,
@@ -1619,6 +1623,80 @@ const faqList = [
       //   }
     }
 
+.mock-container {
+  position: relative;
+  width: 470px;
+  height: 440px;
+  flex-shrink: 0;
+  overflow: hidden; // 👈 はみ出し部分を隠す
+
+  opacity: 0;
+  transform: scale(0.95) translateZ(0);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+
+  @include mixin.screen(mixin.$large, 1060px) {
+    width: 380px;
+    height: 355px;
+  }
+
+  @include mixin.screen(mixin.$small, mixin.$large) {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+  }
+
+  @include mixin.max-screen(mixin.$small) {
+        width: 100%;
+    transition:
+      opacity 0.4s ease,
+      transform 0.4s ease;
+  }
+
+  &.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // ベース画像(mock.svg) - 背景
+  .mock-base {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // オーバーレイ画像(円のPNG)
+  .mock-overlay {
+    position: absolute;
+    top: 50%;
+    left: 49.9%;
+    transform: translate(-50%, -50%);
+    
+    // 👇 高さ基準で表示、幅は自動（左右がはみ出る）
+    width: 178px;
+    height: 75%; // コンテナの高さいっぱいに
+    object-fit: cover; // 👈 contain から cover に変更（左右が切り取られる）
+    z-index: 1;
+
+    // 各サイズでも同じ仕様
+    @include mixin.screen(mixin.$large, 1060px) {
+      width: 143px;
+          left: 49.91%;
+    }
+
+    @include mixin.screen(mixin.$small, mixin.$large) {
+      width: 35.5%;
+      
+    }
+
+    @include mixin.max-screen(mixin.$small) {
+      width: 52.55%;
+    }
+  }
+}
+
+    // 👇 既存の img スタイルは残しておく(他で使われている可能性があるため)
     img {
       width: 470px;
       height: 440px;
@@ -1632,13 +1710,13 @@ const faqList = [
         transform 0.6s ease;
 
       @include mixin.screen(mixin.$large, 1060px) {
-        width: 380px; // ← 画像サイズ変更
-        height: 355px; // ← 画像サイズ変更
+        width: 380px;
+        height: 355px;
       }
 
       @include mixin.screen(mixin.$small, mixin.$large) {
         width: 600px;
-        height: 560px; // ← タブレット用の幅を追加
+        height: 560px;
       }
 
       @include mixin.max-screen(mixin.$small) {
