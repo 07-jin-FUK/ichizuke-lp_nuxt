@@ -10,7 +10,8 @@
           」
         </span>
       </h1>
-      <div class="btn width-long"><p>無料登録はこちら</p></div>
+<a href="https://ichizuke.com/contact/" class="btn width-long" target="_blank"><p>無料登録はこちら</p></a>
+
 
       <h2>
         <span class="campain">オープンキャンペーン</span>
@@ -152,10 +153,21 @@
     </div>
   </section>
 <div class="floating-header" :class="{ visible: isHeroScrolled, open: isMenuOpen, 'in-point': isInPoint }">
-<button class="floating-logo-btn" @click="scrollToTop" aria-label="C">
-  <img src="/images/logo.svg" decoding="async" alt="B" class="floating-logo" />
-</button>
+  <button class="floating-logo-btn" @click="scrollToTop" aria-label="トップへ戻る">
+    <img src="/images/logo.svg" decoding="async" alt="イチヅケ" class="floating-logo" />
+  </button>
 
+  <!-- PC用ナビ -->
+  <nav class="pc-nav">
+    <a @click.prevent="scrollToSection('about')">イチヅケとは</a>
+    <a @click.prevent="scrollToSection('point')">POINT</a>
+    <a @click.prevent="scrollToSection('appeal')">イチヅケの魅力</a>
+    <a @click.prevent="scrollToSection('blog')">転職コラム</a>
+    <a @click.prevent="scrollToSection('faq')">よくある質問</a>
+    <a href="https://ichizuke.com/contact/" target="_blank">お問い合わせ</a>
+  </nav>
+
+  <!-- スマホ・タブレット用ハンバーガー -->
   <button
     class="hamburger-btn"
     :class="{ open: isMenuOpen }"
@@ -163,10 +175,10 @@
     aria-label="メニュー"
   >
     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="24" cy="24" r="22" stroke="#000" stroke-width="1.8"/>
-      <line class="burger-line line1" x1="14" y1="17" x2="34" y2="17" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
-      <line class="burger-line line2" x1="14" y1="24" x2="34" y2="24" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
-      <line class="burger-line line3" x1="14" y1="31" x2="34" y2="31" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="24" cy="24" r="22" stroke="#1d1d1d" stroke-width="1.8"/>
+      <line class="burger-line line1" x1="14" y1="17" x2="34" y2="17" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
+      <line class="burger-line line2" x1="14" y1="24" x2="34" y2="24" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
+      <line class="burger-line line3" x1="14" y1="31" x2="34" y2="31" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
     </svg>
   </button>
 </div>
@@ -180,7 +192,7 @@
       <li><a @click.prevent="scrollToSection('appeal')">イチヅケの魅力</a></li>
       <li><a @click.prevent="scrollToSection('blog')">転職コラム</a></li>
       <li><a @click.prevent="scrollToSection('faq')">よくある質問</a></li>
-      <li class="contact-item"><a href="/contact">お問い合わせ</a></li>
+      <li class="contact-item"><a href="https://ichizuke.com/contact/" target="_blank">お問い合わせ</a></li>
     </ul>
   </nav>
 </div>
@@ -2840,6 +2852,10 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 @include mixin.max-screen(mixin.$small) {
+    
+    .pc-nav {
+  display: none;
+}
 
   .floating-header {
     position: fixed;
@@ -2980,8 +2996,8 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
       display: block;
       padding: 20px 0;
       text-align: center;
-      color: #1d1d1d;
-      font-size: 15px;
+      color: #000;
+      font-size: 14px;
       letter-spacing: 0.08em;
       text-decoration: none;
       cursor: pointer;
@@ -2993,5 +3009,270 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
     }
   }
 }
+}
+
+// ハンバーガーメニュー（タブレット）
+@include mixin.screen(mixin.$small, 900px) {
+    
+    .pc-nav {
+  display: none;
+}
+
+  .floating-header {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 52px;
+    background: #ffffff;
+    border-radius: 100px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 0 20px;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-10px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    &.open {
+      box-shadow: none;
+    }
+
+    &.in-point {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .floating-logo {
+      height: 22px;
+      width: auto;
+      display: block;
+    }
+  }
+
+  .floating-logo-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .hamburger-btn {
+    width: 42px;
+    height: 42px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      width: 34px;
+      height: 34px;
+      display: block;
+    }
+
+    .burger-line {
+      transition:
+        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.35s ease;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+
+    &.open .line1 {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    &.open .line2 {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    &.open .line3 {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  }
+
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+
+    &.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  .nav-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    background: #ffffff;
+    padding: 100px 0 20px;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .nav-overlay.open & {
+      transform: translateX(0);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      border-bottom: 1px solid #e0e0e0;
+
+      &:first-child {
+        border-top: 1px solid #e0e0e0;
+      }
+
+      a {
+        display: block;
+        padding: 22px 0;
+        text-align: center;
+        color: #1d1d1d;
+        font-size: 16px;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.2s ease;
+
+        &:active {
+          background: #f5f5f5;
+        }
+      }
+    }
+  }
+}
+
+// PC用ナビ（900px以上）
+@include mixin.min-screen(900px) {
+
+  .floating-header {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1100px;
+    height: 56px;
+    background: #ffffff;
+    border-radius: 100px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px 0 24px;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-10px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    &.in-point {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .floating-logo {
+      height: 24px;
+      width: auto;
+      display: block;
+    }
+  }
+
+  .floating-logo-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  // PC用ナビ項目
+  .pc-nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+
+    a {
+      color: #1d1d1d;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s ease;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 0;
+        height: 1.5px;
+        background: #1d1d1d;
+        transition: width 0.2s ease;
+      }
+
+      &:hover {
+        opacity: 0.6;
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  // ハンバーガーはPC非表示
+  .hamburger-btn {
+    display: none;
+  }
+
+  // オーバーレイもPC非表示
+  .nav-overlay {
+    display: none;
+  }
 }
 </style>

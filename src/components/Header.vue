@@ -1,15 +1,14 @@
 <template>
   <header class="header" :class="{ 'is-open': isActive, 'is-sticky': overHeroContent }">
-    <!-- <a href="/login" target="_blank" class="btn" v-if="route.path !== '/job-seeker'">企業ログイン</a> -->
-    <div class="btn" v-if="route.path !== '/job-seeker'"><p>企業ログイン</p></div>
-    <!-- <div class="btn btn-sp" v-if="route.path !== '/job-seeker'"><p>ログイン</p></div> -->
+<a href="https://enterintoichizuke.com/auth/login" target="_blank" class="btn" v-if="route.path !== '/job-seeker'"><p>企業ログイン</p></a>
+<a href="https://enterintoichizuke.com/auth/login" target="_blank" class="btn btn-sp" v-if="route.path !== '/job-seeker'"><p>ログイン</p></a>
     <div 
       v-if="route.path === '/agent'" 
       class="bottom-header" 
       :class="{ 'is-sticky': overHeroContent }"
     >
-      <div class="btn">企業ログイン</div>
-      <div class="btn">無料登録</div>
+<a href="https://enterintoichizuke.com/auth/login" class="btn" target="_blank">企業ログイン</a>
+<a href="https://ichizuke.com/contact/" class="btn" target="_blank">無料登録</a>
     </div>
   </header>
 </template>
