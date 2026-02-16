@@ -151,6 +151,7 @@
         </details>
       </div>
     </div>
+    <a href="https://www.outofthebox.co.jp/" target="_blank" class="powered-by">運営会社：out of the box</a>
   </section>
 <div class="floating-header" :class="{ visible: isHeroScrolled, open: isMenuOpen, 'in-point': isInPoint }">
   <button class="floating-logo-btn" @click="scrollToTop" aria-label="トップへ戻る">
@@ -195,8 +196,11 @@
       <li><a @click.prevent="scrollToSection('faq')">よくある質問</a></li>
 
       <li class="contact-item"><a href="https://ichizuke.com/contact/" target="_blank">お問い合わせ</a></li>
-                  <li class="contact-item"><a href="https://ichizuke.com/contact/" target="_blank">無料登録</a></li>
     </ul>
+    <div class="nav-buttons">
+  <a href="https://enterintoichizuke.com/auth/login" class="nav-btn">企業ログイン</a>
+  <a href="https://ichizuke.com/contact/" class="nav-btn nav-btn-register">無料登録</a>
+</div>
   </nav>
 </div>
 </template>
@@ -215,18 +219,36 @@ const isMenuOpen = ref(false);
 const isHeroScrolled = ref(false);
 const isInPoint = ref(false);
 
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
-  document.body.style.overflow = isMenuOpen.value ? 'hidden' : '';
-};
-
-const scrollToSection = (sectionId: string) => {
+const closeMenu = () => {
   isMenuOpen.value = false;
   document.body.style.overflow = '';
+  const bottomHeader = document.querySelector('.bottom-header') as HTMLElement;
+  if (bottomHeader) {
+    bottomHeader.style.removeProperty('opacity');
+    bottomHeader.style.removeProperty('pointer-events');
+  }
+};
+
+const toggleMenu = () => {
+  if (isMenuOpen.value) {
+    closeMenu();
+  } else {
+    isMenuOpen.value = true;
+    document.body.style.overflow = 'hidden';
+    const bottomHeader = document.querySelector('.bottom-header') as HTMLElement;
+    if (bottomHeader) {
+      bottomHeader.style.opacity = '0';
+      bottomHeader.style.pointerEvents = 'none';
+    }
+  }
+};
+
+
+const scrollToSection = (sectionId: string) => {
+  closeMenu();
 
   setTimeout(() => {
     if (sectionId === 'point' && pointSection.value) {
-      // progress = 0.2 のスクロール位置を計算
       const sectionTop = pointSection.value.getBoundingClientRect().top + window.pageYOffset;
       const totalHeight = pointSection.value.offsetHeight - window.innerHeight;
       const targetY = sectionTop + totalHeight * 0.21;
@@ -242,8 +264,7 @@ const scrollToSection = (sectionId: string) => {
 };
 
 const scrollToTop = () => {
-  isMenuOpen.value = false;
-  document.body.style.overflow = '';
+  closeMenu();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
@@ -1287,6 +1308,13 @@ const handleResize = async () => {
 
 onMounted(async () => {
       document.body.style.overflow = '';
+      
+        const bottomHeader = document.querySelector('.bottom-header') as HTMLElement;
+  if (bottomHeader) {
+    bottomHeader.style.removeProperty('opacity');
+    bottomHeader.style.removeProperty('pointer-events');
+  }
+      
   windowWidth.value = window.innerWidth;
 
   await nextTick();
@@ -2631,7 +2659,7 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
 
     @include mixin.max-screen(mixin.$small) {
       width: 90%;
-      padding: 50px 0 100px;
+      padding: 50px 0 80px;
     }
 
     h5 {
@@ -2852,6 +2880,28 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
       }
     }
   }
+  
+.powered-by {
+  display: block;
+  text-align: center;
+
+  padding: 30px 0;
+  background-color: #555555;
+  font-size: 16px;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  @include mixin.max-screen(mixin.$small) {
+    padding:25px;
+    font-size: 14px;
+  }
+}
 }
 
 @include mixin.max-screen(mixin.$small) {
@@ -2891,7 +2941,7 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
     box-shadow: none;
   }
   &.in-point {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
@@ -3011,6 +3061,42 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
       }
     }
   }
+.nav-buttons   {
+  display: flex;
+  gap: 12px;
+  padding: 30px 20px 0;
+  justify-content: center;
+  width: 100%;
+
+  .nav-btn {
+    width:40%;
+    text-align: center;
+    padding: 12px 0;
+    border-radius: 100px;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    border: 1.5px solid #1d1d1d;
+    color: #1d1d1d;
+    background: white;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:active {
+      background: #f5f5f5;
+    }
+
+    &.nav-btn-register {
+      background: #FFE419;
+      color: #222;
+    border: 1.5px solid #FFE419;
+
+      &:active {
+        background: #333;
+      }
+    }
+  }
+}
 }
 }
 
@@ -3054,7 +3140,7 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
     }
 
     &.in-point {
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
     }
@@ -3174,6 +3260,42 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
         }
       }
     }
+.nav-buttons   {
+  display: flex;
+  gap: 12px;
+  padding: 30px 20px 0;
+  justify-content: center;
+  width: 100%;
+
+  .nav-btn {
+    width: 35%;
+    text-align: center;
+    padding: 12px 0;
+    border-radius: 100px;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    border: 1.5px solid #1d1d1d;
+    color: #1d1d1d;
+    background: white;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:active {
+      background: #f5f5f5;
+    }
+
+    &.nav-btn-register {
+      background: #FFE419;
+      color: #222;
+    border: 1.5px solid #FFE419;
+
+      &:active {
+        background: #333;
+      }
+    }
+  }
+}
   }
 }
 
@@ -3210,7 +3332,7 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
     }
 
     &.in-point {
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
     }
