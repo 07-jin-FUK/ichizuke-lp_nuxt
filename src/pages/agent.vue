@@ -125,7 +125,7 @@
       </div>
 
       <div class="blog-dots"></div>
-      <div class="btn"><p>コラム一覧へ</p></div>
+<a href="https://ichizuke.com/category/column/" class="btn" target="_blank"><p>コラム一覧へ</p></a>
     </div>
   </section>
 
