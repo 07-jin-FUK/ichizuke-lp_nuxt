@@ -151,21 +151,25 @@
       </div>
     </div>
   </section>
-  <!-- ハンバーガーメニューボタン -->
-<button
-  class="hamburger-btn"
-  :class="{ visible: isHeroScrolled, open: isMenuOpen }"
-  @click="toggleMenu"
-  aria-label="メニュー"
->
-<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="24" cy="24" r="22" stroke="#1d1d1d" stroke-width="1.8"/>
-  <line class="burger-line line1" x1="14" y1="17" x2="34" y2="17" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
-  <line class="burger-line line2" x1="14" y1="24" x2="34" y2="24" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
-  <line class="burger-line line3" x1="14" y1="31" x2="34" y2="31" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
-</svg>
-
+<div class="floating-header" :class="{ visible: isHeroScrolled, open: isMenuOpen, 'in-point': isInPoint }">
+<button class="floating-logo-btn" @click="scrollToTop" aria-label="C">
+  <img src="/images/logo.svg" decoding="async" alt="B" class="floating-logo" />
 </button>
+
+  <button
+    class="hamburger-btn"
+    :class="{ open: isMenuOpen }"
+    @click="toggleMenu"
+    aria-label="メニュー"
+  >
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="24" r="22" stroke="#000" stroke-width="1.8"/>
+      <line class="burger-line line1" x1="14" y1="17" x2="34" y2="17" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+      <line class="burger-line line2" x1="14" y1="24" x2="34" y2="24" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+      <line class="burger-line line3" x1="14" y1="31" x2="34" y2="31" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
 
 <!-- ナビゲーションオーバーレイ -->
 <div class="nav-overlay" :class="{ open: isMenuOpen }" @click.self="toggleMenu">
@@ -194,6 +198,7 @@ const windowWidth = ref(0);
 // ハンバーガーメニュー
 const isMenuOpen = ref(false);
 const isHeroScrolled = ref(false);
+const isInPoint = ref(false);
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
@@ -203,19 +208,41 @@ const toggleMenu = () => {
 const scrollToSection = (sectionId: string) => {
   isMenuOpen.value = false;
   document.body.style.overflow = '';
+
   setTimeout(() => {
-    const el = document.getElementById(sectionId);
-    if (el) {
-      const offset = el.getBoundingClientRect().top + window.pageYOffset - 20;
-      window.scrollTo({ top: offset, behavior: 'smooth' });
+    if (sectionId === 'point' && pointSection.value) {
+      // progress = 0.2 のスクロール位置を計算
+      const sectionTop = pointSection.value.getBoundingClientRect().top + window.pageYOffset;
+      const totalHeight = pointSection.value.offsetHeight - window.innerHeight;
+      const targetY = sectionTop + totalHeight * 0.21;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    } else {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        const offset = el.getBoundingClientRect().top + window.pageYOffset - 20;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+      }
     }
   }, 350);
+};
+
+const scrollToTop = () => {
+  isMenuOpen.value = false;
+  document.body.style.overflow = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 const handleHeroScroll = () => {
   const hero = document.getElementById('hero');
   if (hero) {
-    isHeroScrolled.value = hero.getBoundingClientRect().bottom < 0;
+    isHeroScrolled.value = hero.getBoundingClientRect().bottom < window.innerHeight * 0.1;
+  }
+
+  // ▼ この判定を追加
+  const point = document.getElementById('point');
+  if (point) {
+    const rect = point.getBoundingClientRect();
+    isInPoint.value = rect.top <= 0 && rect.bottom >= 0;
   }
 };
 
@@ -2812,35 +2839,75 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
   }
 }
 
-// ハンバーガーメニュー（スマホのみ）
 @include mixin.max-screen(mixin.$small) {
 
-  .hamburger-btn {
+  .floating-header {
     position: fixed;
-    top: 15px;
-    right: 5%;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 44px;
+    background: #ffffff;
+    border-radius: 100px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
     z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-10px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+      &.open {
+    box-shadow: none;
+  }
+  &.in-point {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.floating-logo-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+    .floating-logo {
+      height: 18px;
+      width: auto;
+      display: block;
+    }
+  }
+
+  .hamburger-btn {
     width: 36px;
     height: 36px;
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
-    opacity: 0;
-    transform: scale(0.8);
-    pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.3));
-
-    &.visible {
-      opacity: 1;
-      transform: scale(1);
-      pointer-events: auto;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 
     svg {
-      width: 100%;
-      height: 100%;
+      width: 30px;
+      height: 30px;
       display: block;
     }
 
@@ -2881,51 +2948,50 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
     }
   }
 
-  .nav-menu {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100vw;
+.nav-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background: #ffffff;
+  padding: 80px 0 20px;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 
-    height: 100%;
-    background: #ffffff;
-    padding: 80px 0 40px;
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  .nav-overlay.open & {
+    transform: translateX(0);
+  }
 
-    .nav-overlay.open & {
-      transform: translateX(0);
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    border-bottom: 1px solid #e0e0e0;
+
+    &:first-child {
+      border-top: 1px solid #e0e0e0;
     }
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
+    a {
+      display: block;
+      padding: 20px 0;
+      text-align: center;
+      color: #1d1d1d;
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
 
-    li {
-      border-bottom: 1px solid #e0e0e0;
-
-      &:first-child {
-        border-top: 1px solid #e0e0e0;
-      }
-
-      a {
-        display: block;
-        padding: 20px 25px;
-        color: #000;
-        text-align: center;
-        font-size: 14px;
-        letter-spacing: 0.6px;
-        text-decoration: none;
-        cursor: pointer;
-        transition: background 0.2s ease;
-
-        &:active {
-          background: #f5f5f5;
-        }
+      &:active {
+        background: #f5f5f5;
       }
     }
   }
+}
 }
 </style>
