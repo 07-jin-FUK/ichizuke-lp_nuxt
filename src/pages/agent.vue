@@ -192,6 +192,7 @@
       <li><a @click.prevent="scrollToSection('appeal')">イチヅケの魅力</a></li>
       <li><a @click.prevent="scrollToSection('blog')">転職コラム</a></li>
       <li><a @click.prevent="scrollToSection('faq')">よくある質問</a></li>
+            <li class="contact-item"><a href="https://ichizuke.com/contact/" target="_blank">無料登録</a></li>
       <li class="contact-item"><a href="https://ichizuke.com/contact/" target="_blank">お問い合わせ</a></li>
     </ul>
   </nav>
