@@ -2885,8 +2885,8 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
     position: absolute;
     top: 0;
     right: 0;
-    width: 50vw;
-    max-width: 175px;
+    width: 100vw;
+
     height: 100%;
     background: #ffffff;
     padding: 80px 0 40px;
@@ -2912,8 +2912,9 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
 
       a {
         display: block;
-        padding: 15px 25px;
-        color: #1d1d1d;
+        padding: 20px 25px;
+        color: #000;
+        text-align: center;
         font-size: 14px;
         letter-spacing: 0.6px;
         text-decoration: none;
