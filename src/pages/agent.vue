@@ -151,6 +151,35 @@
       </div>
     </div>
   </section>
+  <!-- ハンバーガーメニューボタン -->
+<button
+  class="hamburger-btn"
+  :class="{ visible: isHeroScrolled, open: isMenuOpen }"
+  @click="toggleMenu"
+  aria-label="メニュー"
+>
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="24" cy="24" r="22" stroke="#1d1d1d" stroke-width="1.8"/>
+  <line class="burger-line line1" x1="14" y1="17" x2="34" y2="17" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
+  <line class="burger-line line2" x1="14" y1="24" x2="34" y2="24" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
+  <line class="burger-line line3" x1="14" y1="31" x2="34" y2="31" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
+
+</button>
+
+<!-- ナビゲーションオーバーレイ -->
+<div class="nav-overlay" :class="{ open: isMenuOpen }" @click.self="toggleMenu">
+  <nav class="nav-menu">
+    <ul>
+      <li><a @click.prevent="scrollToSection('about')">イチヅケとは</a></li>
+      <li><a @click.prevent="scrollToSection('point')">POINT</a></li>
+      <li><a @click.prevent="scrollToSection('appeal')">イチヅケの魅力</a></li>
+      <li><a @click.prevent="scrollToSection('blog')">転職コラム</a></li>
+      <li><a @click.prevent="scrollToSection('faq')">よくある質問</a></li>
+      <li class="contact-item"><a href="/contact">お問い合わせ</a></li>
+    </ul>
+  </nav>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -161,6 +190,34 @@ const pointSection = ref<HTMLElement | null>(null);
 
 const bottomHeaderHeight = ref(0);
 const windowWidth = ref(0);
+
+// ハンバーガーメニュー
+const isMenuOpen = ref(false);
+const isHeroScrolled = ref(false);
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+  document.body.style.overflow = isMenuOpen.value ? 'hidden' : '';
+};
+
+const scrollToSection = (sectionId: string) => {
+  isMenuOpen.value = false;
+  document.body.style.overflow = '';
+  setTimeout(() => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      const offset = el.getBoundingClientRect().top + window.pageYOffset - 20;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+  }, 350);
+};
+
+const handleHeroScroll = () => {
+  const hero = document.getElementById('hero');
+  if (hero) {
+    isHeroScrolled.value = hero.getBoundingClientRect().bottom < 0;
+  }
+};
 
 // ==========================================
 // 🚀 最適化: DOM参照をrefで保持
@@ -1187,6 +1244,7 @@ const handleResize = async () => {
 };
 
 onMounted(async () => {
+      document.body.style.overflow = '';
   windowWidth.value = window.innerWidth;
 
   await nextTick();
@@ -1201,11 +1259,15 @@ onMounted(async () => {
 
   window.addEventListener("resize", handleResize);
   window.addEventListener("scroll", handleScroll, { passive: true });
+  
+  window.addEventListener('scroll', handleHeroScroll, { passive: true });
 });
 
 onUnmounted(() => {
+      document.body.style.overflow = '';
   window.removeEventListener("resize", handleResize);
   window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener('scroll', handleHeroScroll);
 
   if (rafId) {
     cancelAnimationFrame(rafId);
@@ -2744,6 +2806,122 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
             flex: 1;
             margin: 0;
           }
+        }
+      }
+    }
+  }
+}
+
+// ハンバーガーメニュー（スマホのみ）
+@include mixin.max-screen(mixin.$small) {
+
+  .hamburger-btn {
+    position: fixed;
+    top: 15px;
+    right: 5%;
+    z-index: 1000;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.3));
+
+    &.visible {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .burger-line {
+      transition:
+        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.35s ease;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+
+    &.open .line1 {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    &.open .line2 {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    &.open .line3 {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  }
+
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+
+    &.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  .nav-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50vw;
+    max-width: 175px;
+    height: 100%;
+    background: #ffffff;
+    padding: 80px 0 40px;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .nav-overlay.open & {
+      transform: translateX(0);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      border-bottom: 1px solid #e0e0e0;
+
+      &:first-child {
+        border-top: 1px solid #e0e0e0;
+      }
+
+      a {
+        display: block;
+        padding: 15px 25px;
+        color: #1d1d1d;
+        font-size: 14px;
+        letter-spacing: 0.6px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.2s ease;
+
+        &:active {
+          background: #f5f5f5;
         }
       }
     }
