@@ -165,6 +165,7 @@
     <a @click.prevent="scrollToSection('blog')">転職コラム</a>
     <a @click.prevent="scrollToSection('faq')">よくある質問</a>
     <a href="https://ichizuke.com/contact/" target="_blank">お問い合わせ</a>
+    <a href="https://ichizuke.com/contact/" class="btn register-btn" target="_blank">無料登録</a>
   </nav>
 
   <!-- スマホ・タブレット用ハンバーガー -->
@@ -192,8 +193,9 @@
       <li><a @click.prevent="scrollToSection('appeal')">イチヅケの魅力</a></li>
       <li><a @click.prevent="scrollToSection('blog')">転職コラム</a></li>
       <li><a @click.prevent="scrollToSection('faq')">よくある質問</a></li>
-            <li class="contact-item"><a href="https://ichizuke.com/contact/" target="_blank">無料登録</a></li>
+
       <li class="contact-item"><a href="https://ichizuke.com/contact/" target="_blank">お問い合わせ</a></li>
+                  <li class="contact-item"><a href="https://ichizuke.com/contact/" target="_blank">無料登録</a></li>
     </ul>
   </nav>
 </div>
@@ -3013,7 +3015,7 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 // ハンバーガーメニュー（タブレット）
-@include mixin.screen(mixin.$small, 900px) {
+@include mixin.screen(mixin.$small, 980px) {
     
     .pc-nav {
   display: none;
@@ -3176,7 +3178,7 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 // PC用ナビ（900px以上）
-@include mixin.min-screen(900px) {
+@include mixin.min-screen(981px) {
 
   .floating-header {
     position: fixed;
@@ -3275,5 +3277,24 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
   .nav-overlay {
     display: none;
   }
+  
+  .register-btn {
+  background-color: #1d1d1d;
+  color: white !important;
+  border: 1.5px solid #1d1d1d;
+  border-radius: 100px;
+  padding: 8px 18px;
+
+  &::after {
+    display: none; // ホバーアンダーライン無効化
+  }
+
+  &:hover {
+    opacity: 1 !important;
+    background-color: white;
+    color: #1d1d1d !important;
+  }
+}
+
 }
 </style>
