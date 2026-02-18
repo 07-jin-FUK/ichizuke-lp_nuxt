@@ -2,8 +2,8 @@
   <div id="hero">
     <div class="copy-wrap">
       <h1>
-        <span>求職者が求めていた</span>
-        <span>新たなアプローチ</span>
+        <span>採用の常識を変える、</span>
+        <span>価値提案型マッチング</span>
         <span class="logo-type">
           「
           <img src="/images/logo.svg" decoding="async" loading="eager" alt="「イチヅケ」" />
@@ -177,7 +177,7 @@
     aria-label="メニュー"
   >
     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="24" cy="24" r="22" stroke="#1d1d1d" stroke-width="1.8"/>
+<circle cx="24" cy="24" r="22" fill="white" stroke="#1d1d1d" stroke-width="1.8"/>
       <line class="burger-line line1" x1="14" y1="17" x2="34" y2="17" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
       <line class="burger-line line2" x1="14" y1="24" x2="34" y2="24" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
       <line class="burger-line line3" x1="14" y1="31" x2="34" y2="31" stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round"/>
@@ -188,6 +188,9 @@
 <!-- ナビゲーションオーバーレイ -->
 <div class="nav-overlay" :class="{ open: isMenuOpen }" @click.self="toggleMenu">
   <nav class="nav-menu">
+      <div class="nav-menu-logo">
+    <img src="/images/logo.svg" alt="イチヅケ" />
+  </div>
     <ul>
       <li><a @click.prevent="scrollToSection('about')">イチヅケとは</a></li>
       <li><a @click.prevent="scrollToSection('point')">POINT</a></li>
@@ -2910,75 +2913,65 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
   display: none;
 }
 
-  .floating-header {
-    position: fixed;
-    top: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    height: 44px;
-    background: #ffffff;
-    border-radius: 100px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 15px;
-    z-index: 1000;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(-50%) translateY(-10px);
-    transition:
-      opacity 0.3s ease,
-      transform 0.3s ease;
+.floating-header {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  left: auto;
+  transform: none;
+  width: auto;
+  height: auto;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 
-    &.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(-50%) translateY(0);
-    }
-      &.open {
-    box-shadow: none;
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
   }
+
+  // &.open は削除（位置を変えない）
+
   &.in-point {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+    // open時のみ意味があるので不要だが残してもOK
+  }
+
+  .floating-logo-btn {
+    display: none; // SPではロゴ非表示
+  }
+
+  .floating-logo {
+    display: none;
+  }
 }
 
-.floating-logo-btn {
-  background: none;
+.hamburger-btn {
+  width: 44px;
+  height: 44px;
+  background: transparent; // ← white → transparent
   border: none;
+  border-radius: 50%;
   padding: 0;
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+
+
+// 変更後
+svg {
+  width: 40px;
+  height: 40px;
+  display: block;
 }
-
-    .floating-logo {
-      height: 18px;
-      width: auto;
-      display: block;
-    }
-  }
-
-  .hamburger-btn {
-    width: 36px;
-    height: 36px;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-
-    svg {
-      width: 30px;
-      height: 30px;
-      display: block;
-    }
 
     .burger-line {
       transition:
@@ -3001,7 +2994,7 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
       transform: translateY(-7px) rotate(-45deg);
     }
   }
-
+  
   .nav-overlay {
     position: fixed;
     inset: 0;
@@ -3016,6 +3009,22 @@ text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2);
       pointer-events: auto;
     }
   }
+  
+  .nav-menu-logo {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 100%;
+  height: 60px; // ハンバーガーボタンと同じ高さ感
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+
+  img {
+    height: 20px;
+    width: auto;
+  }
+}
 
 .nav-menu {
   position: absolute;
